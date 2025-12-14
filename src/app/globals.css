@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+:root {
+  /* Colores originales - tonos tierra */
+  --color-primary: #8B4513;      /* Marrón silla */
+  --color-secondary: #D2691E;    /* Chocolate */
+  --color-accent: #F4A460;       /* Sandy brown */
+  --color-dark: #2C1810;         /* Marrón oscuro */
+  
+  /* Colores adicionales - paleta tierra */
+  --color-wheat: #F5DEB3;        /* Trigo */
+  --color-cornsilk: #FFF8DC;     /* Maíz suave */
+  --color-antiquewhite: #FAEBD7; /* Blanco antiguo */
+  --color-moccasin: #FFE4B5;     /* Mocasín */
+  
+  /* Dark mode colors */
+  --color-dark-bg: #1a1a1a;      /* Fondo principal */
+  --color-dark-surface: #2d2d2d; /* Superficies */
+  --color-dark-text: #e5e5e5;    /* Texto principal */
+  --color-dark-brown: #3D2817;   /* Marrón oscuro 1 */
+  --color-dark-brown-2: #4A3426; /* Marrón oscuro 2 */
+  --color-dark-brown-3: #5C3D2E; /* Marrón oscuro 3 */
+  --color-dark-brown-4: #362415; /* Marrón oscuro 4 */
+}
+
+/* Tailwind custom utilities for dashboard */
+@layer utilities {
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+  .bg-dark-bg {
+    background-color: var(--color-dark-bg);
+  }
+  .bg-dark-surface {
+    background-color: var(--color-dark-surface);
+  }
+  .bg-dark-brown {
+    background-color: var(--color-dark-brown);
+  }
+  .text-primary {
+    color: var(--color-primary);
+  }
+  /* semantic brand alias for easier usage */
+  .text-brand {
+    color: var(--color-primary);
+  }
+  .bg-brand {
+    background-color: var(--color-primary);
+  }
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+  .text-accent {
+    color: var(--color-accent);
+  }
+  .text-dark {
+    color: var(--color-dark);
+  }
+  .text-dark-text {
+    color: var(--color-dark-text);
+  }
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+  .from-primary {
+    --tw-gradient-from: var(--color-primary);
+  }
+  .to-secondary {
+    --tw-gradient-to: var(--color-secondary);
+  }
+  .to-primary\/70 {
+    --tw-gradient-to: color-mix(in srgb, var(--color-primary) 70%, transparent);
+  }
+  .from-secondary {
+    --tw-gradient-from: var(--color-secondary);
+  }
+  .to-secondary\/70 {
+    --tw-gradient-to: color-mix(in srgb, var(--color-secondary) 70%, transparent);
+  }
+  .from-accent {
+    --tw-gradient-from: var(--color-accent);
+  }
+  .to-accent\/70 {
+    --tw-gradient-to: color-mix(in srgb, var(--color-accent) 70%, transparent);
+  }
+  /* Additional gradient utilities for named colors used in templates */
+  .from-cornsilk {
+    --tw-gradient-from: var(--color-cornsilk);
+  }
+  .to-wheat {
+    --tw-gradient-to: var(--color-wheat);
+  }
+  .from-antiquewhite {
+    --tw-gradient-from: var(--color-antiquewhite);
+  }
+  .to-moccasin {
+    --tw-gradient-to: var(--color-moccasin);
+  }
+  .from-wheat {
+    --tw-gradient-from: var(--color-wheat);
+  }
+  .to-cornsilk {
+    --tw-gradient-to: var(--color-cornsilk);
+  }
+  .bg-primary\/10 {
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+  .bg-secondary\/10 {
+    background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+  }
+  .bg-accent\/10 {
+    background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  }
+  .bg-primary\/5 {
+    background-color: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  }
+  .border-primary\/20 {
+    border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+}
+
+/* Light mode (default) */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #FFF8F0;
+  color: var(--color-dark);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode */
+.dark body {
+  background: var(--color-dark-bg);
+  color: var(--color-dark-text);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-secondary);
+}
+
+.btn-secondary {
+  background-color: var(--color-accent);
+  color: var(--color-dark);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.dark .card {
+  background-color: var(--color-dark-surface);
+}
+
+/* Animaciones */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-progress {
+  animation: progress 5s linear;
+}
+
+/* Hero carousel styles */
+.hero-carousel .swiper-pagination-bullet {
+  background-color: var(--color-primary);
+  opacity: 0.5;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px !important;
+}
+
+.hero-carousel .swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: var(--color-primary);
+  transform: scale(1.3);
+}
+
+.hero-carousel .swiper-pagination {
+  bottom: 20px !important;
+}
