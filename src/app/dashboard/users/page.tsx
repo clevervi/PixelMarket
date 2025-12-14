@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser, getAllUsers, createUser, updateUser, deleteUser } from '@/lib/auth-storage';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
-import { Plus, Edit, Trash2, Search, Mail } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Mail, Users, Shield } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 export default function UsersPage() {

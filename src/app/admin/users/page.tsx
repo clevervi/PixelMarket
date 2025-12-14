@@ -44,6 +44,7 @@ const MOCK_USERS: User[] = [
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>(MOCK_USERS);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading] = useState(false);
   const { addNotification } = useNotificationStore();
 
   // Filtrar usuarios: excluir admins y aplicar búsqueda
