@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createResetToken, getUserByEmail } from '@/lib/auth-storage';
+import { createSupabaseServiceClient } from '@/lib/supabaseClient';
 
+// Envía el email de recuperación usando Supabase Auth.
+// La UX no debe revelar si el email existe o no.
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json();
@@ -8,41 +10,37 @@ export async function POST(request: NextRequest) {
     if (!email) {
       return NextResponse.json(
         { success: false, message: 'Email is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Verificar si el usuario existe (en almacenamiento simulado)
-    const userExists = !!getUserByEmail(email);
+    const supabase = createSupabaseServiceClient();
 
-    if (!userExists) {
-      // Responder igual para no revelar si el email existe
-      return NextResponse.json(
-        { success: true, message: 'If an account exists with that email, you will receive a reset link' },
-        { status: 200 }
-      );
+    // Supabase redirect: usamos el origin actual (local o Vercel) para que el link funcione.
+    const redirectTo = `${request.nextUrl.origin}/reset-password`;
+
+    // NOTA: esto puede responder success incluso si el email no existe.
+    const { error } = await supabase.auth.resetPasswordForEmail(String(email).trim(), {
+      redirectTo,
+    });
+
+    if (error) {
+      // No revelamos detalles al usuario final
+      console.error('Supabase resetPasswordForEmail error:', error);
     }
-
-    // Generar token único
-    const resetToken = createResetToken(email);
-
-    console.log(`✓ Password reset requested for: ${email}`);
-    console.log(`✓ Reset token: ${resetToken}`);
-    console.log(`✓ Reset link: http://localhost:3000/reset-password/${resetToken}`);
-
-    // En producción: enviar email con el reset link
-    // const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password/${resetToken}`;
-    // await sendResetEmail(email, resetLink);
 
     return NextResponse.json(
-      { success: true, message: 'If an account exists with that email, you will receive a reset link' },
-      { status: 200 }
+      {
+        success: true,
+        message: 'If an account exists with that email, you will receive a reset link',
+      },
+      { status: 200 },
     );
   } catch (error) {
     console.error('Forgot password error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

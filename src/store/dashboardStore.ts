@@ -164,8 +164,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   isLoading: false,
   fetchDashboardData: async () => {
     set({ isLoading: true });
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    set({ isLoading: false });
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } finally {
+      set({ isLoading: false });
+    }
   },
 }));

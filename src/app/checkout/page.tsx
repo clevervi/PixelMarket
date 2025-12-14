@@ -70,24 +70,60 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isProcessing) return;
+
     setIsProcessing(true);
 
-    // Simular procesamiento de pago (gateway externo, etc.)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Simular procesamiento de pago (gateway externo, etc.)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Preparar items para la orden
-    const orderItems: OrderItem[] = items.map((item) => ({
-      product: item.product,
-      quantity: item.quantity,
-      variant: item.variant,
-      price: item.product.price + (item.variant?.priceModifier || 0),
-    }));
+      // Preparar items para la orden
+      const orderItems: OrderItem[] = items.map((item) => ({
+        product: item.product,
+        quantity: item.quantity,
+        variant: item.variant,
+        price: item.product.price + (item.variant?.priceModifier || 0),
+      }));
 
-    // Crear orden en el backend (PostgreSQL)
-    const response = await fetch('/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      // Crear orden en el backend (PostgreSQL)
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: orderItems,
+          subtotal: subtotalAfterDiscount,
+          tax,
+          shipping,
+          total,
+          discount,
+          couponCode: appliedCoupon?.code,
+          shippingAddress: {
+            fullName: formData.fullName,
+            street: formData.street,
+            city: formData.city,
+            state: formData.state,
+            postalCode: formData.postalCode,
+            country: formData.country,
+            phone: formData.phone,
+          },
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok || !data?.success) {
+        console.error('Order creation error:', data);
+        toast.error(data?.error || 'Failed to create order');
+        return;
+      }
+
+      const created = data.data as { id: string; orderNumber: string; createdAt: string; total: number };
+
+      const order: Order = {
+        id: created.orderNumber || created.id,
+        userId: user?.id || 'guest',
         items: orderItems,
         subtotal: subtotalAfterDiscount,
         tax,
@@ -95,7 +131,9 @@ export default function CheckoutPage() {
         total,
         discount,
         couponCode: appliedCoupon?.code,
+        status: 'pending',
         shippingAddress: {
+          id: '1',
           fullName: formData.fullName,
           street: formData.street,
           city: formData.city,
@@ -104,69 +142,39 @@ export default function CheckoutPage() {
           country: formData.country,
           phone: formData.phone,
         },
-      }),
-    });
+        paymentMethod: {
+          id: '1',
+          type: paymentMethod,
+          ...(paymentMethod === 'card' && {
+            cardLastFour: cardData.number.slice(-4),
+            cardBrand: 'Visa',
+          }),
+          ...(paymentMethod === 'transfer' && {
+            bankName: transferData.bankName,
+            accountNumber: transferData.accountNumber,
+          }),
+        },
+        createdAt: created.createdAt,
+        updatedAt: created.createdAt,
+      };
 
-    const data = await response.json().catch(() => null);
+      // Generar factura PDF (usando los datos locales)
+      generateInvoicePDF(order);
 
-    if (!response.ok || !data?.success) {
-      console.error('Order creation error:', data);
+      // Limpiar carrito y cupón
+      clearCart();
+      removeCoupon();
+
+      toast.success('Order placed successfully!');
+
+      // Redirigir a página de confirmación
+      router.push(`/order-confirmed?orderId=${order.id}`);
+    } catch (error) {
+      console.error('Checkout submit error:', error);
+      toast.error('Failed to create order');
+    } finally {
       setIsProcessing(false);
-      toast.error(data?.error || 'Failed to create order');
-      return;
     }
-
-    const created = data.data as { id: string; orderNumber: string; createdAt: string; total: number };
-
-    const order: Order = {
-      id: created.orderNumber || created.id,
-      userId: user?.id || 'guest',
-      items: orderItems,
-      subtotal: subtotalAfterDiscount,
-      tax,
-      shipping,
-      total,
-      discount,
-      couponCode: appliedCoupon?.code,
-      status: 'pending',
-      shippingAddress: {
-        id: '1',
-        fullName: formData.fullName,
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        postalCode: formData.postalCode,
-        country: formData.country,
-        phone: formData.phone,
-      },
-      paymentMethod: {
-        id: '1',
-        type: paymentMethod,
-        ...(paymentMethod === 'card' && {
-          cardLastFour: cardData.number.slice(-4),
-          cardBrand: 'Visa',
-        }),
-        ...(paymentMethod === 'transfer' && {
-          bankName: transferData.bankName,
-          accountNumber: transferData.accountNumber,
-        }),
-      },
-      createdAt: created.createdAt,
-      updatedAt: created.createdAt,
-    };
-
-    // Generar factura PDF (usando los datos locales)
-    generateInvoicePDF(order);
-
-    // Limpiar carrito y cupón
-    clearCart();
-    removeCoupon();
-
-    setIsProcessing(false);
-    toast.success('Order placed successfully!');
-
-    // Redirigir a página de confirmación
-    router.push(`/order-confirmed?orderId=${order.id}`);
   };
 
   // Show loading state while checking authentication
@@ -179,6 +187,11 @@ export default function CheckoutPage() {
         </div>
       </div>
     );
+  }
+
+  // Si no hay usuario, ya se disparó el redirect desde el effect
+  if (!user) {
+    return null;
   }
 
   if (items.length === 0) {

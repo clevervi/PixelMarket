@@ -46,6 +46,8 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isLoading) return;
     
     if (!email.trim()) {
       addNotification({
@@ -57,33 +59,44 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
     }
 
     setIsLoading(true);
-    const success = await subscribe(email);
-    setIsLoading(false);
 
-    if (success) {
-      // Registrar uso del cupón a nivel backend si el usuario está autenticado
-      try {
-        await fetch('/api/coupons/use', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code: 'BIENVENIDA10' }),
-        }).catch(() => undefined);
-      } catch {
-        // Silenciar errores de tracking de cupón; la experiencia del usuario no depende de esto
+    try {
+      const success = await subscribe(email);
+
+      if (success) {
+        // Registrar uso del cupón a nivel backend si el usuario está autenticado
+        try {
+          await fetch('/api/coupons/use', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: 'BIENVENIDA10' }),
+          }).catch(() => undefined);
+        } catch {
+          // Silenciar errores de tracking de cupón; la experiencia del usuario no depende de esto
+        }
+
+        addNotification({
+          type: 'success',
+          title: t.promo.successTitle,
+          message: t.promo.successMessage,
+        });
+        setIsVisible(false);
+      } else {
+        addNotification({
+          type: 'error',
+          title: t.common.error,
+          message: t.promo.errors.invalidEmail,
+        });
       }
-
-      addNotification({
-        type: 'success',
-        title: t.promo.successTitle,
-        message: t.promo.successMessage,
-      });
-      setIsVisible(false);
-    } else {
+    } catch (error) {
+      console.error('Promo subscribe error:', error);
       addNotification({
         type: 'error',
         title: t.common.error,
         message: t.promo.errors.invalidEmail,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 

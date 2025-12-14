@@ -7,6 +7,19 @@ const connectionString =
   process.env.DATABASE_URL ||
   undefined;
 
+function shouldUseSsl() {
+  // Permite forzar SSL explícitamente
+  if (process.env.DB_SSL === 'true') return true;
+  if (process.env.DB_SSL === 'false') return false;
+
+  // Heurística: Supabase Postgres requiere SSL
+  const host = process.env.DB_HOST || '';
+  if (host.includes('supabase.co')) return true;
+
+  // Si se usa connection string, ya manejamos SSL abajo
+  return false;
+}
+
 const pool = connectionString
   ? new Pool({
       connectionString,
@@ -24,7 +37,8 @@ const pool = connectionString
       database: process.env.DB_NAME || 'latido_ancestral',
       max: parseInt(process.env.DB_POOL_MAX || '10', 10),
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 5000,
+      ...(shouldUseSsl() ? { ssl: { rejectUnauthorized: false } } : {}),
     });
 
 export async function sql<T = unknown>(text: string, params?: unknown[]): Promise<T[]> {

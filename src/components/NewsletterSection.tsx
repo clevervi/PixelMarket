@@ -13,6 +13,8 @@ export default function NewsletterSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isLoading) return;
     
     if (!email.trim()) {
       addNotification({
@@ -24,22 +26,33 @@ export default function NewsletterSection() {
     }
 
     setIsLoading(true);
-    const success = await subscribe(email);
-    setIsLoading(false);
 
-    if (success) {
-      addNotification({
-        type: 'success',
-        title: '¡Subscription successful!',
-        message: 'You have successfully subscribed to our newsletter'
-      });
-      setEmail('');
-    } else {
+    try {
+      const success = await subscribe(email);
+
+      if (success) {
+        addNotification({
+          type: 'success',
+          title: '¡Subscription successful!',
+          message: 'You have successfully subscribed to our newsletter'
+        });
+        setEmail('');
+      } else {
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: 'Invalid email address'
+        });
+      }
+    } catch (error) {
+      console.error('Newsletter subscribe error:', error);
       addNotification({
         type: 'error',
         title: 'Error',
-        message: 'Invalid email address'
+        message: 'Failed to subscribe. Please try again.'
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -35,31 +35,45 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isLoading) return;
+
     setIsLoading(true);
 
-    const result = await login(loginData.email, loginData.password);
-    
-    setIsLoading(false);
+    try {
+      const result = await login(loginData.email, loginData.password);
 
-    if (result.success) {
-      addNotification({
-        type: 'success',
-        title: '¡ Welcome !',
-        message: result.message || 'You have successfully logged in'
-      });
-      onClose();
-      setLoginData({ email: '', password: '' });
-    } else {
+      if (result.success) {
+        addNotification({
+          type: 'success',
+          title: '¡ Welcome !',
+          message: result.message || 'You have successfully logged in'
+        });
+        onClose();
+        setLoginData({ email: '', password: '' });
+      } else {
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: result.message || 'Error logging in'
+        });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
       addNotification({
         type: 'error',
         title: 'Error',
-        message: result.message || 'Error logging in'
+        message: 'Unexpected error logging in'
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isLoading) return;
 
     // Validaciones
     if (registerData.password !== registerData.confirmPassword) {
@@ -82,37 +96,46 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
 
     setIsLoading(true);
 
-    const result = await register({
-      email: registerData.email,
-      password: registerData.password,
-      firstName: registerData.firstName,
-      lastName: registerData.lastName,
-      phone: registerData.phone || undefined
-    });
-
-    setIsLoading(false);
-
-    if (result.success) {
-      addNotification({
-        type: 'success',
-        title: '¡Account created!',
-        message: result.message || 'Your account has been successfully created'
+    try {
+      const result = await register({
+        email: registerData.email,
+        password: registerData.password,
+        firstName: registerData.firstName,
+        lastName: registerData.lastName,
+        phone: registerData.phone || undefined
       });
-      onClose();
-      setRegisterData({
-        email: '',
-        password: '',
-        confirmPassword: '',
-        firstName: '',
-        lastName: '',
-        phone: ''
-      });
-    } else {
+
+      if (result.success) {
+        addNotification({
+          type: 'success',
+          title: '¡Account created!',
+          message: result.message || 'Your account has been successfully created'
+        });
+        onClose();
+        setRegisterData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          firstName: '',
+          lastName: '',
+          phone: ''
+        });
+      } else {
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: result.message || 'Error creating the account'
+        });
+      }
+    } catch (error) {
+      console.error('Register error:', error);
       addNotification({
         type: 'error',
         title: 'Error',
-        message: result.message || 'Error creating the account'
+        message: 'Unexpected error creating the account'
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -315,7 +338,8 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
               {' '}
               <button
                 onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-                className="text-primary font-semibold hover:underline"
+                disabled={isLoading}
+                className="text-primary font-semibold hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {mode === 'login' ? 'Sign up' : 'Log in'}
               </button>

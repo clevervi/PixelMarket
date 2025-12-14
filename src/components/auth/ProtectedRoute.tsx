@@ -21,24 +21,30 @@ export default function ProtectedRoute({
 
   useEffect(() => {
     const checkAuth = () => {
-      const user = getCurrentUser();
-      
-      // Si no hay usuario, redirigir al login
-      if (!user) {
-        router.push(redirectTo);
-        return;
-      }
+      try {
+        const user = getCurrentUser();
 
-      // Si se especificaron roles permitidos, verificar el rol del usuario
-      if (allowedRoles.length > 0 && !allowedRoles.includes(user.role || '')) {
-        // Usuario no autorizado para esta ruta
-        router.push('/unauthorized');
-        return;
-      }
+        // Si no hay usuario, redirigir al login
+        if (!user) {
+          setIsAuthorized(false);
+          router.push(redirectTo);
+          return;
+        }
 
-      // Usuario autenticado y autorizado
-      setIsAuthorized(true);
-      setIsLoading(false);
+        // Si se especificaron roles permitidos, verificar el rol del usuario
+        if (allowedRoles.length > 0 && !allowedRoles.includes(user.role || '')) {
+          // Usuario no autorizado para esta ruta
+          setIsAuthorized(false);
+          router.push('/unauthorized');
+          return;
+        }
+
+        // Usuario autenticado y autorizado
+        setIsAuthorized(true);
+      } finally {
+        // Evita que el loader se quede “pegado” por cualquier ruta de salida
+        setIsLoading(false);
+      }
     };
 
     checkAuth();
@@ -52,7 +58,16 @@ export default function ProtectedRoute({
     );
   }
 
-  return isAuthorized ? <>{children}</> : null;
+  if (!isAuthorized) {
+    // Mientras redirige, evita un “pantallazo en blanco”
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-surface">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 }
 
 // Helper components para roles específicos

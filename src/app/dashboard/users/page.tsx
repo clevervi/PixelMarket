@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCurrentUser, getAllUsers, createUser, updateUser, deleteUser } from '@/lib/auth-storage';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { Plus, Edit, Trash2, Search, Mail, Users, Shield } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -14,30 +13,59 @@ export default function UsersPage() {
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadUsers = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch('/api/users', { credentials: 'include' });
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.error || 'Failed to load users');
+      }
+
+      setUsers(data.data || []);
+      setFilteredUsers(data.data || []);
+    } catch (err: any) {
+      console.error('Failed to load users:', err);
+      toast.error(err?.message || 'Failed to load users');
+      setUsers([]);
+      setFilteredUsers([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const currentUser = getCurrentUser();
-    if (!currentUser) {
-      router.push('/login');
-      return;
-    }
-    
-    // Only admin can access this page
-    if (currentUser.role !== 'admin') {
-      router.push('/dashboard');
-      toast.error('You do not have permission to access this page');
-      return;
-    }
-    
-    setUser(currentUser);
-    loadUsers();
-  }, [router]);
+    const bootstrap = async () => {
+      try {
+        // Validar sesión en server (auth_token)
+        const meRes = await fetch('/api/auth/me', { credentials: 'include' });
+        const meData = await meRes.json().catch(() => null);
 
-  const loadUsers = () => {
-    const allUsers = getAllUsers();
-    setUsers(allUsers);
-    setFilteredUsers(allUsers);
-  };
+        if (!meRes.ok || !meData?.user) {
+          router.push('/login');
+          return;
+        }
+
+        // Only admin can access this page
+        if (meData.user.role !== 'admin') {
+          router.push('/dashboard');
+          toast.error('You do not have permission to access this page');
+          return;
+        }
+
+        setUser(meData.user);
+        await loadUsers();
+      } catch (error) {
+        console.error('Failed to bootstrap users page:', error);
+        router.push('/login');
+      }
+    };
+
+    bootstrap();
+  }, [router]);
 
   useEffect(() => {
     let filtered = users;
@@ -57,16 +85,8 @@ export default function UsersPage() {
     setFilteredUsers(filtered);
   }, [searchTerm, selectedRole, users]);
 
-  const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this user?')) {
-      const success = deleteUser(id);
-      if (success) {
-        toast.success('User deleted successfully');
-        loadUsers();
-      } else {
-        toast.error('Failed to delete user');
-      }
-    }
+  const handleDelete = async (id: string) => {
+    toast('Delete user is not implemented yet');
   };
 
   const getRoleBadgeColor = (role: string) => {
@@ -82,7 +102,7 @@ export default function UsersPage() {
     }
   };
 
-  if (!user) {
+  if (!user || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
