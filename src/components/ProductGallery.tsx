@@ -23,7 +23,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
 
   return (
     <div className="space-y-4">
-      {/* Imagen principal */}
+      {/* Main image */}
       <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 group">
         <Image
           src={images[currentIndex]}
@@ -34,7 +34,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
           priority
         />
         
-        {/* Botón de zoom */}
+        {/* Zoom button */}
         <button
           onClick={() => setIsZoomOpen(true)}
           className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all opacity-0 group-hover:opacity-100"
@@ -42,7 +42,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
           <FiZoomIn className="w-5 h-5 text-gray-800" />
         </button>
 
-        {/* Navegación de imágenes */}
+        {/* Image navigation */}
         {images.length > 1 && (
           <>
             <button
@@ -58,7 +58,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
               <FiChevronRight className="w-6 h-6 text-gray-800" />
             </button>
 
-            {/* Indicador de posición */}
+            {/* Position indicator */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
               {images.map((_, idx) => (
                 <div
@@ -73,7 +73,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
         )}
       </div>
 
-      {/* Miniaturas */}
+      {/* Thumbnails */}
       {images.length > 1 && (
         <div className="grid grid-cols-4 gap-2">
           {images.map((image, idx) => (
@@ -98,7 +98,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
         </div>
       )}
 
-      {/* Modal de zoom */}
+      {/* Zoom modal */}
       {isZoomOpen && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
           <button

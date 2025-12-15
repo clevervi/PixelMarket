@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { supabaseBrowserClient } from '@/lib/supabaseClient';
+import { getSupabaseBrowserClient } from '@/lib/supabaseClient';
 
 interface LogoutButtonProps {
   className?: string;
@@ -23,21 +23,23 @@ export default function LogoutButton({
 
   const handleLogout = async () => {
     try {
-      // Cerrar sesión en Supabase (elimina cookies de sesión)
-      await supabaseBrowserClient.auth.signOut();
+      const supabase = getSupabaseBrowserClient();
 
-      // Notificar al backend para limpiar auth_token
+      // Sign out from Supabase (removes session cookies)
+      await supabase.auth.signOut();
+
+      // Notify the backend to clear auth_token
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
       
-      // Eliminar el usuario del almacenamiento local
+      // Remove the user from local storage
       localStorage.removeItem('user');
       
-      // Redirigir al login
+      // Redirect to login
       router.push('/login');
-      router.refresh(); // Forzar recarga de la página para actualizar el estado de autenticación
+      router.refresh(); // Force a refresh to update auth state
       
       toast.success('Has cerrado sesión correctamente');
     } catch (error) {
@@ -46,10 +48,10 @@ export default function LogoutButton({
     }
   };
 
-  // Estilos base
+  // Base styles
   const baseStyles = 'rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
   
-  // Variantes de estilo
+  // Style variants
   const variants = {
     primary: 'bg-primary text-white hover:bg-primary/90 focus:ring-primary',
     secondary: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary',
@@ -57,14 +59,14 @@ export default function LogoutButton({
     ghost: 'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-gray-500',
   };
   
-  // Tamaños
+  // Sizes
   const sizes = {
     sm: 'px-2.5 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
     lg: 'px-6 py-3 text-base',
   };
   
-  // Ancho completo
+  // Full width
   const widthClass = fullWidth ? 'w-full' : '';
 
   return (

@@ -99,7 +99,7 @@ export default function NotificationsPage() {
     },
   ];
 
-  // Filtrar notificaciones
+  // Filter notifications
   const notifications = allNotifications.filter(notification => {
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          notification.message.toLowerCase().includes(searchTerm.toLowerCase());
@@ -140,12 +140,12 @@ export default function NotificationsPage() {
   };
 
   const markAllAsRead = () => {
-    // Aquí implementarías la lógica para marcar todas como leídas
+    // Mark-all-as-read logic would be implemented here
     console.log('Mark all as read');
   };
 
   const deleteNotification = (id: number) => {
-    // Aquí implementarías la lógica para eliminar la notificación
+    // Delete-notification logic would be implemented here
     console.log('Delete notification:', id);
   };
 

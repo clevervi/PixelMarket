@@ -265,7 +265,7 @@ export default function ProductsPage() {
                     Edit
                   </button>
                   
-                  {user.role === 'admin' && (
+                  {canDelete && (
                     <button
                       onClick={() => handleDelete(product.id)}
                       className="flex items-center justify-center gap-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
@@ -335,7 +335,7 @@ export default function ProductsPage() {
                   }
 
                   try {
-                    // De momento, usamos una descripción generada a partir del nombre
+                    // For now, we generate a description from the name
                     const description = `${name} - ${categoryLabel}`;
                     const shortDescription = description;
 

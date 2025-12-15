@@ -25,7 +25,7 @@ export default function AdminDashboard() {
 
   const allFeaturedProducts = products.filter((p) => p.featured);
   
-  // Filtrar productos basado en el término de búsqueda
+  // Filter products based on the search term
   const featuredProducts = allFeaturedProducts.filter(product =>
     product.name.toLowerCase().includes(adminSearchTerm.toLowerCase()) ||
     product.description.toLowerCase().includes(adminSearchTerm.toLowerCase()) ||

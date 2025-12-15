@@ -22,14 +22,12 @@ export default function NewHeader() {
   const modalRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [currentUser, setCurrentUser] = useState<any>(null);
   const { t } = useTranslation();
 
-  const { items, getItemCount } = useCartStore();
+  const { getItemCount } = useCartStore();
   const { items: wishlistItems } = useWishlistStore();
-  const { user, isAuthenticated, logout } = useUserStore();
+  const { isAuthenticated, logout } = useUserStore();
   const { openCart } = useCartSidebar();
 
   const cartItemsCount = getItemCount();
@@ -75,7 +73,7 @@ export default function NewHeader() {
 
   return (
     <header className={`fixed w-full top-0 z-50 bg-white transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-md'}`}>
-      {/* Header: barra marrón con Welcome y barra blanca con título */}
+      {/* Header: brown top bar (tagline) and white bar with title */}
       <div className="w-full flex flex-col" style={{ position: 'relative', zIndex: 100 }}>
         <div
           className="bg-[#8B4513] text-white h-10 text-sm flex items-center relative"
@@ -83,7 +81,7 @@ export default function NewHeader() {
         >
           <span className="ml-18">{t.home.heroTagline}</span>
 
-          {/* Logo a la izquierda */}
+          {/* Logo on the left */}
           <div
             className="absolute z-50"
             style={{
@@ -94,7 +92,7 @@ export default function NewHeader() {
             <LogoAncestral size={70} />
           </div>
 
-          {/* Acciones a la derecha */}
+          {/* Actions on the right */}
           <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }}>
             <div className="flex items-center gap-4 whitespace-nowrap">
               <Link href="/wishlist" className="flex items-center text-white hover:text-gray-200 text-sm font-medium relative">

@@ -1,34 +1,34 @@
 -- ==================================================================================
--- LATIDO ANCESTRAL - BASE DE DATOS COMPLETA (MONOLITO + MARKETPLACE)
--- Fecha de consolidación: 2025
+-- LATIDO ANCESTRAL - COMPLETE DATABASE (MONOLITH + MARKETPLACE)
+-- Consolidation date: 2025
 -- ==================================================================================
 
--- NOTA PARA SUPABASE
--- Este script está pensado para ejecutarse directamente sobre la base de datos
--- del proyecto de Supabase (generalmente llamada "postgres") usando el SQL Editor.
--- No crea la base de datos, solo el esquema y algunos datos de ejemplo.
--- Asegúrate de:
---   1) Ejecutarlo en el schema "public" (valor por defecto en Supabase).
---   2) Tener habilitadas las extensiones indicadas más abajo (Supabase las soporta).
---   3) Revisar o eliminar los datos de ejemplo (usuarios, productos, cupones)
---      si vas a trabajar con datos reales en producción.
+-- NOTE FOR SUPABASE
+-- This script is intended to be executed directly on the Supabase project's
+-- database (usually called "postgres") using the SQL Editor.
+-- It does not create the database; it only creates the schema and some sample data.
+-- Make sure to:
+--   1) Run it in the "public" schema (Supabase default).
+--   2) Have the extensions listed below enabled (Supabase supports them).
+--   3) Review or remove the sample data (users, products, coupons)
+--      if you are going to use real production data.
 
 -- ============================================
--- 1. CONFIGURACIÓN INICIAL Y EXTENSIONES
+-- 1. INITIAL CONFIGURATION AND EXTENSIONS
 -- ============================================
 
--- Habilitar extensiones necesarias
+-- Enable required extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Configuración regional (opcional)
+-- Regional configuration (optional)
 SET timezone = 'America/Bogota';
 
 -- ============================================
--- 2. TIPOS ENUMERADOS (Consolidados)
+-- 2. ENUM TYPES (consolidated)
 -- ============================================
 
--- Se agrega 'provider' a los roles originales para soportar la lógica multi-vendor
+-- Adds 'provider' to the original roles to support multi-vendor logic
 CREATE TYPE user_role AS ENUM ('customer', 'admin', 'vendor', 'moderator', 'provider');
 
 CREATE TYPE order_status AS ENUM ('pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded');
@@ -41,10 +41,10 @@ CREATE TYPE coupon_type AS ENUM ('percentage', 'fixed_amount', 'free_shipping');
 CREATE TYPE subscription_status AS ENUM ('active', 'inactive', 'pending');
 
 -- ============================================
--- 3. TABLAS BASE (Sistema Core)
+-- 3. CORE TABLES (core system)
 -- ============================================
 
--- Roles y Permisos
+-- Roles and permissions
 CREATE TABLE roles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(50) UNIQUE NOT NULL,
@@ -65,20 +65,20 @@ CREATE TABLE roles_permisos (
     PRIMARY KEY (role_id, permiso_id)
 );
 
--- Usuarios (Base + Campos Vendor preliminares)
+-- Users (base + preliminary vendor fields)
 CREATE TABLE usuarios (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL, -- En inserts antiguos puede venir como 'nombre' completo, se ajustará
+    last_name VARCHAR(100) NOT NULL, -- In older inserts this may come as the full 'name' field; it will be adjusted
     phone VARCHAR(50),
     role user_role DEFAULT 'customer',
     
-    -- Campos de estado y marketplace
+    -- Marketplace and status fields
     is_active BOOLEAN DEFAULT true,
     status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'suspended', 'pending')),
-    vendor_id UUID, -- Se añade la FK más adelante al crear la tabla vendors
+    vendor_id UUID, -- The FK is added later after creating the vendors table
     
     email_verified BOOLEAN DEFAULT false,
     email_verified_at TIMESTAMP,
@@ -105,7 +105,7 @@ CREATE TABLE direcciones (
     country VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     is_default BOOLEAN DEFAULT false,
-    tipo VARCHAR(20), -- 'envio' o 'facturacion'
+    tipo VARCHAR(20), -- 'shipping' or 'billing'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -125,7 +125,7 @@ CREATE TABLE metodos_pago (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Catálogo
+-- Catalog
 CREATE TABLE categorias (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) UNIQUE NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE etiquetas (
 );
 
 -- ============================================
--- 4. TABLAS MULTI-VENDOR (Marketplace)
+-- 4. MULTI-VENDOR TABLES (marketplace)
 -- ============================================
 
 CREATE TABLE vendors (
@@ -170,7 +170,7 @@ CREATE TABLE vendors (
     approved_by UUID REFERENCES usuarios(id)
 );
 
--- Ahora sí podemos conectar usuarios con vendors
+-- Now we can link users with vendors
 ALTER TABLE usuarios ADD CONSTRAINT fk_usuarios_vendor_id 
     FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE SET NULL;
 
@@ -224,7 +224,7 @@ CREATE TABLE vendor_analytics (
 );
 
 -- ============================================
--- 5. PRODUCTOS Y E-COMMERCE (Continuación)
+-- 5. PRODUCTS AND E-COMMERCE (continued)
 -- ============================================
 
 CREATE TABLE productos (
@@ -241,21 +241,21 @@ CREATE TABLE productos (
     featured BOOLEAN DEFAULT false,
     is_active BOOLEAN DEFAULT true,
     
-    -- Gestión de Stock
+    -- Stock management
     stock INTEGER DEFAULT 0 CHECK (stock >= 0),
     sku VARCHAR(100) UNIQUE,
     
-    -- Datos físicos
+    -- Physical attributes
     weight DECIMAL(8, 2),
     dimensions VARCHAR(100),
     
-    -- Métricas
+    -- Metrics
     rating_average DECIMAL(3, 2) DEFAULT 0 CHECK (rating_average >= 0 AND rating_average <= 5),
     reviews_count INTEGER DEFAULT 0,
     views_count INTEGER DEFAULT 0,
     sales_count INTEGER DEFAULT 0,
     
-    -- Datos Multi-Vendor
+    -- Multi-vendor fields
     vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
     status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'out_of_stock', 'discontinued')),
     created_by UUID REFERENCES usuarios(id),
@@ -446,7 +446,7 @@ CREATE TABLE wishlist (
 );
 
 -- ============================================
--- 6. SISTEMA (Notificaciones, Logs, Config)
+-- 6. SYSTEM (notifications, logs, config)
 -- ============================================
 
 CREATE TABLE notificaciones (
@@ -457,7 +457,7 @@ CREATE TABLE notificaciones (
     message TEXT NOT NULL,
     status notification_status DEFAULT 'unread',
     link VARCHAR(500),
-    data JSONB, -- Añadido para extensibilidad del marketplace
+    data JSONB, -- Added for marketplace extensibility
     read_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -496,7 +496,7 @@ CREATE TABLE tokens (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE logs ( -- Audit Log general
+CREATE TABLE logs ( -- General audit log
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
     action VARCHAR(100) NOT NULL,
@@ -509,7 +509,7 @@ CREATE TABLE logs ( -- Audit Log general
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE audit_log ( -- Audit Log específico Marketplace (si se desea mantener separado)
+CREATE TABLE audit_log ( -- Marketplace-specific audit log (if you want to keep it separate)
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES usuarios(id),
   action VARCHAR(100) NOT NULL,
@@ -552,10 +552,10 @@ CREATE TABLE cupones_usuarios (
 );
 
 -- ============================================
--- 7. ÍNDICES
+-- 7. INDEXES
 -- ============================================
 
--- Usuarios
+-- Users
 CREATE INDEX idx_usuarios_email ON usuarios(email);
 CREATE INDEX idx_usuarios_role ON usuarios(role);
 CREATE INDEX idx_usuarios_vendor ON usuarios(vendor_id);
@@ -566,28 +566,28 @@ CREATE INDEX idx_vendors_owner ON vendors(owner_id);
 CREATE INDEX idx_vendors_slug ON vendors(slug);
 CREATE INDEX idx_vendors_status ON vendors(status);
 
--- Productos
+-- Products
 CREATE INDEX idx_productos_slug ON productos(slug);
 CREATE INDEX idx_productos_category ON productos(category_id);
 CREATE INDEX idx_productos_vendor ON productos(vendor_id);
 CREATE INDEX idx_productos_featured ON productos(featured) WHERE featured = true;
 CREATE INDEX idx_productos_active ON productos(is_active) WHERE is_active = true;
 
--- Pedidos
+-- Orders
 CREATE INDEX idx_pedidos_usuario ON pedidos(usuario_id);
 CREATE INDEX idx_pedidos_vendor ON pedidos(vendor_id);
 CREATE INDEX idx_pedidos_status ON pedidos(status);
 CREATE INDEX idx_pedidos_number ON pedidos(order_number);
 
--- Otros
+-- Other
 CREATE INDEX idx_reseñas_producto ON reseñas(producto_id);
 CREATE INDEX idx_audit_log_entity ON audit_log(entity_type, entity_id);
 
 -- ============================================
--- 8. FUNCIONES Y TRIGGERS
+-- 8. FUNCTIONS AND TRIGGERS
 -- ============================================
 
--- Función para actualizar updated_at
+-- Function to update updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -596,14 +596,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Aplicar trigger updated_at a tablas clave
+-- Apply updated_at trigger to key tables
 CREATE TRIGGER update_usuarios_updated_at BEFORE UPDATE ON usuarios FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_productos_updated_at BEFORE UPDATE ON productos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_vendors_updated_at BEFORE UPDATE ON vendors FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_pedidos_updated_at BEFORE UPDATE ON pedidos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_vendor_payouts_updated_at BEFORE UPDATE ON vendor_payouts FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Función para actualizar el rating promedio
+-- Function to update the average rating
 CREATE OR REPLACE FUNCTION update_product_rating()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -626,7 +626,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_product_rating_on_review AFTER INSERT OR UPDATE ON reseñas
     FOR EACH ROW EXECUTE FUNCTION update_product_rating();
 
--- Función para generar número de pedido
+-- Function to generate the order number
 CREATE OR REPLACE FUNCTION generate_order_number()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -641,7 +641,7 @@ CREATE SEQUENCE order_number_seq;
 CREATE TRIGGER generate_order_number_trigger BEFORE INSERT ON pedidos
     FOR EACH ROW EXECUTE FUNCTION generate_order_number();
 
--- Función para registrar movimientos de inventario
+-- Function to record inventory movements
 CREATE OR REPLACE FUNCTION register_inventory_movement()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -671,10 +671,10 @@ CREATE TRIGGER register_inventory_on_order AFTER INSERT ON detalle_pedido
     FOR EACH ROW EXECUTE FUNCTION register_inventory_movement();
 
 -- ============================================
--- 9. DATOS DE SEMILLA (SEED DATA)
+-- 9. SEED DATA
 -- ============================================
 
--- Roles y Configuración
+-- Roles and configuration
 INSERT INTO roles (name, description) VALUES
 ('admin', 'Administrador con acceso completo'),
 ('vendor', 'Vendedor con acceso a gestión de productos'),
@@ -688,7 +688,7 @@ INSERT INTO configuracion (key, value, description) VALUES
 ('tax_rate', '19', 'Tasa de impuesto en porcentaje (IVA)'),
 ('free_shipping_threshold', '100000', 'Monto mínimo para envío gratis');
 
--- Categorías
+-- Categories
 INSERT INTO categorias (name, slug, description, image, display_order) VALUES
 ('Sombreros', 'sombreros', 'Sombreros artesanales tradicionales', '/images/categories/sombreros.jpg', 1),
 ('Mochilas', 'mochilas', 'Mochilas tejidas a mano', '/images/categories/mochilas.jpg', 2),
@@ -696,27 +696,27 @@ INSERT INTO categorias (name, slug, description, image, display_order) VALUES
 ('Textiles', 'textiles', 'Ropa y telas', '/images/categories/textiles.jpg', 4),
 ('Decoración', 'decoracion', 'Hogar', '/images/categories/decoracion.jpg', 5);
 
--- Subcategorías
+-- Subcategories
 INSERT INTO categorias (name, slug, description, parent_id) 
 SELECT 'Sombreros Vueltiao', 'sombreros-vueltiao', 'Sombrero Zenú', id FROM categorias WHERE slug = 'sombreros';
 
 INSERT INTO categorias (name, slug, description, parent_id) 
 SELECT 'Mochilas Wayuu', 'mochilas-wayuu', 'Mochila Wayuu', id FROM categorias WHERE slug = 'mochilas';
 
--- Usuarios Principales (Hardcoded IDs for reference)
+-- Core users (hardcoded IDs for reference)
 -- Admin
 INSERT INTO usuarios (id, first_name, last_name, email, password_hash, role, is_active, status, email_verified) VALUES 
 ('11111111-1111-1111-1111-111111111111', 'Admin', 'User', 'admin@latidoancestral.com', '$2a$10$YQ7VlZVGvXqJKdDQ1XKxJeX9qKqN5QnF.nF9qJ5pKdLqNF9qJ5pKd', 'admin', true, 'active', true);
 
--- Vendor Owner
+-- Vendor owner
 INSERT INTO usuarios (id, first_name, last_name, email, password_hash, role, is_active, status, email_verified) VALUES 
 ('22222222-2222-2222-2222-222222222222', 'Carlos', 'Artesano', 'vendor@latidoancestral.com', '$2a$10$YQ7VlZVGvXqJKdDQ1XKxJeX9qKqN5QnF.nF9qJ5pKdLqNF9qJ5pKd', 'vendor', true, 'active', true);
 
--- Cliente
+-- Customer
 INSERT INTO usuarios (id, first_name, last_name, email, password_hash, role, is_active, status, email_verified) VALUES 
 ('33333333-3333-3333-3333-333333333333', 'María', 'Cliente', 'cliente@latidoancestral.com', '$2a$10$YQ7VlZVGvXqJKdDQ1XKxJeX9qKqN5QnF.nF9qJ5pKdLqNF9qJ5pKd', 'customer', true, 'active', true);
 
--- Crear Vendor (Tienda)
+-- Create vendor (store)
 INSERT INTO vendors (id, business_name, slug, description, owner_id, status, commission_rate, contact_email, contact_phone, address, approved_at, approved_by)
 VALUES (
   'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
@@ -733,13 +733,13 @@ VALUES (
   '11111111-1111-1111-1111-111111111111'
 );
 
--- Asignar usuario vendor a su tienda
+-- Assign the vendor user to their store
 UPDATE usuarios SET vendor_id = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' WHERE id = '22222222-2222-2222-2222-222222222222';
 
--- Etiquetas
+-- Tags
 INSERT INTO etiquetas (name, slug) VALUES ('Hecho a mano', 'hecho-a-mano'), ('Wayuu', 'wayuu'), ('Zenú', 'zenu');
 
--- Productos
+-- Products
 INSERT INTO productos (name, slug, description, short_description, price, cost_price, category_id, brand, material, featured, stock, sku, weight, rating_average, reviews_count, vendor_id, created_by)
 SELECT 
     'Sombrero Vueltiao Tradicional 19 Vueltas',
@@ -782,30 +782,30 @@ SELECT
     '22222222-2222-2222-2222-222222222222'
 FROM categorias c WHERE c.slug = 'mochilas-wayuu';
 
--- Cupones
+-- Coupons
 INSERT INTO cupones (code, type, discount_value, min_purchase_amount, starts_at, expires_at)
 VALUES ('BIENVENIDA10', 'percentage', 10, 50000, NOW(), NOW() + INTERVAL '90 days');
 
 -- ============================================
--- 10. ROW LEVEL SECURITY (RLS) PARA SUPABASE (OPCIONAL)
+-- 10. ROW LEVEL SECURITY (RLS) FOR SUPABASE (OPTIONAL)
 -- ============================================
 
--- NOTA:
--- Estas políticas están pensadas para usarse cuando la aplicación se conecta a
--- través del cliente de Supabase (supabase-js) con JWT de usuario. Las
--- conexiones directas desde el backend usando el rol "postgres" (supersuario)
--- no se verán afectadas por RLS.
--- Si aún no vas a usar Supabase Auth + RLS puedes comentar o eliminar esta
--- sección antes de ejecutar el script.
+-- NOTE:
+-- These policies are intended to be used when the application connects
+-- through the Supabase client (supabase-js) with a user JWT. Direct
+-- connections (e.g. using the "postgres" role / superuser) will not be
+-- affected by RLS.
+-- If you are not going to use Supabase Auth + RLS yet, you can comment out
+-- or remove this section before running the script.
 
--- Habilitar RLS en tablas clave
+-- Enable RLS on key tables
 ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.wishlist ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.pedidos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cupones_usuarios ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.direcciones ENABLE ROW LEVEL SECURITY;
 
--- Usuarios: cada usuario ve/actualiza solo su propio perfil
+-- Users: each user can only view/update their own profile
 CREATE POLICY "usuarios_all_service_role"
 ON public.usuarios
 FOR ALL
@@ -823,7 +823,7 @@ FOR UPDATE
 USING (id = auth.uid())
 WITH CHECK (id = auth.uid());
 
--- Wishlist: solo dueño puede ver/modificar
+-- Wishlist: only the owner can view/modify
 CREATE POLICY "wishlist_all_service_role"
 ON public.wishlist
 FOR ALL
@@ -845,7 +845,7 @@ ON public.wishlist
 FOR DELETE
 USING (usuario_id = auth.uid());
 
--- Direcciones: solo dueño puede ver/modificar
+-- Addresses: only the owner can view/modify
 CREATE POLICY "direcciones_all_service_role"
 ON public.direcciones
 FOR ALL
@@ -873,7 +873,7 @@ ON public.direcciones
 FOR DELETE
 USING (usuario_id = auth.uid());
 
--- Pedidos: clientes solo ven sus propios pedidos (admin/service_role se maneja por backend)
+-- Orders: customers only see their own orders (admin/service_role is handled by the backend)
 CREATE POLICY "pedidos_all_service_role"
 ON public.pedidos
 FOR ALL
@@ -885,7 +885,7 @@ ON public.pedidos
 FOR SELECT
 USING (usuario_id = auth.uid());
 
--- Cupones_usuarios: solo ver usos propios
+-- cupones_usuarios: only allow viewing own usage records
 CREATE POLICY "cupones_usuarios_all_service_role"
 ON public.cupones_usuarios
 FOR ALL
@@ -898,5 +898,5 @@ FOR SELECT
 USING (usuario_id = auth.uid());
 
 -- ============================================
--- FIN DEL SCRIPT
+-- END OF SCRIPT
 -- ============================================

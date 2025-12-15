@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  /* Colores originales - tonos tierra */
-  --color-primary: #8B4513;      /* Marrón silla */
+  /* Original colors - earth tones */
+  --color-primary: #8B4513;      /* Saddle brown */
   --color-secondary: #D2691E;    /* Chocolate */
   --color-accent: #F4A460;       /* Sandy brown */
-  --color-dark: #2C1810;         /* Marrón oscuro */
+  --color-dark: #2C1810;         /* Dark brown */
   
-  /* Colores adicionales - paleta tierra */
-  --color-wheat: #F5DEB3;        /* Trigo */
-  --color-cornsilk: #FFF8DC;     /* Maíz suave */
-  --color-antiquewhite: #FAEBD7; /* Blanco antiguo */
-  --color-moccasin: #FFE4B5;     /* Mocasín */
+  /* Additional colors - earth palette */
+  --color-wheat: #F5DEB3;        /* Wheat */
+  --color-cornsilk: #FFF8DC;     /* Cornsilk */
+  --color-antiquewhite: #FAEBD7; /* Antique white */
+  --color-moccasin: #FFE4B5;     /* Moccasin */
   
   /* Dark mode colors */
-  --color-dark-bg: #1a1a1a;      /* Fondo principal */
-  --color-dark-surface: #2d2d2d; /* Superficies */
-  --color-dark-text: #e5e5e5;    /* Texto principal */
-  --color-dark-brown: #3D2817;   /* Marrón oscuro 1 */
-  --color-dark-brown-2: #4A3426; /* Marrón oscuro 2 */
-  --color-dark-brown-3: #5C3D2E; /* Marrón oscuro 3 */
-  --color-dark-brown-4: #362415; /* Marrón oscuro 4 */
+  --color-dark-bg: #1a1a1a;      /* Main background */
+  --color-dark-surface: #2d2d2d; /* Surfaces */
+  --color-dark-text: #e5e5e5;    /* Main text */
+  --color-dark-brown: #3D2817;   /* Dark brown 1 */
+  --color-dark-brown-2: #4A3426; /* Dark brown 2 */
+  --color-dark-brown-3: #5C3D2E; /* Dark brown 3 */
+  --color-dark-brown-4: #362415; /* Dark brown 4 */
 }
 
 /* Tailwind custom utilities for dashboard */
@@ -182,7 +182,7 @@ body {
   background-color: var(--color-dark-surface);
 }
 
-/* Animaciones */
+/* Animations */
 @keyframes fade-in {
   from {
     opacity: 0;

@@ -14,7 +14,7 @@ export default function ProductVariantSelector({
 }: ProductVariantSelectorProps) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(variants[0]);
 
-  // Extraer opciones únicas
+  // Extract unique options
   const sizes = [...new Set(variants.map(v => v.size).filter(Boolean))];
   const colors = [...new Set(variants.map(v => v.color).filter(Boolean))];
   const materials = [...new Set(variants.map(v => v.material).filter(Boolean))];
@@ -37,7 +37,7 @@ export default function ProductVariantSelector({
 
   return (
     <div className="space-y-6">
-      {/* Selector de Talla */}
+      {/* Size selector */}
       {sizes.length > 0 && (
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -74,7 +74,7 @@ export default function ProductVariantSelector({
         </div>
       )}
 
-      {/* Selector de Color */}
+      {/* Color selector */}
       {colors.length > 0 && (
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -112,7 +112,7 @@ export default function ProductVariantSelector({
         </div>
       )}
 
-      {/* Selector de Material */}
+      {/* Material selector */}
       {materials.length > 0 && (
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -132,7 +132,7 @@ export default function ProductVariantSelector({
         </div>
       )}
 
-      {/* Selector de Modelo */}
+      {/* Model selector */}
       {models.length > 0 && (
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -152,7 +152,7 @@ export default function ProductVariantSelector({
         </div>
       )}
 
-      {/* Info de Stock y Precio */}
+      {/* Stock and price info */}
       <div className="bg-gray-50 rounded-lg p-4 space-y-2">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium text-gray-700">Available Stock:</span>

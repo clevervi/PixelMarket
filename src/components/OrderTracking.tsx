@@ -97,7 +97,7 @@ export default function OrderTracking({ order }: OrderTrackingProps) {
             }}
           ></div>
 
-          {/* Pasos */}
+          {/* Steps */}
           <div className="space-y-8">
             {statusOrder.map((status, index) => {
               const config = statusConfig[status];
@@ -106,7 +106,7 @@ export default function OrderTracking({ order }: OrderTrackingProps) {
 
               return (
                 <div key={status} className="relative flex items-center gap-4">
-                  {/* Círculo del paso */}
+                  {/* Step circle */}
                   <div 
                     className={`
                       relative z-10 flex items-center justify-center w-16 h-16 rounded-full border-4 border-white shadow-lg transition-all duration-300
@@ -120,7 +120,7 @@ export default function OrderTracking({ order }: OrderTrackingProps) {
                     {config.icon}
                   </div>
 
-                  {/* Información del paso */}
+                  {/* Step details */}
                   <div className="flex-1">
                     <h4 className={`
                       text-lg font-bold transition-colors
@@ -139,7 +139,7 @@ export default function OrderTracking({ order }: OrderTrackingProps) {
                     </p>
                   </div>
 
-                  {/* Check de completado */}
+                  {/* Completion check */}
                   {isCompleted && !isCurrent && (
                     <div className="text-green-500">
                       <FiCheckCircle className="w-6 h-6" />
@@ -152,7 +152,7 @@ export default function OrderTracking({ order }: OrderTrackingProps) {
         </div>
       )}
 
-      {/* Dirección de envío */}
+      {/* Shipping address */}
       <div className="mt-8 p-4 bg-gray-50 rounded-lg">
         <h4 className="font-semibold text-gray-900 mb-2">Shipping Address</h4>
         <p className="text-sm text-gray-600">

@@ -1,5 +1,5 @@
-// Sistema de almacenamiento en memoria para desarrollo
-// En producción, usar base de datos real
+// In-memory storage system for development
+// In production, use a real database
 
 export interface ResetTokenData {
   email: string;
@@ -17,10 +17,10 @@ export interface UserData {
   updatedAt?: Date;
 }
 
-// Almacenamiento de tokens de reset
+// Reset token storage
 export const resetTokens = new Map<string, ResetTokenData>();
 
-// Almacenamiento de usuarios (simulado)
+// User storage (mocked)
 let usersData: UserData[] = [
   { 
     id: 1,
@@ -54,17 +54,17 @@ let usersData: UserData[] = [
   }
 ];
 
-// Obtener todos los usuarios (solo para admin)
+// Get all users (admin-only)
 export function getAllUsers(): UserData[] {
   return usersData;
 }
 
-// Obtener usuario por ID
+// Get user by ID
 export function getUserById(id: number): UserData | undefined {
   return usersData.find(user => user.id === id);
 }
 
-// Crear un nuevo usuario
+// Create a new user
 export function createUser(userData: Omit<UserData, 'id' | 'createdAt' | 'updatedAt'>): UserData | null {
   const existingUser = usersData.find(u => u.email === userData.email);
   if (existingUser) return null;
@@ -81,7 +81,7 @@ export function createUser(userData: Omit<UserData, 'id' | 'createdAt' | 'update
   return newUser;
 }
 
-// Actualizar usuario
+// Update a user
 export function updateUser(id: number, userData: Partial<UserData>): UserData | null {
   const userIndex = usersData.findIndex(u => u.id === id);
   if (userIndex === -1) return null;
@@ -95,19 +95,19 @@ export function updateUser(id: number, userData: Partial<UserData>): UserData | 
   return usersData[userIndex];
 }
 
-// Eliminar usuario
+// Delete a user
 export function deleteUser(id: number): boolean {
   const initialLength = usersData.length;
   usersData = usersData.filter(u => u.id !== id);
   return usersData.length < initialLength;
 }
 
-// Obtener usuario por email
+// Get user by email
 export function getUserByEmail(email: string): UserData | undefined {
   return usersData.find(u => u.email === email);
 }
 
-// Obtener usuario actual desde localStorage
+// Get the current user from localStorage
 export function getCurrentUser(): UserData | null {
   if (typeof window === 'undefined') return null;
   const userJson = localStorage.getItem('user');
@@ -121,13 +121,13 @@ export function getCurrentUser(): UserData | null {
   }
 }
 
-// Establecer usuario actual en localStorage
+// Persist the current user in localStorage
 export function setCurrentUser(user: UserData): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem('user', JSON.stringify(user));
 }
 
-// Actualizar contraseña de usuario
+// Update a user's password
 export function updateUserPassword(email: string, newPassword: string): boolean {
   const userIndex = usersData.findIndex(u => u.email === email);
   if (userIndex === -1) return false;
@@ -138,7 +138,7 @@ export function updateUserPassword(email: string, newPassword: string): boolean 
     updatedAt: new Date()
   };
   
-  // Actualizar en localStorage si es el usuario actual
+  // Update localStorage if this is the current user
   const currentUser = getCurrentUser();
   if (currentUser && currentUser.email === email) {
     setCurrentUser(usersData[userIndex]);
@@ -147,20 +147,20 @@ export function updateUserPassword(email: string, newPassword: string): boolean 
   return true;
 }
 
-// Crear token de restablecimiento
+// Create a reset token
 export function createResetToken(email: string): string {
   const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-  const expiresAt = Date.now() + 3600000; // 1 hora de expiración
+  const expiresAt = Date.now() + 3600000; // 1 hour expiration
   resetTokens.set(token, { email, expiresAt });
   return token;
 }
 
-// Obtener datos del token de restablecimiento
+// Get reset token data
 export function getResetTokenData(token: string): ResetTokenData | undefined {
   const data = resetTokens.get(token);
   if (!data) return undefined;
   
-  // Eliminar el token si ha expirado
+  // Delete the token if it has expired
   if (data.expiresAt < Date.now()) {
     resetTokens.delete(token);
     return undefined;
@@ -169,30 +169,30 @@ export function getResetTokenData(token: string): ResetTokenData | undefined {
   return data;
 }
 
-// Eliminar token de restablecimiento
+// Delete a reset token
 export function deleteResetToken(token: string): void {
   resetTokens.delete(token);
 }
 
-// Cerrar sesión
+// Log out
 export function logout(): void {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('user');
   }
 }
 
-// Verificar si el usuario está autenticado
+// Check if the user is authenticated
 export function isAuthenticated(): boolean {
   return getCurrentUser() !== null;
 }
 
-// Verificar si el usuario tiene un rol específico
+// Check if the user has a specific role
 export function hasRole(role: string): boolean {
   const user = getCurrentUser();
   return user ? user.role === role : false;
 }
 
-// Verificar si el usuario tiene alguno de los roles especificados
+// Check if the user has any of the given roles
 export function hasAnyRole(roles: string[]): boolean {
   const user = getCurrentUser();
   return user ? roles.includes(user.role) : false;

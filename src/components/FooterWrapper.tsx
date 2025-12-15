@@ -6,7 +6,7 @@ import Footer from './Footer';
 export default function FooterWrapper() {
   const pathname = usePathname();
 
-  // Ocultar el footer en todas las páginas del dashboard
+  // Hide the footer on all dashboard pages
   if (pathname.startsWith('/dashboard')) {
     return null;
   }

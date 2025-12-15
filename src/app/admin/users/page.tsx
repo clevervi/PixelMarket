@@ -13,7 +13,7 @@ interface User {
   createdAt: string;
 }
 
-// Datos mock - 3 usuarios (sin admin)
+// Mock data - 3 users (no admin)
 const MOCK_USERS: User[] = [
   {
     id: 2,
@@ -47,9 +47,9 @@ export default function UsersPage() {
   const [isLoading] = useState(false);
   const { addNotification } = useNotificationStore();
 
-  // Filtrar usuarios: excluir admins y aplicar búsqueda
+  // Filter users: exclude admins and apply search
   const filteredUsers = users
-    .filter(user => user.role !== 'admin') // No mostrar admins
+    .filter(user => user.role !== 'admin') // Do not show admins
     .filter(user =>
       searchTerm === '' ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -101,7 +101,7 @@ export default function UsersPage() {
 
 
   const handleDelete = (userId: number, userRole: string) => {
-    // No permitir borrar admins
+    // Do not allow deleting admins
     if (userRole === 'admin') {
       addNotification({
         type: 'error',
@@ -114,7 +114,7 @@ export default function UsersPage() {
 
     if (!confirm('Are you sure you want to delete this user?')) return;
 
-    // Eliminar localmente
+    // Delete locally
     setUsers(users.filter(u => u.id !== userId));
     addNotification({
       type: 'success',

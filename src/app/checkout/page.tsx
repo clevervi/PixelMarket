@@ -76,10 +76,10 @@ export default function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      // Simular procesamiento de pago (gateway externo, etc.)
+      // Simulate payment processing (external gateway, etc.)
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // Preparar items para la orden
+      // Prepare items for the order
       const orderItems: OrderItem[] = items.map((item) => ({
         product: item.product,
         quantity: item.quantity,
@@ -87,7 +87,7 @@ export default function CheckoutPage() {
         price: item.product.price + (item.variant?.priceModifier || 0),
       }));
 
-      // Crear orden en el backend (PostgreSQL)
+      // Create the order in the backend (PostgreSQL)
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -158,16 +158,16 @@ export default function CheckoutPage() {
         updatedAt: created.createdAt,
       };
 
-      // Generar factura PDF (usando los datos locales)
+      // Generate the invoice PDF (using local data)
       generateInvoicePDF(order);
 
-      // Limpiar carrito y cupón
+      // Clear cart and coupon
       clearCart();
       removeCoupon();
 
       toast.success('Order placed successfully!');
 
-      // Redirigir a página de confirmación
+      // Redirect to the confirmation page
       router.push(`/order-confirmed?orderId=${order.id}`);
     } catch (error) {
       console.error('Checkout submit error:', error);
@@ -189,13 +189,13 @@ export default function CheckoutPage() {
     );
   }
 
-  // Si no hay usuario, ya se disparó el redirect desde el effect
+  // If there is no user, the redirect has already been triggered in the effect
   if (!user) {
     return null;
   }
 
   if (items.length === 0) {
-    // Mostrar estado vacío en la página de checkout en lugar de redirigir a una ruta inexistente
+    // Show an empty state on the checkout page instead of redirecting to a missing route
     return (
       <div className="min-h-screen flex items-center justify-center py-12 bg-gradient-to-br from-amber-50 via-white to-orange-50">
         <div className="max-w-2xl w-full text-center p-8 bg-white rounded-lg shadow-md">
@@ -227,9 +227,9 @@ export default function CheckoutPage() {
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Formulario */}
+            {/* Form */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Información de envío */}
+              {/* Shipping information */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                   <FiTruck /> {t.checkout.shippingInfo}
@@ -335,14 +335,14 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Método de pago */}
+              {/* Payment method */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                   <FiDollarSign /> {t.checkout.paymentMethod}
                 </h2>
 
                 <div className="space-y-4">
-                  {/* Opciones de pago */}
+                  {/* Payment options */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label
                       className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
@@ -417,7 +417,7 @@ export default function CheckoutPage() {
                     </label>
                   </div>
 
-                  {/* Formulario de tarjeta */}
+                  {/* Card form */}
                   {paymentMethod === 'card' && (
                     <div className="mt-4 space-y-4 p-4 bg-gray-50 rounded-lg">
                       <div>
@@ -482,7 +482,7 @@ export default function CheckoutPage() {
                     </div>
                   )}
 
-                  {/* Información de transferencia */}
+                  {/* Bank transfer information */}
                   {paymentMethod === 'transfer' && (
                     <div className="mt-4 space-y-4 p-4 bg-gray-50 rounded-lg">
                       <p className="text-sm text-gray-600">
@@ -497,7 +497,7 @@ export default function CheckoutPage() {
                     </div>
                   )}
 
-                  {/* Información contra entrega */}
+                  {/* Cash on delivery information */}
                   {paymentMethod === 'cash_on_delivery' && (
                     <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                       <p className="text-sm text-gray-600">
@@ -509,7 +509,7 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Resumen del pedido */}
+            {/* Order summary */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow-md p-6 sticky top-4">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">{t.checkout.orderSummary}</h2>

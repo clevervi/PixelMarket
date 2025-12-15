@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { FaDownload, FaEye, FaFilter } from 'react-icons/fa';
-import { useUserStore } from '@/store/userStore';
 
 interface Sale {
   id: string;
@@ -16,7 +15,6 @@ interface Sale {
 }
 
 export default function SalesPage() {
-  const { user } = useUserStore();
   const [sales, setSales] = useState<Sale[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -34,7 +32,7 @@ export default function SalesPage() {
         }
       } catch (err) {
         console.error('Failed to fetch sales:', err);
-        // Usar datos de prueba
+        // Use test data
         setSales([
           {
             id: '1',
@@ -75,7 +73,7 @@ export default function SalesPage() {
     fetchSales();
   }, []);
 
-  // Filtrar y buscar
+  // Filter and search
   const filteredSales = sales.filter((sale) => {
     const matchStatus = filterStatus === 'all' || sale.status === filterStatus;
     const matchSearch =

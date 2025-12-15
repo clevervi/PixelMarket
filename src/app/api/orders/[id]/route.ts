@@ -77,7 +77,7 @@ export async function GET(
         );
       }
 
-      // Solo las líneas de este vendor
+      // Only line items belonging to this vendor
       itemsRes = await pool.query<{
         id: string;
         producto_id: string | null;
@@ -108,7 +108,7 @@ export async function GET(
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     } else {
-      // Admin o cliente: todas las líneas del pedido
+      // Admin or customer: all line items for the order
       itemsRes = await pool.query<{
         id: string;
         producto_id: string | null;
@@ -135,7 +135,7 @@ export async function GET(
       );
     }
 
-    // Autorización final: admin, dueño del pedido (cliente) o vendor con líneas propias
+    // Final authorization: admin, order owner (customer), or vendor with their own items
     const isAdmin = currentUser.role === 'admin';
     const isCustomerOwner =
       currentUser.role !== 'admin' && currentUser.role !== 'vendor' && order.usuario_id === currentUser.sub;

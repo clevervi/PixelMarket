@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseServiceClient } from '@/lib/supabaseClient';
 
-// Envía el email de recuperación usando Supabase Auth.
-// La UX no debe revelar si el email existe o no.
+// Sends the recovery email using Supabase Auth.
+// The UX must not reveal whether the email exists or not.
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json();
@@ -16,16 +16,16 @@ export async function POST(request: NextRequest) {
 
     const supabase = createSupabaseServiceClient();
 
-    // Supabase redirect: usamos el origin actual (local o Vercel) para que el link funcione.
+    // Supabase redirect: use the current origin (local or Vercel) so the link works.
     const redirectTo = `${request.nextUrl.origin}/reset-password`;
 
-    // NOTA: esto puede responder success incluso si el email no existe.
+    // NOTE: this may respond with success even if the email does not exist.
     const { error } = await supabase.auth.resetPasswordForEmail(String(email).trim(), {
       redirectTo,
     });
 
     if (error) {
-      // No revelamos detalles al usuario final
+      // Do not reveal details to the end user
       console.error('Supabase resetPasswordForEmail error:', error);
     }
 

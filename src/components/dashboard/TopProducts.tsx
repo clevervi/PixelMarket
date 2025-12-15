@@ -17,7 +17,7 @@ export default function TopProducts({ products }: TopProductsProps) {
         <TrendingUp className="w-6 h-6 text-primary" />
       </div>
       <div className="space-y-4">
-        {products.map((product, index) => (
+        {products.map((product) => (
           <div
             key={product.id}
             className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-brown transition-colors duration-200"

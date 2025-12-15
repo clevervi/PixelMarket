@@ -55,7 +55,7 @@ export default function PerfilPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Información Personal */}
+          {/* Personal information */}
           <Link
             href="/profile/information"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow"
@@ -79,7 +79,7 @@ export default function PerfilPage() {
             </div>
           </Link>
 
-          {/* Direcciones */}
+          {/* Addresses */}
           <Link
             href="/profile/addresses"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow"
@@ -100,7 +100,7 @@ export default function PerfilPage() {
             </div>
           </Link>
 
-          {/* Métodos de Pago */}
+          {/* Payment methods */}
           <Link
             href="/profile/payment-methods"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow"
@@ -123,7 +123,7 @@ export default function PerfilPage() {
             </div>
           </Link>
 
-          {/* Pedidos */}
+          {/* Orders */}
           <Link
             href="/profile/orders"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow"
@@ -146,7 +146,7 @@ export default function PerfilPage() {
             </div>
           </Link>
 
-          {/* Lista de Deseos */}
+          {/* Wishlist */}
           <Link
             href="/wishlist"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow"
@@ -169,7 +169,7 @@ export default function PerfilPage() {
             </div>
           </Link>
 
-          {/* Cerrar Sesión */}
+          {/* Log out */}
           <button
             onClick={handleLogout}
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow text-left"

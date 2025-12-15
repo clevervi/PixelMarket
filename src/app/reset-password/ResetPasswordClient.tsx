@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiLock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { supabaseBrowserClient } from '@/lib/supabaseClient';
+import { getSupabaseBrowserClient } from '@/lib/supabaseClient';
 
 export default function ResetPasswordClient() {
   const router = useRouter();
@@ -24,16 +24,18 @@ export default function ResetPasswordClient() {
   const [error, setError] = useState<string>('');
   const [isValidLink, setIsValidLink] = useState(false);
 
-  // Intercambiar el `code` por una sesión (PKCE) cuando venimos del email de Supabase
+  // Exchange `code` for a session (PKCE) when coming from the Supabase email
   useEffect(() => {
     const run = async () => {
       try {
         setValidating(true);
         setError('');
 
-        // Si venimos del email, Supabase suele mandar ?code=...&type=recovery
+        const supabase = getSupabaseBrowserClient();
+
+        // Supabase emails usually include ?code=...&type=recovery
         if (code) {
-          const { error: exchangeError } = await supabaseBrowserClient.auth.exchangeCodeForSession(code);
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
           if (exchangeError) {
             console.error('exchangeCodeForSession error:', exchangeError);
             setError('Reset link is invalid or has expired');
@@ -42,15 +44,15 @@ export default function ResetPasswordClient() {
           }
         }
 
-        // Confirmar que existe sesión para poder actualizar password
-        const { data } = await supabaseBrowserClient.auth.getSession();
+        // Ensure a session exists so we can update the password
+        const { data } = await supabase.auth.getSession();
         if (!data.session) {
           setError('Reset link is invalid or has expired');
           setIsValidLink(false);
           return;
         }
 
-        // Si `type` está presente y no es recovery, no es un link válido para reset
+        // If `type` is present and isn't recovery, it's not a valid reset link
         if (type && type !== 'recovery') {
           setError('Invalid reset link');
           setIsValidLink(false);
@@ -89,7 +91,8 @@ export default function ResetPasswordClient() {
     setLoading(true);
 
     try {
-      const { error: updateError } = await supabaseBrowserClient.auth.updateUser({ password });
+      const supabase = getSupabaseBrowserClient();
+      const { error: updateError } = await supabase.auth.updateUser({ password });
       if (updateError) {
         console.error('updateUser error:', updateError);
         throw new Error('Failed to reset password');
@@ -97,8 +100,8 @@ export default function ResetPasswordClient() {
 
       setSuccess(true);
 
-      // Buen hygiene: cerrar sesión de recovery
-      await supabaseBrowserClient.auth.signOut().catch(() => undefined);
+      // Good hygiene: sign out from the recovery session
+      await supabase.auth.signOut().catch(() => undefined);
 
       setTimeout(() => router.push('/login'), 1500);
     } catch (err: any) {

@@ -11,7 +11,7 @@ export default function SearchBar({ onSearch, availableColors }: SearchBarProps)
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
 
-  // Actualiza el estado pero no filtra hasta presionar el botón
+  // Update state but don't filter until the button is pressed
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -33,7 +33,7 @@ export default function SearchBar({ onSearch, availableColors }: SearchBarProps)
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Búsqueda por nombre */}
+        {/* Search by name */}
         <div className="flex-1">
           <label htmlFor="search" className="block text-sm font-semibold text-gray-700 mb-2">
             Search by name
@@ -48,7 +48,7 @@ export default function SearchBar({ onSearch, availableColors }: SearchBarProps)
           />
         </div>
 
-        {/* Filtro por color */}
+        {/* Filter by color */}
         <div className="md:w-64">
           <label htmlFor="color" className="block text-sm font-semibold text-gray-700 mb-2">
             Filter by color
@@ -68,7 +68,7 @@ export default function SearchBar({ onSearch, availableColors }: SearchBarProps)
           </select>
         </div>
 
-        {/* Botón de buscar */}
+        {/* Search button */}
         <div className="flex items-end">
           <button
             onClick={handleSearch}
@@ -78,7 +78,7 @@ export default function SearchBar({ onSearch, availableColors }: SearchBarProps)
           </button>
         </div>
 
-        {/* Botón de limpiar */}
+        {/* Clear button */}
         {(searchTerm || selectedColor) && (
           <div className="flex items-end">
             <button
@@ -91,7 +91,7 @@ export default function SearchBar({ onSearch, availableColors }: SearchBarProps)
         )}
       </div>
 
-      {/* Indicador de resultados */}
+      {/* Results indicator */}
       {(searchTerm || selectedColor) && (
         <div className="mt-4 text-sm text-gray-600">
           Filtering by:{" "}

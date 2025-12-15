@@ -1,6 +1,6 @@
 import type { Product } from '@/types';
 
-// Schema.org markup para productos
+// Schema.org markup for products
 export function generateProductSchema(product: Product, averageRating?: number, reviewCount?: number) {
   const schema = {
     '@context': 'https://schema.org',
@@ -35,7 +35,7 @@ export function generateProductSchema(product: Product, averageRating?: number, 
   return JSON.stringify(schema);
 }
 
-// Schema.org markup para organización
+// Schema.org markup for organization
 export function generateOrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
@@ -67,7 +67,7 @@ export function generateOrganizationSchema() {
   return JSON.stringify(schema);
 }
 
-// Schema.org markup para breadcrumbs
+// Schema.org markup for breadcrumbs
 export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
   const schema = {
     '@context': 'https://schema.org',
@@ -83,7 +83,7 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
   return JSON.stringify(schema);
 }
 
-// Generar meta tags para SEO
+// Generate SEO meta tags
 export interface MetaTags {
   title: string;
   description: string;
@@ -120,14 +120,14 @@ export function generateMetaTags(tags: MetaTags) {
   };
 }
 
-// Generar URL amigable (slug)
+// Generate a URL-friendly slug
 export function generateSlug(text: string): string {
   return text
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos
-    .replace(/[^a-z0-9\s-]/g, '') // Eliminar caracteres especiales
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
     .trim()
-    .replace(/\s+/g, '-') // Reemplazar espacios con guiones
-    .replace(/-+/g, '-'); // Eliminar guiones múltiples
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-'); // Collapse repeated hyphens
 }

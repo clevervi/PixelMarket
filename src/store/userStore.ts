@@ -12,7 +12,7 @@ interface RegisterData {
 
 interface UserStore {
   user: User | null;
-  users: User[]; // Lista de usuarios registrados
+  users: User[]; // List of registered users
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   register: (data: RegisterData) => Promise<{ success: boolean; message?: string }>;
@@ -40,12 +40,12 @@ export const useUserStore = create<UserStore>()(
         
         const { users } = get();
         
-        // Verificar si el email ya existe
+        // Check whether the email already exists
         if (users.find(u => u.email.toLowerCase() === data.email.toLowerCase())) {
           return { success: false, message: 'Este correo ya está registrado' };
         }
 
-        // Crear nuevo usuario
+        // Create a new user
         const newUser: User = {
           id: `user_${Date.now()}`,
           email: data.email,
@@ -59,7 +59,7 @@ export const useUserStore = create<UserStore>()(
           createdAt: new Date(),
         };
 
-        // Guardar usuario en la lista y hacer login automáticamente
+        // Save user in the list and log in automatically
         set({ 
           users: [...users, newUser],
           user: newUser, 
@@ -74,15 +74,15 @@ export const useUserStore = create<UserStore>()(
         
         const { users } = get();
         
-        // Buscar usuario por email (en producción validar password con hash)
+        // Find user by email (in production validate password with a hash)
         const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
         
         if (!foundUser) {
           return { success: false, message: 'Usuario no encontrado' };
         }
 
-        // En producción, validar password
-        // Por ahora, cualquier password es válido para testing
+        // In production, validate the password
+        // For now, any password is accepted for testing
         if (password.length < 6) {
           return { success: false, message: 'Contraseña inválida' };
         }

@@ -8,7 +8,7 @@ export default function EsenciaPage() {
       </h1>
 
       <div className="max-w-5xl mx-auto space-y-8">
-        {/* Nuestra Raíz */}
+        {/* Our roots */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary">
             Our Roots
@@ -44,7 +44,7 @@ export default function EsenciaPage() {
           </div>
         </section>
 
-        {/* Elegirnos es Abrazar una Historia */}
+        {/* Choosing us is embracing a story */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary">
             Choosing Us is Embracing a Story
@@ -69,7 +69,7 @@ export default function EsenciaPage() {
           </div>
         </section>
 
-        {/* Una Herencia que Vibra Contigo */}
+        {/* A heritage that vibrates with you */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary">
             A Heritage that Vibrates with You
@@ -85,7 +85,7 @@ export default function EsenciaPage() {
           </p>
         </section>
 
-        {/* Nuestros Valores */}
+        {/* Our values */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-8 text-primary text-center">
             Our Values

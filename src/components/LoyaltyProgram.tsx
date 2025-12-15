@@ -162,7 +162,7 @@ export default function LoyaltyProgram() {
         </div>
       </div>
 
-      {/* Historial reciente */}
+      {/* Recent history */}
       {pointsHistory.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h4 className="text-xl font-bold text-gray-900 mb-4">
@@ -193,7 +193,7 @@ export default function LoyaltyProgram() {
         </div>
       )}
 
-      {/* Cómo ganar puntos */}
+      {/* How to earn points */}
       <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-6">
         <h4 className="text-lg font-bold text-gray-900 mb-4">
           How to earn points?

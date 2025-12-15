@@ -8,7 +8,7 @@ export default function InspiracionPage() {
       </h1>
 
       <div className="max-w-5xl mx-auto space-y-8">
-        {/* Lo que nos inspira */}
+        {/* What inspires us */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary">
             What Inspires Us
@@ -32,7 +32,7 @@ export default function InspiracionPage() {
           </div>
         </section>
 
-        {/* Fragmentos de Sabiduría - Voces entre hilos */}
+        {/* Fragments of Wisdom - Voices Among Threads */}
         <section className="bg-gradient-to-br from-primary/10 to-accent/20 rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary text-center">
             Fragments of Wisdom
@@ -71,7 +71,7 @@ export default function InspiracionPage() {
           </div>
         </section>
 
-        {/* Historias que Inspiran */}
+        {/* Stories that Inspire */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary text-center">
             Stories that Inspire
@@ -113,7 +113,7 @@ export default function InspiracionPage() {
           </div>
         </section>
 
-        {/* Postales de Raíz */}
+        {/* Root Postcards */}
         <section className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-6 text-primary text-center">
             Root Postcards
@@ -145,7 +145,7 @@ export default function InspiracionPage() {
           </div>
         </section>
 
-        {/* Cierre Inspirador */}
+        {/* Inspirational closing */}
         <section className="bg-gradient-to-r from-primary to-secondary text-white rounded-xl shadow-lg p-8 md:p-12 text-center">
           <h2 className="text-3xl font-bold mb-6">
             We Weave with the Heart

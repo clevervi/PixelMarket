@@ -10,7 +10,7 @@ export function useLanguageCookie() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Leer la cookie del idioma
+    // Read the language cookie
     const cookies = document.cookie
       .split('; ')
       .reduce((acc, cookie) => {
@@ -26,7 +26,7 @@ export function useLanguageCookie() {
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    // Guardar en cookie con expiración de 1 año
+    // Save to a cookie with a 1-year expiration
     const date = new Date();
     date.setFullYear(date.getFullYear() + 1);
     document.cookie = `language=${lang}; expires=${date.toUTCString()}; path=/`;

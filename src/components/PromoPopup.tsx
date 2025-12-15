@@ -7,7 +7,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { useTranslation } from '@/hooks/useTranslation';
 
 interface PromoPopupProps {
-  delay?: number; // Tiempo de espera antes de mostrar (en ms)
+  delay?: number; // Delay before showing (in ms)
 }
 
 export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
@@ -21,17 +21,17 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // No mostrar si ya está suscrito
+    // Don't show if the user is already subscribed
     if (isSubscribed) return;
 
     const quizSeen = window.localStorage.getItem('style_quiz_seen') === 'true';
-    if (!quizSeen) return; // Esperar a que el usuario haya visto/decidido sobre el quiz
+    if (!quizSeen) return; // Wait until the user has seen/decided about the quiz
 
-    // Verificar si el popup ya se mostró alguna vez en este dispositivo
+    // Check if the popup has already been shown on this device
     const popupShown = window.localStorage.getItem('welcome_coupon_shown') === 'true';
     if (popupShown) return;
 
-    // Mostrar después del delay
+    // Show after the delay
     const timer = setTimeout(() => {
       setIsVisible(true);
       window.localStorage.setItem('welcome_coupon_shown', 'true');
@@ -64,7 +64,7 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
       const success = await subscribe(email);
 
       if (success) {
-        // Registrar uso del cupón a nivel backend si el usuario está autenticado
+        // Record coupon usage on the backend if the user is authenticated
         try {
           await fetch('/api/coupons/use', {
             method: 'POST',
@@ -72,7 +72,7 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
             body: JSON.stringify({ code: 'BIENVENIDA10' }),
           }).catch(() => undefined);
         } catch {
-          // Silenciar errores de tracking de cupón; la experiencia del usuario no depende de esto
+          // Silence coupon-tracking errors; the user experience does not depend on this
         }
 
         addNotification({
@@ -116,7 +116,7 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
           className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden pointer-events-auto animate-scale-in"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Botón cerrar */}
+          {/* Close button */}
           <button
             onClick={handleClose}
             className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors z-10"
@@ -124,7 +124,7 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
             <FiX className="w-5 h-5 text-gray-600" />
           </button>
 
-          {/* Header con gradiente vertical */}
+          {/* Header with vertical gradient */}
           <div className="bg-gradient-to-b from-[#8B4513] to-[#D2691E] text-white p-8 text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-4">
               <FiGift className="w-10 h-10" />
@@ -137,7 +137,7 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
             </p>
           </div>
 
-          {/* Contenido */}
+          {/* Content */}
           <div className="p-8">
             <p className="text-center text-gray-600 mb-6">
               {t.promo.description}
@@ -162,7 +162,7 @@ export default function PromoPopup({ delay = 5000 }: PromoPopupProps) {
               </button>
             </form>
 
-            {/* Cupón preview - white dashed box with tag icon */}
+            {/* Coupon preview - white dashed box with tag icon */}
             <div className="mt-6 p-4 bg-white rounded-lg border-2 border-dashed border-yellow-400">
               <div className="flex items-center justify-between">
                 <div>

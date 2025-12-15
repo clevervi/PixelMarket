@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaSave } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaSave } from 'react-icons/fa';
 import { useNotificationStore } from '@/store/notificationStore';
 
 interface Address {
@@ -28,7 +28,6 @@ export default function AddressesPage() {
     },
   ]);
   const [isAdding, setIsAdding] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({
     label: '',
     street: '',

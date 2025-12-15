@@ -15,7 +15,7 @@ export default function StyleQuizEntryModal() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // No mostrar en la página del quiz ni en dashboard/login
+    // Don't show on the quiz page nor on dashboard/login
     if (pathname?.startsWith('/style-quiz')) return;
     if (pathname?.startsWith('/dashboard')) return;
     if (pathname?.startsWith('/login') || pathname?.startsWith('/register')) return;
@@ -23,7 +23,7 @@ export default function StyleQuizEntryModal() {
     const seen = window.localStorage.getItem(STYLE_QUIZ_KEY) === 'true';
     if (seen) return;
 
-    // Pequeño delay para no ser invasivo
+    // Small delay so it doesn't feel intrusive
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 4000);

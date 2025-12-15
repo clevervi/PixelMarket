@@ -68,7 +68,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
 
   return (
     <div ref={searchRef} className="relative w-full max-w-2xl mx-auto">
-      {/* Barra de búsqueda principal */}
+      {/* Main search bar */}
       <div className="relative">
         <div className="relative flex items-center">
           <FiSearch className="absolute left-4 w-5 h-5 text-gray-400" />
@@ -144,13 +144,13 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
           </div>
         )}
 
-        {/* Panel de filtros avanzados */}
+        {/* Advanced filters panel */}
         {showFilters && (
           <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 p-6 z-50 animate-fade-in">
             <h3 className="font-bold text-gray-900 mb-4">Advanced Filters</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Filtro de precio */}
+              {/* Price filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Price Range
@@ -170,7 +170,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
                 </div>
               </div>
 
-              {/* Filtro de categoría */}
+              {/* Category filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category
@@ -190,7 +190,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
                 </select>
               </div>
 
-              {/* Ordenar por */}
+              {/* Sort by */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sort By
@@ -205,7 +205,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
                 </select>
               </div>
 
-              {/* Disponibilidad */}
+              {/* Availability */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Availability

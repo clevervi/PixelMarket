@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Admin puede crear para cualquier vendor; vendor solo para el suyo
+    // Admin can create for any vendor; vendor only for their own store
     let effectiveVendorId: string | null = null;
     if (user.role === 'vendor') {
       effectiveVendorId = user.vendorId ?? null;

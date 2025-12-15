@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-// Endpoint legacy. Ver comentario en /api/auth/reset-password.
-export async function GET(_request: NextRequest) {
+// Legacy endpoint. See the comment in /api/auth/reset-password.
+export async function GET() {
   return NextResponse.json(
     {
       success: false,

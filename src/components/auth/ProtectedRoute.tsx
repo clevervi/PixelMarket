@@ -24,25 +24,25 @@ export default function ProtectedRoute({
       try {
         const user = getCurrentUser();
 
-        // Si no hay usuario, redirigir al login
+        // If there is no user, redirect to login
         if (!user) {
           setIsAuthorized(false);
           router.push(redirectTo);
           return;
         }
 
-        // Si se especificaron roles permitidos, verificar el rol del usuario
+        // If allowed roles were specified, check the user's role
         if (allowedRoles.length > 0 && !allowedRoles.includes(user.role || '')) {
-          // Usuario no autorizado para esta ruta
+          // User is not authorized for this route
           setIsAuthorized(false);
           router.push('/unauthorized');
           return;
         }
 
-        // Usuario autenticado y autorizado
+        // User is authenticated and authorized
         setIsAuthorized(true);
       } finally {
-        // Evita que el loader se quede “pegado” por cualquier ruta de salida
+        // Prevent the loader from getting "stuck" due to any early exit path
         setIsLoading(false);
       }
     };
@@ -59,7 +59,7 @@ export default function ProtectedRoute({
   }
 
   if (!isAuthorized) {
-    // Mientras redirige, evita un “pantallazo en blanco”
+    // While redirecting, avoid a blank screen flash
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-surface">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -70,7 +70,7 @@ export default function ProtectedRoute({
   return <>{children}</>;
 }
 
-// Helper components para roles específicos
+// Helper components for specific roles
 export const AdminRoute = ({ children }: { children: React.ReactNode }) => (
   <ProtectedRoute allowedRoles={['admin']}>
     {children}

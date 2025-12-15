@@ -8,15 +8,15 @@ const connectionString =
   undefined;
 
 function shouldUseSsl() {
-  // Permite forzar SSL explícitamente
+  // Allows explicitly forcing SSL
   if (process.env.DB_SSL === 'true') return true;
   if (process.env.DB_SSL === 'false') return false;
 
-  // Heurística: Supabase Postgres requiere SSL
+  // Heuristic: Supabase Postgres requires SSL
   const host = process.env.DB_HOST || '';
   if (host.includes('supabase.co')) return true;
 
-  // Si se usa connection string, ya manejamos SSL abajo
+  // If a connection string is used, SSL is handled below
   return false;
 }
 
@@ -26,7 +26,7 @@ const pool = connectionString
       max: parseInt(process.env.DB_POOL_MAX || '10', 10),
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 5000,
-      // Supabase requiere SSL; en local aceptamos el certificado sin verificar.
+      // Supabase requires SSL; locally we accept the certificate without verification.
       ssl: { rejectUnauthorized: false },
     })
   : new Pool({

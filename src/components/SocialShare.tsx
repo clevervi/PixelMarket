@@ -87,7 +87,7 @@ export default function SocialShare({ url, title }: SocialShareProps) {
   );
 }
 
-// Componente de iconos de redes sociales para el footer
+// Social media icon component for the footer
 export function SocialIcons() {
   return (
     <div className="flex items-center gap-4">

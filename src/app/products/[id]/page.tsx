@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -17,14 +16,14 @@ interface ProductPageProps {
   }>;
 }
 
-// Generar metadata dinámica para SEO
+// Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { id } = await params;
   const product = products.find((p) => p.id === id);
 
   if (!product) {
     return {
-      title: 'Producto no encontrado',
+      title: 'Product not found',
     };
   }
 
@@ -40,7 +39,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   });
 }
 
-// Generar rutas estáticas para mejor SEO
+// Generate static routes for better SEO
 export async function generateStaticParams() {
   return products.map((product) => ({
     id: product.id,
@@ -61,7 +60,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     minimumFractionDigits: 0,
   }).format(product.price);
 
-  // Schema markup para SEO
+  // Schema markup for SEO
   const productSchema = generateProductSchema(
     product,
     product.rating || 0,
@@ -107,7 +106,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         />
 
         <div className="flex flex-col justify-center">
-          {/* Badge de destacado */}
+          {/* Featured badge */}
           {product.featured && (
             <span className="inline-block w-fit px-3 py-1 bg-primary text-white text-sm font-semibold rounded-full mb-3">
               Featured
@@ -182,22 +181,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </div>
 
-      {/* Tabs de Información */}
+      {/* Info tabs */}
       <div className="mb-16">
   <div className="bg-[#FDF5E6] dark:bg-[#FDF5E6] rounded-xl shadow-lg p-8 border-2 border-[#F4A460]">
-          {/* Reseñas */}
+          {/* Reviews */}
           <div className="mb-12">
             <ProductReviews productId={product.id} />
           </div>
 
-          {/* Preguntas y Respuestas */}
+          {/* Q&A */}
           <div>
             <ProductQuestions productId={product.id} />
           </div>
         </div>
       </div>
 
-      {/* Recomendaciones */}
+      {/* Recommendations */}
       <div className="bg-white dark:bg-dark-surface rounded-lg shadow-lg p-8 md:p-12 border-2 border-amber-200 dark:border-amber-800 mb-12">
         <ProductRecommendations 
           currentProductId={product.id}

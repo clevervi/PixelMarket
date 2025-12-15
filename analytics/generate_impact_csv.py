@@ -3,20 +3,19 @@ import numpy as np
 from pathlib import Path
 import time
 
+"""Script: generate_impact_csv_100k.py
+
+Generates a CSV file with 100,000 records of simulated "before" and "after" metrics
+for the Ancestral Heartbeat platform.
+
+It keeps realistic distributions and relationships between metrics.
 """
-Script: generate_impact_csv_100k.py
 
-Genera un archivo CSV con 100,000 registros de métricas simuladas de "antes" y "después"
-de la plataforma Ancestral heartbeat.
+# Data generation configuration
+TOTAL_RECORDS = 100_000  # 100k records
+BATCH_SIZE = 10_000  # Write in batches for efficiency
 
-Mantiene distribuciones realistas y relaciones entre métricas.
-"""
-
-# Configuración de la generación de datos
-TOTAL_RECORDS = 100_000  # 100 mil registros
-BATCH_SIZE = 10_000  # Escribir en lotes para eficiencia
-
-# Definiciones base ampliadas
+# Expanded base definitions
 COMMUNITIES = [
     {"name": "Comunidad Wayuu", "region": "La Guajira", "category": "Mochilas"},
     {"name": "Tejidos del Caribe", "region": "Atlántico", "category": "Sombreros"},
@@ -35,7 +34,7 @@ COMMUNITIES = [
     {"name": "Sombreros Aguadeños", "region": "Caldas", "category": "Sombreros"},
 ]
 
-# Factores de crecimiento por tipo de artesanía
+# Growth factors by craft category
 CATEGORY_FACTORS = {
     "Mochilas": 1.3,
     "Sombreros": 1.2,
@@ -48,7 +47,7 @@ CATEGORY_FACTORS = {
     "Marroquinería": 1.3,
 }
 
-# Parámetros base para generación de datos
+# Base parameters for data generation
 BASE_PARAMS = {
     "before": {
         "year_range": (2021, 2023),
@@ -71,12 +70,12 @@ BASE_PARAMS = {
 }
 
 def generate_community_data(community_info, period, n_records):
-    """Genera datos para una comunidad específica."""
+    """Generate data for a specific community."""
     params = BASE_PARAMS[period]
     
     data = []
     for _ in range(n_records):
-        # Año con distribución normal (más registros en años centrales)
+        # Year with a normal distribution (more records in the middle years)
         year_range = params["year_range"]
         year = int(np.random.normal(
             loc=(year_range[0] + year_range[1]) / 2,
@@ -84,44 +83,44 @@ def generate_community_data(community_info, period, n_records):
         ))
         year = max(year_range[0], min(year_range[1], year))
         
-        # Artesanos activos
+        # Active artisans
         artisans_base = np.random.randint(params["artisans_range"][0], params["artisans_range"][1])
-        seasonal_factor = 0.8 + 0.4 * np.random.random()  # Variación estacional
+        seasonal_factor = 0.8 + 0.4 * np.random.random()  # Seasonal variation
         artisans_active = int(artisans_base * seasonal_factor)
         
-        # Pedidos (relacionado con artesanos)
+        # Orders (related to artisans)
         orders_multiplier = np.random.uniform(*params["orders_multiplier_range"])
         orders = int(artisans_active * orders_multiplier * (0.8 + 0.4 * np.random.random()))
         
-        # Piezas vendidas
+        # Pieces sold
         pieces_per_order = np.random.uniform(*params["pieces_per_order_range"])
         pieces_sold = int(orders * pieces_per_order)
         
-        # Precio promedio
+        # Average price
         base_price = np.random.uniform(*params["price_range_cop"])
         category_factor = CATEGORY_FACTORS.get(community_info["category"], 1.0)
         avg_price_cop = int(base_price * category_factor)
         
-        # Ingresos totales
+        # Total revenue
         revenue_cop = int(pieces_sold * avg_price_cop)
         
-        # Comercio justo (más alto en periodo "after")
+        # Fair trade (higher in the "after" period)
         if period == "before":
-            fair_trade_chance = 0.3  # Solo 30% de registros tienen comercio justo antes
+            fair_trade_chance = 0.3  # Only 30% of records have fair trade before
             if np.random.random() < fair_trade_chance:
                 fair_trade_premium_pct = round(np.random.uniform(*params["fair_trade_range"]), 1)
             else:
                 fair_trade_premium_pct = 0.0
         else:
-            fair_trade_chance = 0.8  # 80% tienen comercio justo después
+            fair_trade_chance = 0.8  # 80% have fair trade after
             if np.random.random() < fair_trade_chance:
                 fair_trade_premium_pct = round(np.random.uniform(*params["fair_trade_range"]), 1)
             else:
                 fair_trade_premium_pct = 0.0
         
-        # Exportaciones
+        # Exports
         export_base = np.random.uniform(*params["export_range"])
-        # Comunidades de ciertas regiones exportan más
+        # Communities in some regions export more
         if community_info["region"] in ["La Guajira", "Atlántico", "Magdalena"]:
             export_share_pct = min(100.0, round(export_base * 1.3, 1))
         else:
@@ -145,7 +144,7 @@ def generate_community_data(community_info, period, n_records):
     return data
 
 def print_statistics(data):
-    """Imprime estadísticas básicas de los datos generados."""
+    """Print basic statistics for the generated data."""
     if not data:
         return
     
@@ -160,7 +159,7 @@ def print_statistics(data):
         if period_data:
             print(f"\n{period_name} ({len(period_data):,} registros):")
             
-            # Convertir a arrays numpy para cálculos eficientes
+            # Convert to NumPy arrays for efficient calculations
             artisans = np.array([d["artisans_active"] for d in period_data])
             revenues = np.array([d["revenue_cop"] for d in period_data])
             prices = np.array([d["avg_price_cop"] for d in period_data])
@@ -174,13 +173,13 @@ def print_statistics(data):
             print(f"  • Exportaciones: {exports.mean():.1f}% (avg)")
 
 def main() -> None:
-    """Genera el CSV con 100,000 registros."""
+    """Generate the CSV with 100,000 records."""
     
     print(f"Iniciando generación de {TOTAL_RECORDS:,} registros...")
     print(f"Comunidades disponibles: {len(COMMUNITIES)}")
     print(f"Distribución: 40% antes (2021-2023), 60% después (2024-2026)")
     
-    # Crear directorio de salida
+    # Create output directory
     output_dir = Path(__file__).parent / "analytics"
     output_dir.mkdir(exist_ok=True)
     output_path = output_dir / "artesania_impacto_100k.csv"
@@ -191,13 +190,13 @@ def main() -> None:
         "avg_price_cop", "fair_trade_premium_pct", "export_share_pct",
     ]
     
-    # Semilla para reproducibilidad
+    # Seed for reproducibility
     np.random.seed(42)
     
     start_time = time.time()
     all_data = []
     
-    # Calcular número de registros por periodo
+    # Compute number of records per period
     records_before = int(TOTAL_RECORDS * 0.4)  # 40,000 registros
     records_after = TOTAL_RECORDS - records_before  # 60,000 registros
     
@@ -205,23 +204,23 @@ def main() -> None:
     print(f"  • Antes de la plataforma: {records_before:,} registros")
     print(f"  • Después de la plataforma: {records_after:,} registros")
     
-    # Generar datos "before"
+    # Generate "before" data
     print("\nGenerando datos 'before'...")
     remaining_before = records_before
     
     while remaining_before > 0:
-        # Determinar tamaño del lote actual
+        # Determine current batch size
         batch_size = min(BATCH_SIZE, remaining_before)
         
-        # Seleccionar comunidad aleatoria para este lote
+        # Pick a random community for this batch
         community_idx = np.random.randint(0, len(COMMUNITIES))
         community_info = COMMUNITIES[community_idx]
         
-        # Determinar cuántos registros para esta comunidad
-        # (distribución no uniforme - algunas comunidades tienen más datos)
+        # Decide how many records to generate for this community
+        # (non-uniform distribution - some communities have more data)
         n_for_community = min(batch_size, np.random.randint(500, 3000))
         
-        # Generar datos
+        # Generate data
         batch_data = generate_community_data(community_info, "before", n_for_community)
         all_data.extend(batch_data)
         
@@ -230,32 +229,32 @@ def main() -> None:
         if len(all_data) % 20_000 == 0:
             print(f"  Generados: {len(all_data):,} registros")
     
-    # Generar datos "after"
+    # Generate "after" data
     print("\nGenerando datos 'after'...")
     remaining_after = records_after
     
     while remaining_after > 0:
-        # Determinar tamaño del lote actual
+        # Determine current batch size
         batch_size = min(BATCH_SIZE, remaining_after)
         
-        # Seleccionar comunidad (algunas tienen más crecimiento)
-        # Dar más probabilidad a comunidades de regiones costeras (mayor crecimiento)
+        # Choose a community (some have higher growth)
+        # Give more weight to coastal regions (higher growth)
         weights = []
         for comm in COMMUNITIES:
             if comm["region"] in ["La Guajira", "Atlántico", "Magdalena", "Valle del Cauca"]:
-                weights.append(2.0)  # Mayor probabilidad
+                weights.append(2.0)  # Higher probability
             elif comm["category"] in ["Mochilas", "Joyas", "Hamacas"]:
-                weights.append(1.5)  # Probabilidad media
+                weights.append(1.5)  # Medium probability
             else:
-                weights.append(1.0)  # Probabilidad base
+                weights.append(1.0)  # Base probability
         
         community_idx = np.random.choice(len(COMMUNITIES), p=np.array(weights)/sum(weights))
         community_info = COMMUNITIES[community_idx]
         
-        # Determinar cuántos registros para esta comunidad
+        # Decide how many records to generate for this community
         n_for_community = min(batch_size, np.random.randint(1000, 4000))
         
-        # Generar datos
+        # Generate data
         batch_data = generate_community_data(community_info, "after", n_for_community)
         all_data.extend(batch_data)
         
@@ -264,31 +263,31 @@ def main() -> None:
         if len(all_data) % 20_000 == 0:
             print(f"  Generados: {len(all_data):,} registros")
     
-    # Mezclar datos para que no estén agrupados por periodo
+    # Shuffle data so it is not grouped by period
     np.random.shuffle(all_data)
     
-    # Asegurar que tenemos exactamente TOTAL_RECORDS
+    # Ensure we have exactly TOTAL_RECORDS
     all_data = all_data[:TOTAL_RECORDS]
     
-    # Escribir al archivo CSV
+    # Write to the CSV file
     print(f"\nEscribiendo {len(all_data):,} registros al archivo CSV...")
     with output_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         
-        # Escribir en lotes para mayor eficiencia
+        # Write in batches for better performance
         for i in range(0, len(all_data), BATCH_SIZE):
             batch = all_data[i:i + BATCH_SIZE]
             writer.writerows(batch)
             
-            if (i // BATCH_SIZE) % 5 == 0:  # Mostrar progreso cada 5 lotes
+            if (i // BATCH_SIZE) % 5 == 0:  # Show progress every 5 batches
                 print(f"  Escritos: {min(i + BATCH_SIZE, len(all_data)):,} registros")
     
-    # Mostrar estadísticas
+    # Show statistics
     print_statistics(all_data)
     
     elapsed_time = time.time() - start_time
-    file_size = output_path.stat().st_size / (1024**2)  # Tamaño en MB
+    file_size = output_path.stat().st_size / (1024**2)  # Size in MB
     
     print("\n" + "="*60)
     print("GENERACIÓN COMPLETADA")
@@ -299,7 +298,7 @@ def main() -> None:
     print(f"Tiempo total: {elapsed_time:.2f} segundos")
     print(f"Velocidad: {len(all_data)/elapsed_time:,.0f} registros/segundo")
     
-    # Mostrar distribución por comunidad
+    # Show distribution by community
     print("\nDistribución por comunidad (top 10):")
     community_counts = {}
     for record in all_data:

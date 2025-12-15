@@ -57,7 +57,7 @@ export default function StoreManagerDashboard() {
   
   const allFeaturedProducts = products.filter((p) => p.featured);
   
-  // Filtrar productos basado en el término de búsqueda
+  // Filter products based on the search term
   const featuredProducts = allFeaturedProducts.filter(product =>
     product.name.toLowerCase().includes(managerSearchTerm.toLowerCase()) ||
     product.description.toLowerCase().includes(managerSearchTerm.toLowerCase()) ||
@@ -76,7 +76,7 @@ export default function StoreManagerDashboard() {
         }
       } catch (err) {
         console.error('Failed to fetch stats:', err);
-        // Usar datos de prueba
+        // Use test data
         setStats({
           productsCount: 24,
           salesCount: 156,
@@ -90,6 +90,14 @@ export default function StoreManagerDashboard() {
 
     fetchStats();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8B4513]" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

@@ -39,7 +39,7 @@ export default function ContactoPage() {
 
       <div className="max-w-4xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 mb-12">
-          {/* Información de contacto */}
+          {/* Contact information */}
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold mb-6 text-primary">
              Contact Information
@@ -96,7 +96,7 @@ export default function ContactoPage() {
             </div>
           </div>
 
-          {/* Formulario de contacto */}
+          {/* Contact form */}
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold mb-6 text-primary">
               Send us a message

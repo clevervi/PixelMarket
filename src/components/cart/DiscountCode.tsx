@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useCouponStore } from '@/store/couponStore';
 import { FiTag, FiX, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { useTranslation } from '@/hooks/useTranslation';
 
 interface DiscountCodeProps {
   cartTotal: number;
@@ -14,7 +13,6 @@ export default function DiscountCode({ cartTotal }: DiscountCodeProps) {
   const { appliedCoupon, applyCoupon, removeCoupon, validateCoupon, calculateDiscount } = useCouponStore();
   const [code, setCode] = useState('');
   const [isApplying, setIsApplying] = useState(false);
-  const { t } = useTranslation();
 
   const handleApply = async () => {
     if (!code.trim()) {

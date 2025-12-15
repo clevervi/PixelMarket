@@ -26,7 +26,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const categoryProducts = products.filter((p) => p.category === id);
 
-  // Obtener colores únicos de los productos de esta categoría
+  // Get unique colors from the products in this category
   const availableColors = useMemo(() => {
     const colors = categoryProducts
       .map((p) => p.color)
@@ -34,7 +34,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     return Array.from(new Set(colors)).sort();
   }, [categoryProducts]);
 
-  // Filtrar productos basado en búsqueda
+  // Filter products based on search
   const filteredProducts = useMemo(() => {
     return categoryProducts.filter((product) => {
       const matchesSearch = searchTerm

@@ -5,7 +5,7 @@ export interface GuardContext {
   req: NextRequest;
 }
 
-// Autenticación de servidor basada únicamente en el auth_token propio
+// Server-side authentication based only on our own auth_token
 export async function requireAuth(req: NextRequest) {
   const user = getAuthUser(req);
   if (!user) {

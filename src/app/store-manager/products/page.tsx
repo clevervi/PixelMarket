@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaEdit, FaTrash, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNotificationStore } from '@/store/notificationStore';
-import { useUserStore } from '@/store/userStore';
 import { products as featuredProductsData } from '@/data/products';
 
 interface Product {
@@ -19,7 +18,6 @@ interface Product {
 }
 
 export default function StoreManagerProductsPage() {
-  const { user } = useUserStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,7 +39,7 @@ export default function StoreManagerProductsPage() {
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      // Usar productos de featured products con datos mock
+      // Use featured products data as mock products
       const mockProducts = featuredProductsData.map((p, index) => ({
         id: index + 1,
         name: p.name,

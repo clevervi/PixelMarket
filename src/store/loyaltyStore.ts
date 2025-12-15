@@ -7,8 +7,8 @@ export interface LoyaltyReward {
   description: string;
   pointsCost: number;
   type: 'discount' | 'freeShipping' | 'product';
-  value?: number; // Para descuentos
-  productId?: string; // Para productos gratis
+  value?: number; // For discounts
+  productId?: string; // For free products
 }
 
 interface LoyaltyStore {
@@ -106,7 +106,7 @@ export const useLoyaltyStore = create<LoyaltyStore>()(
       },
       
       getPointsForPurchase: (amount) => {
-        // 1 punto por cada $1000 COP gastados
+        // 1 point for every 1000 COP spent
         return Math.floor(amount / 1000);
       },
     }),

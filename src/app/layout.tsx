@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Descubre artesanías colombianas auténticas hechas a mano",
     type: "website",
   },
-  // Fijamos metadataBase para evitar el warning de Next.js y preparar el proyecto para despliegue.
+  // Set metadataBase to avoid the Next.js warning and prepare the project for deployment.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
 };
 

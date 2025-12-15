@@ -12,17 +12,17 @@ export function generateInvoicePDF(order: Order): void {
   doc.setFontSize(10);
   doc.text('Artesanías Colombianas', pageWidth / 2, 28, { align: 'center' });
   
-  // Título de factura
+  // Invoice title
   doc.setFontSize(18);
   doc.text('FACTURA DE COMPRA', pageWidth / 2, 45, { align: 'center' });
   
-  // Información de pedido
+  // Order information
   doc.setFontSize(10);
   doc.text(`Número de Orden: ${order.id}`, 15, 60);
   doc.text(`Fecha: ${new Date(order.createdAt).toLocaleDateString('es-CO')}`, 15, 67);
   doc.text(`Estado: ${getStatusLabel(order.status)}`, 15, 74);
   
-  // Información de cliente
+  // Customer information
   doc.setFontSize(12);
   doc.text('INFORMACIÓN DE ENVÍO', 15, 90);
   doc.setFontSize(10);
@@ -32,12 +32,12 @@ export function generateInvoicePDF(order: Order): void {
   doc.text(`${order.shippingAddress.postalCode || order.shippingAddress.zipCode || ''}, ${order.shippingAddress.country}`, 15, 116);
   doc.text(`Tel: ${order.shippingAddress.phone}`, 15, 122);
   
-  // Tabla de productos
+  // Products table
   let y = 140;
   doc.setFontSize(12);
   doc.text('PRODUCTOS', 15, y);
   
-  // Encabezados de tabla
+  // Table headers
   y += 10;
   doc.setFontSize(9);
   doc.text('Producto', 15, y);
@@ -45,11 +45,11 @@ export function generateInvoicePDF(order: Order): void {
   doc.text('Precio', 145, y);
   doc.text('Total', 175, y);
   
-  // Línea separadora
+  // Separator line
   y += 2;
   doc.line(15, y, pageWidth - 15, y);
   
-  // Items
+  // Line items
   y += 8;
   doc.setFontSize(9);
   order.items.forEach((item) => {
@@ -75,14 +75,14 @@ export function generateInvoicePDF(order: Order): void {
     
     y += 8;
     
-    // Nueva página si es necesario
+    // Add a new page if needed
     if (y > 250) {
       doc.addPage();
       y = 20;
     }
   });
   
-  // Totales
+  // Totals
   y += 5;
   doc.line(15, y, pageWidth - 15, y);
   y += 10;
@@ -103,7 +103,7 @@ export function generateInvoicePDF(order: Order): void {
   doc.text('TOTAL:', 130, y);
   doc.text(`$${order.total.toLocaleString('es-CO')}`, 175, y);
   
-  // Método de pago
+  // Payment method
   y += 15;
   doc.setFontSize(10);
   doc.text(`Método de pago: ${getPaymentMethodLabel(order.paymentMethod.type)}`, 15, y);
@@ -114,7 +114,7 @@ export function generateInvoicePDF(order: Order): void {
   doc.text('Ancestral heartbeat - Artesanías Colombianas', pageWidth / 2, footerY, { align: 'center' });
   doc.text('www.latidoancestral.com | contacto@latidoancestral.com', pageWidth / 2, footerY + 5, { align: 'center' });
   
-  // Descargar PDF
+  // Download PDF
   doc.save(`factura-${order.id}.pdf`);
 }
 

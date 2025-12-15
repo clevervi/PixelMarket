@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/guards';
 import { createSupabaseServiceClient } from '@/lib/supabaseClient';
 import { hashPassword } from '@/lib/auth';
 
-// GET /api/users - listado de usuarios (solo admin)
+// GET /api/users - list users (admin-only)
 export async function GET(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
@@ -46,8 +46,8 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/users - crear usuario (solo admin)
-// Crea usuario en Supabase Auth y su perfil en `public.usuarios` con el mismo UUID.
+// POST /api/users - create a user (admin-only)
+// Creates a Supabase Auth user and a matching profile row in `public.usuarios` with the same UUID.
 export async function POST(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
 
     const supabase = createSupabaseServiceClient();
 
-    // 1) Crear en Supabase Auth
+    // 1) Create in Supabase Auth
     const { data: createdAuth, error: createAuthError } = await supabase.auth.admin.createUser({
       email,
       password,
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
 
     const userId = createdAuth.user.id;
 
-    // 2) Insertar en tabla usuarios
+    // 2) Insert into usuarios table
     const passwordHash = await hashPassword(password);
 
     const { data: inserted, error: insertError } = await supabase
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
     if (insertError || !inserted) {
       console.error('POST /api/users insert profile error:', insertError);
 
-      // Best-effort: revertir usuario auth si falló el insert
+      // Best-effort: revert the auth user if the profile insert failed
       try {
         await supabase.auth.admin.deleteUser(userId);
       } catch (revertErr) {

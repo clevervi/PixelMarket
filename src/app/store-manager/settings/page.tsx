@@ -21,7 +21,6 @@ export default function StoreSettingsPage() {
   const router = useRouter();
   const { user } = useUserStore();
   const { addNotification } = useNotificationStore();
-  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const [storeInfo, setStoreInfo] = useState<StoreInfo>({

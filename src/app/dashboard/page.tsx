@@ -15,7 +15,6 @@ import {
   Users, 
   TrendingUp,
   ArrowUpRight,
-  ArrowDownRight,
   Package,
   Eye
 } from 'lucide-react';
@@ -121,7 +120,7 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Quick Stats Row - impacto en comunidades */}
+        {/* Quick Stats Row - community impact */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white dark:bg-dark-surface rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-800">
             <div className="flex items-center justify-between mb-4">

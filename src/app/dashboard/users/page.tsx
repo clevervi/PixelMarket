@@ -40,7 +40,7 @@ export default function UsersPage() {
   useEffect(() => {
     const bootstrap = async () => {
       try {
-        // Validar sesión en server (auth_token)
+        // Validate server session (auth_token)
         const meRes = await fetch('/api/auth/me', { credentials: 'include' });
         const meData = await meRes.json().catch(() => null);
 
@@ -86,7 +86,7 @@ export default function UsersPage() {
   }, [searchTerm, selectedRole, users]);
 
   const handleDelete = async (id: string) => {
-    toast('Delete user is not implemented yet');
+    toast(`Delete user (${id}) is not implemented yet`);
   };
 
   const getRoleBadgeColor = (role: string) => {

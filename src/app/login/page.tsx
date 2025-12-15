@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { supabaseBrowserClient } from '@/lib/supabaseClient';
+import { getSupabaseBrowserClient } from '@/lib/supabaseClient';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,8 +23,10 @@ export default function LoginPage() {
     setError('');
 
     try {
-      // 1) Login en Supabase Auth para crear la sesión (cookies sb-*)
-      const { data: signInData, error: signInError } = await supabaseBrowserClient.auth.signInWithPassword({
+      const supabase = getSupabaseBrowserClient();
+
+      // 1) Sign in with Supabase Auth to create the session (sb-* cookies)
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
@@ -33,7 +35,7 @@ export default function LoginPage() {
         throw new Error(signInError?.message || 'Login failed');
       }
 
-      // 2) Sincronizar con el backend para obtener el perfil (usuarios) y auth_token
+      // 2) Sync with the backend to get the profile (usuarios) and auth_token
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,7 +49,7 @@ export default function LoginPage() {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Guardar usuario en localStorage (para código cliente que ya lo usa)
+      // Persist the user in localStorage (for client code that already uses it)
       localStorage.setItem('user', JSON.stringify({
         id: data.user.id,
         email: data.user.email,
@@ -56,7 +58,7 @@ export default function LoginPage() {
         role: data.user.role,
       }));
 
-      // Redirigir al dashboard
+      // Redirect to the dashboard
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'An error occurred during login');

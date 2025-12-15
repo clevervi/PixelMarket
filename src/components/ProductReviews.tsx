@@ -111,7 +111,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         </div>
       </div>
 
-      {/* Formulario de nueva reseña */}
+      {/* New review form */}
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-[#FFF8DC] p-6 rounded-lg space-y-4 border-2 border-[#F4A460]">
           <h3 className="text-xl font-semibold text-[#8B4513]">Write your review</h3>
@@ -221,7 +221,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         </form>
       )}
 
-      {/* Lista de reseñas */}
+      {/* Reviews list */}
       <div className="space-y-6">
         {reviews.length === 0 ? (
           <p className="text-center text-[#8B4513] py-8">
@@ -261,7 +261,7 @@ function ReviewCard({ review, onMarkHelpful }: { review: Review; onMarkHelpful: 
       <h4 className="font-semibold text-[#8B4513]">{review.title}</h4>
       <p className="text-[#2C1810]">{review.comment}</p>
 
-      {/* Imágenes */}
+      {/* Images */}
       {review.images && review.images.length > 0 && (
         <div className="flex gap-2 flex-wrap">
           {review.images.map((img, idx) => (
@@ -290,7 +290,7 @@ function ReviewCard({ review, onMarkHelpful }: { review: Review; onMarkHelpful: 
         </div>
       )}
 
-      {/* Útil */}
+      {/* Helpful */}
       <div className="flex items-center gap-2 pt-3 border-t border-[#F4A460]">
         <button
           onClick={() => onMarkHelpful(review.id)}

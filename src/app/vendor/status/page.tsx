@@ -7,15 +7,13 @@ import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 export default function ApplicationStatusPage() {
   const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'approved' | 'pending' | 'rejected' | 'not-found'>('loading');
-  const [applicationEmail, setApplicationEmail] = useState('');
 
   useEffect(() => {
-    // Obtener email de la URL o del localStorage
+    // Get the email from the URL or localStorage
     const searchParams = new URLSearchParams(window.location.search);
     const email = searchParams.get('email') || localStorage.getItem('vendor-apply-email');
 
     if (email) {
-      setApplicationEmail(email);
       checkApplicationStatus(email);
     } else {
       setStatus('not-found');

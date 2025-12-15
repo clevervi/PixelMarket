@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
-// Logo local desde public/assets/logo.png
+// Local logo from public/assets/logo.png
 const LOGO_SRC = '/assets/logo.png';
 
 type LogoAncestralProps = {
@@ -9,13 +9,13 @@ type LogoAncestralProps = {
   hoverBelow?: boolean;
 };
 
-function LogoAncestral({ size = 120, hoverBelow = false }: LogoAncestralProps) {
+function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
   const [showTitle, setShowTitle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [imageLoadError, setImageLoadError] = useState(false);
 
   const handleImageError = () => {
-    // Si la imagen falla, mostrar placeholder visual
+    // If the image fails to load, show a visual placeholder
     setImageLoadError(true);
   };
 
@@ -37,8 +37,8 @@ function LogoAncestral({ size = 120, hoverBelow = false }: LogoAncestralProps) {
         aria-label="Ver logo completo"
       >
         <div style={{
-          width: 64,
-          height: 64,
+          width: size,
+          height: size,
           borderRadius: '50%',
           overflow: 'hidden',
           boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
@@ -52,14 +52,14 @@ function LogoAncestral({ size = 120, hoverBelow = false }: LogoAncestralProps) {
             <Image
               src={LOGO_SRC}
               alt="Logo Ancestral Heartbeat"
-              width={64}
-              height={64}
+              width={size}
+              height={size}
               style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               onError={handleImageError}
               priority
             />
           ) : (
-            // Fallback visual cuando ninguna imagen carga
+            // Visual fallback when no image can be loaded
             <div style={{
               width: '100%',
               height: '100%',
@@ -73,35 +73,49 @@ function LogoAncestral({ size = 120, hoverBelow = false }: LogoAncestralProps) {
               ♥
             </div>
           )}
-          {/* Antes/Después: overlay difuminado que aparece al hover/focus */}
-          <div
-            aria-hidden={!showTitle}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              fontWeight: '700',
-              fontSize: '0.9rem',
-              pointerEvents: 'none',
-              background: 'rgba(0,0,0,0.32)',
-              WebkitBackdropFilter: 'blur(4px)',
-              backdropFilter: 'blur(4px)',
-              opacity: showTitle ? 1 : 0,
-              transform: showTitle ? 'translateY(0)' : 'translateY(6px)',
-              transition: 'opacity 220ms ease, transform 220ms ease',
-              borderRadius: '50%'
-            }}
-          >
-            Ancestral Heartbeat
-          </div>
+          {!hoverBelow && (
+            <div
+              aria-hidden={!showTitle}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontWeight: '700',
+                fontSize: '0.9rem',
+                pointerEvents: 'none',
+                background: 'rgba(0,0,0,0.32)',
+                WebkitBackdropFilter: 'blur(4px)',
+                backdropFilter: 'blur(4px)',
+                opacity: showTitle ? 1 : 0,
+                transform: showTitle ? 'translateY(0)' : 'translateY(6px)',
+                transition: 'opacity 220ms ease, transform 220ms ease',
+                borderRadius: '50%'
+              }}
+            >
+              Ancestral Heartbeat
+            </div>
+          )}
         </div>
       </button>
+      {hoverBelow && showTitle && (
+        <div
+          style={{
+            marginTop: '8px',
+            textAlign: 'center',
+            fontWeight: 700,
+            fontSize: '0.9rem',
+            color: '#8B4513',
+          }}
+        >
+          Ancestral Heartbeat
+        </div>
+      )}
       {showModal && (
         <div
           style={{

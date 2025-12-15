@@ -11,15 +11,15 @@ export default function CartSessionManager() {
   useEffect(() => {
     const currentUserId = user?.id || user?.email || null;
     
-    // Actualizar el userId en el store del carrito
-    // Esto hará que el storage cambie automáticamente a la key del usuario actual
+    // Update the userId in the cart store
+    // This makes the storage key automatically switch to the current user
     setUserId(currentUserId);
     
-    // Forzar recarga del carrito desde el storage del usuario actual
+    // Force a cart reload from the current user's storage
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event('storage'));
     }
   }, [user, setUserId]);
 
-  return null; // Este componente no renderiza nada
+  return null; // This component does not render anything
 }

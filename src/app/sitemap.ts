@@ -5,7 +5,7 @@ import { categories } from '@/data/products';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://latidoancestral.com';
 
-  // Páginas estáticas
+  // Static pages
   const staticPages = [
     {
       url: baseUrl,
@@ -51,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Páginas de productos
+  // Product pages
   const productPages = products.map((product) => ({
     url: `${baseUrl}/products/${product.id}`,
     lastModified: new Date(),
@@ -59,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // Páginas de categorías
+  // Category pages
   const categoryPages = categories.map((category) => ({
     url: `${baseUrl}/collections/${category.id}`,
     lastModified: new Date(),

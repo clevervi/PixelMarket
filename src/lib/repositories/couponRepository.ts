@@ -55,7 +55,7 @@ export async function markCouponUsed(userId: string, couponId: string, orderId?:
     [couponId, userId, orderId ?? null],
   );
 
-  // Incrementar contador global de uso del cupón
+  // Increment the coupon's global usage counter
   await sql(
     `UPDATE cupones
      SET usage_count = COALESCE(usage_count, 0) + 1

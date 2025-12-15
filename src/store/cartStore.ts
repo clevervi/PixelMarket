@@ -19,7 +19,7 @@ interface CartStore {
   setUserId: (userId: string | null) => void;
 }
 
-// Función para obtener el userId actual
+// Helper to get the current userId
 const getCurrentUserId = (): string | null => {
   if (typeof window === 'undefined') return null;
   
@@ -36,7 +36,7 @@ const getCurrentUserId = (): string | null => {
   return null;
 };
 
-// Storage personalizado que usa el userId como parte de la key
+// Custom storage that uses userId as part of the key
 const userSpecificStorage = {
   getItem: (name: string) => {
     const userId = getCurrentUserId();
@@ -104,7 +104,7 @@ export const useCartStore = create<CartStore>()(
       clearCart: () => set({ items: [], discountCode: undefined, discountAmount: 0 }),
 
       applyDiscount: (code: string) => {
-        // Simulación de validación de códigos
+        // Simulated validation of discount codes
         const discountCodes: Record<string, number> = {
           'SAVE10': 10,
           'SAVE20': 20,

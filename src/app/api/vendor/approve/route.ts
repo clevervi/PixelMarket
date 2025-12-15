@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Encontrar la aplicación
+    // Find the application
     const application = getVendorApplicationById(applicationId);
     if (!application) {
       return NextResponse.json(
@@ -28,17 +28,17 @@ export async function POST(req: Request) {
     }
 
     if (action === 'approve') {
-      // Crear usuario store-manager a partir de la aplicación
+      // Create a store-manager user from the application
       const existingUser = findUserByEmail(application.email);
       
       if (existingUser) {
-        // Si el usuario existe, actualizar su rol a store-manager
+        // If the user exists, update their role to store-manager
         updateUser(application.email, {
           role: 'store-manager',
           storeName: application.business,
         });
       } else {
-        // Crear nuevo usuario como store-manager (sin contraseña, requerirá reset)
+        // Create a new store-manager user (no password, will require reset)
         const newVendor = {
           id: `vendor_${Date.now()}`,
           email: application.email,
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
           role: 'store-manager',
           storeName: application.business,
           isActive: true,
-          passwordHash: null, // El vendor deberá establecer una contraseña
+          passwordHash: null, // The vendor must set a password
         };
         addUser(newVendor);
       }

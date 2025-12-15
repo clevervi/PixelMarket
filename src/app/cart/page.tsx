@@ -9,7 +9,7 @@ import DiscountCode from '@/components/cart/DiscountCode';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function CarritoPage() {
-  const { items, removeItem, updateQuantity, getSubtotal, getTotal, clearCart, discountCode, discountAmount } = useCartStore();
+  const { items, removeItem, updateQuantity, getSubtotal, clearCart, discountCode, discountAmount } = useCartStore();
   const { calculateDiscount } = useCouponStore();
   const { t } = useTranslation();
 
@@ -49,7 +49,7 @@ export default function CarritoPage() {
         <h1 className="text-4xl font-bold text-gray-800 mb-8">{t.cart.title}</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Lista de productos */}
+          {/* Product list */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => {
               const itemPrice = item.product.price + (item.variant?.priceModifier || 0);

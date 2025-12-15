@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Comprobar si ya existe en nuestra tabla de usuarios (por compatibilidad)
+    // Check if it already exists in our users table (for compatibility)
     const existing = await findUserByEmailForAuth(email);
     if (existing) {
       return NextResponse.json(
@@ -32,12 +32,12 @@ export async function POST(request: NextRequest) {
 
     const supabase = createSupabaseServiceClient();
 
-    // Creamos también un hash local de la contraseña para cumplir con el NOT NULL
-    // de la columna password_hash en la tabla usuarios. La verificación real la hace
-    // Supabase Auth, pero mantenemos este campo por compatibilidad.
+    // We also create a local password hash to satisfy the NOT NULL constraint
+    // of the password_hash column in the usuarios table. Real verification is done by
+    // Supabase Auth, but we keep this field for compatibility.
     const passwordHash = await hashPassword(password);
 
-    // Crear el usuario en Supabase Auth (email/password)
+    // Create the user in Supabase Auth (email/password)
     const { data: signUpData, error: signUpError } = await supabase.auth.admin.createUser({
       email,
       password,
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (signUpError || !signUpData.user) {
-      // Si el proveedor indica que el email ya existe, devolvemos 409 de forma clara.
+      // If the provider indicates the email already exists, return a clear 409.
       const code = (signUpError as any)?.code;
       const status = (signUpError as any)?.status;
 
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     const authUser = signUpData.user;
     const userId = authUser.id as string;
 
-    // Insertar fila correspondiente en nuestra tabla usuarios usando el mismo UUID
+    // Insert the corresponding row in our usuarios table using the same UUID
     const insertResult = await supabase
       .from('usuarios')
       .insert({
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Leer el usuario recién creado con el helper para mantener el mismo shape/tipos
+    // Read the newly created user with the helper to keep the same shape/types
     const user = await findUserByIdForAuth(userId);
 
     if (!user) {
@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
       message: 'Account created successfully',
     }, { status: 201 });
 
-    // Seguimos emitiendo el auth_token propio para compatibilidad con guards actuales
+    // We still issue our own auth_token for compatibility with existing guards
     setAuthCookie(response, {
       sub: user.id,
       email: user.email,

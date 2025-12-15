@@ -1,6 +1,6 @@
-// Estado compartido global para la aplicación
-// En producción, esto debería estar en una base de datos
-// Nota: Este estado se pierde cuando se reinicia el servidor
+// Global shared state for the app
+// In production, this should live in a real database
+// Note: this state is lost when the server restarts
 
 let vendorApplications: any[] = [];
 let registeredUsers: any[] = [
@@ -15,7 +15,7 @@ let registeredUsers: any[] = [
   }
 ];
 
-// Funciones para vendorApplications
+// Helpers for vendorApplications
 export function addVendorApplication(application: any) {
   vendorApplications.push(application);
 }
@@ -37,7 +37,7 @@ export function updateVendorApplication(id: string, updates: any) {
   return null;
 }
 
-// Funciones para registeredUsers
+// Helpers for registeredUsers
 export function findUserByEmail(email: string) {
   return registeredUsers.find(u => u.email === email);
 }

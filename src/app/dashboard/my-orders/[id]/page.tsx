@@ -49,7 +49,7 @@ export default function OrderDetailsPage() {
     }
     setUser(currentUser);
 
-    // Cargar detalles reales del pedido
+    // Load real order details
     fetch(`/api/orders/${orderId}`)
       .then((res) => res.json())
       .then((data) => {

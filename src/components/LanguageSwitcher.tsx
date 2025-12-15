@@ -28,7 +28,7 @@ export default function LanguageSwitcher() {
   const handleLanguageChange = (code: 'en' | 'es') => {
     setLanguage(code);
     setIsOpen(false);
-    // Recarga la página después de cambiar
+    // Reload the page after changing the language
     setTimeout(() => window.location.reload(), 0);
   };
 

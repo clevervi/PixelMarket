@@ -18,9 +18,9 @@ export default function ProductBadges({
 }: ProductBadgesProps) {
   return (
     <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10 pointer-events-none">
-      {/* Badges izquierdos */}
+      {/* Left-side badges */}
       <div className="flex flex-col gap-2">
-        {/* Badge de Nuevo */}
+        {/* New badge */}
         {isNew && (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-500 text-white text-xs font-bold rounded-full shadow-lg">
             <FiStar className="w-3 h-3" />
@@ -28,7 +28,7 @@ export default function ProductBadges({
           </span>
         )}
 
-        {/* Badge de Destacado */}
+        {/* Featured badge */}
         {product.featured && (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
             <FiStar className="w-3 h-3" />
@@ -36,7 +36,7 @@ export default function ProductBadges({
           </span>
         )}
 
-        {/* Badge de Descuento */}
+        {/* Discount badge */}
         {discount && discount > 0 && (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg">
             <FiTag className="w-3 h-3" />
@@ -45,7 +45,7 @@ export default function ProductBadges({
         )}
       </div>
 
-      {/* Badges derechos - Stock */}
+      {/* Right-side badges - Stock */}
       <div className="flex flex-col gap-2">
         {stock === 0 ? (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-800 text-white text-xs font-bold rounded-full shadow-lg">
@@ -73,7 +73,7 @@ export default function ProductBadges({
   );
 }
 
-// Componente para mostrar stock inline en la página de producto
+// Component to show inline stock status on the product page
 export function StockIndicator({ stock }: { stock: number }) {
   if (stock === 0) {
     return (

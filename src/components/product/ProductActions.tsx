@@ -44,6 +44,29 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   return (
     <div className="flex flex-col sm:flex-row gap-4">
+      {/* Quantity */}
+      <div className="flex items-center justify-center border-2 border-[#F4A460] rounded-lg overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+          className="px-4 py-3 bg-white hover:bg-gray-50 text-[#8B4513] font-bold"
+          aria-label="Decrease quantity"
+        >
+          −
+        </button>
+        <div className="px-4 py-3 bg-white text-[#2C1810] font-semibold min-w-12 text-center">
+          {quantity}
+        </div>
+        <button
+          type="button"
+          onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+          className="px-4 py-3 bg-white hover:bg-gray-50 text-[#8B4513] font-bold"
+          aria-label="Increase quantity"
+        >
+          +
+        </button>
+      </div>
+
       <button 
         onClick={handleAddToCart}
         className="btn-primary flex-1 flex items-center justify-center gap-2 hover:shadow-lg transition-all"

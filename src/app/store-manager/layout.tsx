@@ -39,7 +39,7 @@ export default function StoreManagerLayout({ children }: { children: React.React
   const { user, isAuthenticated, logout } = useUserStore() as any;
   const { managerSearchTerm, setManagerSearchTerm } = useSearchStore();
 
-  // Proteger ruta - solo store-manager/admin puede acceder
+  // Protect route - only store-manager/admin can access
   useEffect(() => {
     if (!isAuthenticated || (user?.role !== 'store-manager' && user?.role !== 'admin')) {
       router.push('/login');

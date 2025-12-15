@@ -1,4 +1,4 @@
-import { sql, sqlOne } from '../db';
+import { sqlOne } from '../db';
 import type { AuthRole } from '../auth';
 import { createSupabaseServiceClient } from '../supabaseClient';
 
@@ -39,11 +39,11 @@ export interface UserOrderSummaryRow {
   created_at: string;
 }
 
-// === Nuevos helpers pensados para Supabase Auth ===
-// En lugar de usar conexión directa a PostgreSQL, estas funciones utilizan
-// el cliente de Supabase (HTTP), lo que funciona incluso en el plan gratuito.
+// === New helpers designed for Supabase Auth ===
+// Instead of using a direct PostgreSQL connection, these functions use the
+// Supabase client (HTTP), which works even on the free plan.
 
-// findUserByIdForAuth: obtiene el usuario por su UUID (igual a auth.users.id)
+// findUserByIdForAuth: fetches a user by UUID (same as auth.users.id)
 export async function findUserByIdForAuth(id: string): Promise<AuthUserRow | null> {
   const supabase = createSupabaseServiceClient();
 
@@ -74,7 +74,7 @@ export async function findUserByIdForAuth(id: string): Promise<AuthUserRow | nul
   };
 }
 
-// findUserByEmailForAuth: busca primero por email usando Supabase HTTP
+// findUserByEmailForAuth: looks up by email using Supabase HTTP
 export async function findUserByEmailForAuth(email: string): Promise<AuthUserRow | null> {
   const supabase = createSupabaseServiceClient();
 

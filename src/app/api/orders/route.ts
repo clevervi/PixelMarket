@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
       items: orderItems,
     });
 
-    // Best-effort: registrar uso del cupón vinculado a este pedido
+    // Best-effort: record coupon usage linked to this order
     if (couponId) {
       try {
         await markCouponUsed(user.sub, couponId, created.id);

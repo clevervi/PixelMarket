@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminOrVendor } from '@/lib/guards';
 import { findVendorById, findVendorByOwnerId } from '@/lib/repositories/vendorRepository';
-import { getAuthUser } from '@/lib/auth';
 
 // GET /api/vendors/me - get vendor store for current admin/vendor
 export async function GET(req: NextRequest) {

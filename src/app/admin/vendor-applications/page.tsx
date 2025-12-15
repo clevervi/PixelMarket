@@ -66,7 +66,7 @@ export default function VendorApplicationsPage() {
         body: JSON.stringify({
           applicationId,
           action: 'approve',
-          adminId: '1', // En producción, usar el ID del admin autenticado
+          adminId: '1', // In production, use the authenticated admin's ID
         }),
       });
 

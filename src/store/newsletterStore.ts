@@ -15,15 +15,15 @@ export const useNewsletterStore = create<NewsletterStore>()(
       isSubscribed: false,
       
       subscribe: async (email) => {
-        // Simulación de API call
+        // Simulated API call
         try {
-          // Validación básica de email
+          // Basic email validation
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(email)) {
             return false;
           }
           
-          // Simular delay de API
+          // Simulate API delay
           await new Promise(resolve => setTimeout(resolve, 1000));
           
           set({ 

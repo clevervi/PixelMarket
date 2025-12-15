@@ -7,8 +7,8 @@ import Link from 'next/link';
 export default function ResetPasswordLegacyRedirectPage() {
   const router = useRouter();
 
-  // Esta ruta era parte de un flujo legacy /reset-password/[token].
-  // El flujo actual usa Supabase recovery link y aterriza en /reset-password (sin token en la ruta).
+  // This route was part of a legacy /reset-password/[token] flow.
+  // The current flow uses the Supabase recovery link and lands on /reset-password (no token in the path).
   useEffect(() => {
     router.replace('/reset-password');
   }, [router]);

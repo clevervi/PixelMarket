@@ -26,43 +26,43 @@ export default function ProductRecommendations({
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { getAverageRating } = useReviewStore();
 
-  // Algoritmo de recomendación
+  // Recommendation algorithm
   const recommendations = useMemo(() => {
     const currentProduct = products.find(p => p.id === currentProductId);
     if (!currentProduct) return [];
 
-    // Filtrar productos de la misma categoría
+    // Filter products from the same category
     const sameCategory = products.filter(
       p => p.id !== currentProductId && p.category === currentCategory
     );
 
-    // Productos con colores similares (si aplica)
+    // Products with a similar color (if applicable)
     const similarColor = products.filter(
       p => p.id !== currentProductId && 
            p.category !== currentCategory &&
            p.color === currentProduct.color
     );
 
-    // Productos en rango de precio similar (±30%)
+    // Products in a similar price range (±30%)
     const priceRange = currentProduct.price * 0.3;
     const similarPrice = products.filter(
       p => p.id !== currentProductId &&
            Math.abs(p.price - currentProduct.price) <= priceRange
     );
 
-    // Combinar y priorizar
+    // Combine and prioritize
     const combined = [
-      ...sameCategory.slice(0, 2),      // 2 de la misma categoría
-      ...similarColor.slice(0, 1),      // 1 de color similar
-      ...similarPrice.slice(0, 1),      // 1 de precio similar
+      ...sameCategory.slice(0, 2),      // 2 from the same category
+      ...similarColor.slice(0, 1),      // 1 with a similar color
+      ...similarPrice.slice(0, 1),      // 1 in a similar price range
     ];
 
-    // Eliminar duplicados
+    // Remove duplicates
     const unique = combined.filter(
       (product, index, self) => self.findIndex(p => p.id === product.id) === index
     );
 
-    // Si no hay suficientes, agregar productos aleatorios
+    // If there are not enough, add random products
     if (unique.length < maxRecommendations) {
       const remaining = products
         .filter(p => p.id !== currentProductId && !unique.find(u => u.id === p.id))

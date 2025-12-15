@@ -55,7 +55,7 @@ export default function SettingsPage() {
 
   const handleProfileUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la lógica para actualizar el perfil
+    // Profile update logic would go here
     toast.success('Perfil actualizado correctamente');
   };
 
@@ -70,7 +70,7 @@ export default function SettingsPage() {
     setIsLoading(true);
     
     try {
-      // Aquí iría la lógica para actualizar la contraseña
+      // Password update logic would go here
       const success = updateUserPassword(
         user?.email || '',
         formData.newPassword
@@ -116,7 +116,7 @@ export default function SettingsPage() {
       <div className="p-6">
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Perfil */}
+        {/* Profile */}
         <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-dark dark:text-dark-text mb-6">
             Profile Information
@@ -174,7 +174,7 @@ export default function SettingsPage() {
           </form>
         </div>
         
-        {/* Cambiar contraseña */}
+        {/* Change password */}
         <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-dark dark:text-dark-text mb-6">
             Change Password
@@ -238,7 +238,7 @@ export default function SettingsPage() {
         </div>
       </div>
       
-      {/* Sección de cierre de sesión */}
+      {/* Logout section */}
       <div className="mt-8 bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold text-dark dark:text-dark-text mb-4">
           Logout
@@ -248,7 +248,7 @@ export default function SettingsPage() {
         </p>
         <button
           onClick={() => {
-            // Aquí iría la lógica para cerrar sesión
+            // Logout logic would go here
             localStorage.removeItem('user');
             router.push('/login');
           }}

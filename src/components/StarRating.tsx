@@ -29,7 +29,7 @@ export default function StarRating({
 
   return (
     <div className="flex items-center gap-1">
-      {/* Estrellas completas */}
+      {/* Full stars */}
       {Array.from({ length: fullStars }).map((_, index) => (
         <FaStar
           key={`full-${index}`}
@@ -39,7 +39,7 @@ export default function StarRating({
         />
       ))}
 
-      {/* Media estrella */}
+      {/* Half star */}
       {hasHalfStar && (
         <FaStarHalfAlt
           size={size}
@@ -48,7 +48,7 @@ export default function StarRating({
         />
       )}
 
-      {/* Estrellas vacías */}
+      {/* Empty stars */}
       {Array.from({ length: emptyStars }).map((_, index) => (
         <FaRegStar
           key={`empty-${index}`}

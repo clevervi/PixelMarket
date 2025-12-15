@@ -2,12 +2,10 @@
 
 /**
  * EXAMPLE: How to use i18n in different components
- * EJEMPLO: Cómo usar i18n en diferentes componentes
  */
 
 import { useTranslation } from '@/hooks/useTranslation';
 import { useState } from 'react';
-import type { Product } from '@/types';
 
 // ============================================================================
 // EXAMPLE 1: Simple Button with Translations
@@ -106,7 +104,7 @@ export function ExampleCheckoutForm() {
 // ============================================================================
 
 export function ExampleLanguageContext() {
-  const { t, language } = useTranslation();
+  const { language } = useTranslation();
 
   return (
     <div className="p-6 bg-white rounded-lg">

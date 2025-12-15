@@ -29,7 +29,7 @@ export default function MyOrdersPage() {
     }
     setUser(currentUser);
 
-    // Cargar órdenes reales del backend
+    // Load real orders from the backend
     fetch(`/api/users/${currentUser.id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -50,7 +50,7 @@ export default function MyOrdersPage() {
 
   if (!user) return null;
 
-  // Filtrar órdenes basado en el término de búsqueda
+  // Filter orders based on the search term
   const filteredOrders = orders.filter(order => 
     order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     order.status.toLowerCase().includes(searchTerm.toLowerCase()) ||

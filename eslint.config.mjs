@@ -3,15 +3,14 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
   {
-    // Ignoramos artefactos generados y el backend compilado para que ESLint
-    // se centre en el código fuente del frontend/proyecto principal.
+    // Ignore generated artifacts and any compiled backend output so ESLint
+    // focuses on the main Next.js codebase.
     ignores: [
       'node_modules/**',
       '.next/**',
       'out/**',
       'build/**',
       'dist/**',
-      'backend/dist/**',
       '*.config.js',
     ],
   },
@@ -25,8 +24,8 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-        // Para la demo desactivamos el modo "project" para evitar errores
-        // de parsing innecesarios; el tipado fuerte lo hace TypeScript en build.
+        // For the demo we disable "project" mode to avoid unnecessary parsing
+        // errors; TypeScript already provides strong typing during build.
         // project: './tsconfig.json',
       },
     },
@@ -35,7 +34,7 @@ export default [
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
-      // Relajamos reglas muy estrictas para evitar errores de lint en la demo.
+      // Relax overly strict rules to avoid lint noise in the demo.
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-empty-object-type': 'off',

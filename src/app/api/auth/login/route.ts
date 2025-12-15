@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createSupabaseServiceClient();
 
-    // Verificar credenciales contra Supabase Auth
+    // Verify credentials against Supabase Auth
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const authUser = signInData.user;
     const userId = authUser.id as string;
 
-    // Buscar el perfil en nuestra tabla usuarios usando el mismo UUID
+    // Look up the profile in our usuarios table using the same UUID
     const user = await findUserByIdForAuth(userId);
 
     if (!user) {
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       message: 'Login successful',
     });
 
-    // Seguimos emitiendo el auth_token propio para compatibilidad con guards actuales
+    // We still issue our own auth_token for compatibility with existing guards
     setAuthCookie(response, {
       sub: user.id,
       email: user.email,

@@ -7,7 +7,7 @@ import { useReviewStore } from '@/store/reviewStore';
 import { useQuestionStore } from '@/store/questionStore';
 import { getCurrentUser } from '@/lib/auth-storage';
 
-// Solo hidratar los stores que lo necesitan (no settings)
+// Only rehydrate the stores that need it (not settings)
 export default function StoreHydration() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -16,7 +16,7 @@ export default function StoreHydration() {
       useReviewStore.persist.rehydrate();
       useQuestionStore.persist.rehydrate();
 
-      // Sincronizar wishlist con backend si el usuario está autenticado
+      // Sync wishlist with the backend if the user is authenticated
       const user = getCurrentUser();
       if (user) {
         fetch('/api/wishlist')

@@ -10,11 +10,11 @@ export interface SupabaseAuthContext {
 }
 
 /**
- * Obtiene el usuario autenticado a través de Supabase (JWT) y la fila
- * correspondiente en la tabla `usuarios`.
+ * Get the authenticated user via Supabase (JWT) and the corresponding row
+ * in the `usuarios` table.
  */
 export async function getSupabaseAuthContext(): Promise<SupabaseAuthContext | null> {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase.auth.getUser();
 

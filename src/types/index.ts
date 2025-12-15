@@ -1,12 +1,12 @@
-// Variantes de producto
+// Product variants
 export interface ProductVariant {
   id: string;
-  size?: string;        // Talla (S, M, L, XL, etc.)
+  size?: string;        // Size (S, M, L, XL, etc.)
   color?: string;       // Color
   material?: string;    // Material
-  model?: string;       // Modelo
-  stock: number;        // Stock disponible
-  priceModifier?: number; // Modificador de precio (+/- cantidad)
+  model?: string;       // Model
+  stock: number;        // Available stock
+  priceModifier?: number; // Price modifier (+/- amount)
 }
 
 export interface Product {
@@ -15,16 +15,16 @@ export interface Product {
   description: string;
   price: number;
   image: string;
-  images?: string[];    // Múltiples imágenes
+  images?: string[];    // Multiple images
   category: string;
   color?: string;
   featured?: boolean;
-  brand?: string;       // Marca
+  brand?: string;       // Brand
   material?: string;    // Material
-  variants?: ProductVariant[]; // Variantes disponibles
-  tags?: string[];      // Tags para búsqueda
-  rating?: number;      // Calificación promedio
-  reviewsCount?: number; // Cantidad de reseñas
+  variants?: ProductVariant[]; // Available variants
+  tags?: string[];      // Search tags
+  rating?: number;      // Average rating
+  reviewsCount?: number; // Number of reviews
 }
 
 export interface Category {
@@ -34,14 +34,14 @@ export interface Category {
   image: string;
 }
 
-// Carrito de compras
+// Shopping cart
 export interface CartItem {
   product: Product;
   quantity: number;
   variant?: ProductVariant;
 }
 
-// Dirección
+// Address
 export interface Address {
   id: string;
   type?: 'shipping' | 'billing';
@@ -59,7 +59,7 @@ export interface Address {
   isDefault?: boolean;
 }
 
-// Método de pago
+// Payment method
 export type PaymentMethodType = 'card' | 'paypal' | 'transfer' | 'cash_on_delivery';
 
 export interface PaymentMethod {
@@ -74,18 +74,18 @@ export interface PaymentMethod {
   isDefault?: boolean;
 }
 
-// Estado de pedido
+// Order status
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
-// Item de pedido
+// Order item
 export interface OrderItem {
   product: Product;
   quantity: number;
   variant?: ProductVariant;
-  price: number; // Precio al momento de la compra
+  price: number; // Price at the time of purchase
 }
 
-// Pedido
+// Order
 export interface Order {
   id: string;
   userId?: string;
@@ -105,7 +105,7 @@ export interface Order {
   invoiceUrl?: string;
 }
 
-// Usuario
+// User
 export interface User {
   id: string;
   name?: string;
@@ -116,12 +116,12 @@ export interface User {
   phone?: string;
   addresses?: Address[];
   paymentMethods?: PaymentMethod[];
-  wishlist?: string[]; // IDs de productos
+  wishlist?: string[]; // Product IDs
   orders?: Order[];
   createdAt: string | Date;
 }
 
-// Filtros de búsqueda
+// Search filters
 export interface SearchFilters {
   query?: string;
   category?: string;
@@ -134,7 +134,7 @@ export interface SearchFilters {
   sortBy?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc' | 'newest' | 'rating';
 }
 
-// Reseñas
+// Reviews
 export interface Review {
   id: string;
   productId: string;
@@ -143,15 +143,15 @@ export interface Review {
   rating: number; // 1-5
   title: string;
   comment: string;
-  images?: string[]; // URLs de imágenes subidas
-  videos?: string[]; // URLs de videos subidos
+  images?: string[]; // Uploaded image URLs
+  videos?: string[]; // Uploaded video URLs
   verifiedPurchase: boolean;
-  helpful: number; // Contador de "útil"
+  helpful: number; // "Helpful" counter
   createdAt: string | Date;
   updatedAt?: string | Date;
 }
 
-// Preguntas y Respuestas
+// Q&A
 export interface Question {
   id: string;
   productId: string;
@@ -165,13 +165,13 @@ export interface Question {
   createdAt: string | Date;
 }
 
-// Tema
+// Theme
 export type Theme = 'light' | 'dark';
 
-// Idioma
+// Language
 export type Language = 'es' | 'en';
 
-// Moneda
+// Currency
 export type Currency = 'COP' | 'USD';
 
 export interface I18nConfig {

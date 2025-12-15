@@ -50,7 +50,7 @@ export default function SearchFilters({ filters, onFilterChange, onClose }: Sear
       </div>
 
       <div className="space-y-6">
-        {/* Categoría */}
+        {/* Category */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Categoría
@@ -69,7 +69,7 @@ export default function SearchFilters({ filters, onFilterChange, onClose }: Sear
           </select>
         </div>
 
-        {/* Rango de precio */}
+        {/* Price range */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Rango de Precio
@@ -131,7 +131,7 @@ export default function SearchFilters({ filters, onFilterChange, onClose }: Sear
           </select>
         </div>
 
-        {/* Ordenar por */}
+        {/* Sort by */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Ordenar por
@@ -151,7 +151,7 @@ export default function SearchFilters({ filters, onFilterChange, onClose }: Sear
           </select>
         </div>
 
-        {/* Botones */}
+        {/* Buttons */}
         <div className="flex gap-2 pt-4">
           <button
             onClick={resetFilters}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaArrowLeft, FaSave, FaImage } from 'react-icons/fa';
+import { FaArrowLeft, FaSave } from 'react-icons/fa';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useUserStore } from '@/store/userStore';
 

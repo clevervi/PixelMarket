@@ -129,7 +129,7 @@ function QuestionCard({
 
   return (
     <div className="bg-[#FDF5E6] rounded-lg border-2 border-[#F4A460] p-6 space-y-3 shadow-sm">
-      {/* Pregunta */}
+      {/* Question */}
       <div>
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1">
@@ -144,7 +144,7 @@ function QuestionCard({
           </div>
         </div>
 
-        {/* Respuesta */}
+        {/* Answer */}
         {question.answer ? (
           <div className="ml-6 mt-3 pl-4 border-l-2 border-[#F4A460] bg-[#FFE4B5] p-3 rounded">
             <div className="flex items-center gap-2 mb-1">
@@ -195,7 +195,7 @@ function QuestionCard({
         )}
       </div>
 
-      {/* Útil */}
+      {/* Helpful */}
       <div className="flex items-center gap-2 pt-3 border-t border-[#F4A460]">
         <button
           onClick={() => onMarkHelpful(question.id)}

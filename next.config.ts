@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [],
   },
-  // Permitir orígenes adicionales en desarrollo (por ejemplo, acceder al dev server
-  // desde otro dispositivo en la red local con IP 10.1.70.5).
+  // Allow additional dev origins in development (e.g. accessing the dev server
+  // from another device on the local network such as IP 10.1.70.5).
   allowedDevOrigins: [
     'localhost:3000',
     '127.0.0.1:3000',

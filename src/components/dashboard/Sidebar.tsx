@@ -29,7 +29,7 @@ interface NavItem {
   href: string;
   icon: React.ElementType;
   badge?: string;
-  roles?: string[]; // Roles que pueden ver este ítem
+  roles?: string[]; // Roles allowed to see this item
 }
 
 const navItems: NavItem[] = [
@@ -117,19 +117,19 @@ export default function Sidebar() {
   const router = useRouter();
 
   useEffect(() => {
-    // Obtener el rol del usuario actual
+    // Get the current user's role
     const currentUser = getCurrentUser();
     if (!currentUser) {
-      // Redirigir al login si no hay usuario autenticado
+      // Redirect to login if there is no authenticated user
       router.push('/login');
       return;
     }
     setUserRole(currentUser.role || 'customer');
   }, [router]);
 
-  // Filtrar elementos del menú según el rol del usuario
+  // Filter menu items based on the user's role
   const filteredNavItems = navItems.filter(item => {
-    if (!item.roles) return true; // Si no se especifican roles, se muestra a todos
+    if (!item.roles) return true; // If no roles are specified, show to everyone
     return item.roles.includes(userRole);
   });
 
