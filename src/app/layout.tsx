@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Orbitron, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import NewHeader from "@/components/NewHeader";
 import FooterWrapper from "@/components/FooterWrapper";
@@ -12,16 +13,22 @@ import { CartSidebarProvider } from "@/contexts/CartSidebarContext";
 import CartSidebar from "@/components/cart/CartSidebar";
 import CartSessionManager from "@/components/CartSessionManager";
 
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "PixelMarket - Digital Assets & Tech Marketplace",
-  description: "Senior-grade professional marketplace for high-quality digital assets, software artifacts, and technology products. Built for the modern pixel era.",
+  title: "PixelMarket Nexus | Digital Asset Infrastructure",
+  description: "Senior-grade professional marketplace for high-performance digital assets, engineering resources, and architectural templates.",
   keywords: ["digital assets", "software", "tech marketplace", "pixels", "developer tools", "e-commerce"],
-  openGraph: {
-    title: "PixelMarket - Digital Assets & Tech Marketplace",
-    description: "Discover high-quality digital assets and professional tech products.",
-    type: "website",
-  },
-  // Set metadataBase to avoid the Next.js warning and prepare the project for deployment.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
 };
 
@@ -31,8 +38,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${orbitron.variable} ${spaceGrotesk.variable} antialiased selection:bg-cyan-500/30 overflow-x-hidden mesh-gradient`}>
         <CartSidebarProvider>
           <QuickViewProvider>
             <StoreHydration />

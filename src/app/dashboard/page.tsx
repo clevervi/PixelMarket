@@ -15,8 +15,6 @@ import {
   Users, 
   TrendingUp,
   ArrowUpRight,
-  Package,
-  Eye,
   Shield,
   Layers,
   Cpu

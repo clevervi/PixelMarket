@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Shield, Lock, Eye, Users, Cookie, FileText, Mail, Info, Cpu, ArrowRight } from 'lucide-react';
+import { Shield, Lock, FileText, ArrowRight, Info, Cpu, Users, Cookie, Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Operations Security Policy | PixelMarket Nexus',

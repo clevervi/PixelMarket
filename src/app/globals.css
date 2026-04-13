@@ -1,260 +1,99 @@
 @import "tailwindcss";
 
 :root {
-  /* PixelMarket Tech Palette - Futuristic & Professional */
-  --color-primary: #6366f1;      /* Indigo 500 */
-  --color-secondary: #4f46e5;    /* Indigo 600 */
-  --color-accent: #10b981;       /* Emerald 500 (Neon highlights) */
-  --color-dark: #0f172a;         /* Slate 900 (Deepest Navy) */
+  /* Nexus Cyber-Premium Palette - Ultra High Rendering */
+  --color-primary: oklch(62.6% 0.19 253);    /* Electric Cyan */
+  --color-secondary: oklch(51.4% 0.19 278);  /* Neon Violet */
+  --color-accent: oklch(86.5% 0.18 184);     /* Laser Green */
   
-  /* UI Surface Colors */
-  --color-surface: #ffffff;
-  --color-surface-soft: #f8fafc;
-  --color-surface-muted: #f1f5f9;
+  --color-dark-bg: oklch(12% 0.02 260);      /* Deepest Obsidian */
+  --color-dark-surface: oklch(18% 0.03 260); /* Matte Slate */
+  --color-dark-text: oklch(98% 0.01 260);    /* Pure Titanium */
+  --color-dark-border: oklch(25% 0.03 260);
   
-  /* Product Accent Palette */
-  --color-tech-blue: #3b82f6;
-  --color-tech-purple: #a855f7;
-  --color-tech-cyan: #06b6d4;
-  
-  /* Dark mode colors - True Dark */
-  --color-dark-bg: #020617;      /* Extremely Deep Navy */
-  --color-dark-surface: #0f172a; /* Slate 900 */
-  --color-dark-text: #f1f5f9;   
-  --color-dark-border: #1e293b;
+  /* UX Dynamics */
+  --blur-nexus: 24px;
+  --glass-opacity: 0.12;
+  --glow-cyan: 0 0 25px -5px oklch(62.6% 0.19 253 / 40%);
 }
 
-/* Tailwind custom utilities for dashboard */
 @layer utilities {
-  .bg-primary {
-    background-color: var(--color-primary);
+  .glass-nexus {
+    background: oklch(100% 0 0 / var(--glass-opacity));
+    backdrop-filter: blur(var(--blur-nexus));
+    border: 1px solid oklch(100% 0 0 / 0.1);
   }
-  .bg-secondary {
-    background-color: var(--color-secondary);
+  
+  .glass-dark {
+    background: oklch(0% 0 0 / 0.3);
+    backdrop-filter: blur(var(--blur-nexus));
+    border: 1px solid oklch(100% 0 0 / 0.05);
   }
-  .bg-accent {
-    background-color: var(--color-accent);
+
+  .text-glow {
+    text-shadow: 0 0 12px oklch(62.6% 0.19 253 / 30%);
   }
-  .bg-dark-bg {
-    background-color: var(--color-dark-bg);
+
+  .nexus-gradient-text {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  .bg-dark-surface {
-    background-color: var(--color-dark-surface);
-  }
-  .bg-dark-brown {
-    background-color: var(--color-dark-brown);
-  }
-  .text-primary {
-    color: var(--color-primary);
-  }
-  /* semantic brand alias for easier usage */
-  .text-brand {
-    color: var(--color-primary);
-  }
-  .bg-brand {
-    background-color: var(--color-primary);
-  }
-  .text-secondary {
-    color: var(--color-secondary);
-  }
-  .text-accent {
-    color: var(--color-accent);
-  }
-  .text-dark {
-    color: var(--color-dark);
-  }
-  .text-dark-text {
-    color: var(--color-dark-text);
-  }
-  .border-primary {
-    border-color: var(--color-primary);
-  }
-  .from-primary {
-    --tw-gradient-from: var(--color-primary);
-  }
-  .to-secondary {
-    --tw-gradient-to: var(--color-secondary);
-  }
-  .to-primary\/70 {
-    --tw-gradient-to: color-mix(in srgb, var(--color-primary) 70%, transparent);
-  }
-  .from-secondary {
-    --tw-gradient-from: var(--color-secondary);
-  }
-  .to-secondary\/70 {
-    --tw-gradient-to: color-mix(in srgb, var(--color-secondary) 70%, transparent);
-  }
-  .from-accent {
-    --tw-gradient-from: var(--color-accent);
-  }
-  .to-accent\/70 {
-    --tw-gradient-to: color-mix(in srgb, var(--color-accent) 70%, transparent);
-  }
-  /* Additional gradient utilities for named colors used in templates */
-  .from-cornsilk {
-    --tw-gradient-from: var(--color-cornsilk);
-  }
-  .to-wheat {
-    --tw-gradient-to: var(--color-wheat);
-  }
-  .from-antiquewhite {
-    --tw-gradient-from: var(--color-antiquewhite);
-  }
-  .to-moccasin {
-    --tw-gradient-to: var(--color-moccasin);
-  }
-  .from-wheat {
-    --tw-gradient-from: var(--color-wheat);
-  }
-  .to-cornsilk {
-    --tw-gradient-to: var(--color-cornsilk);
-  }
-  .bg-primary\/10 {
-    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  }
-  .bg-secondary\/10 {
-    background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
-  }
-  .bg-accent\/10 {
-    background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
-  }
-  .bg-primary\/5 {
-    background-color: color-mix(in srgb, var(--color-primary) 5%, transparent);
-  }
-  .border-primary\/20 {
-    border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+  .mesh-gradient {
+    background-image: 
+      radial-gradient(circle at 0% 0%, oklch(62.6% 0.19 253 / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, oklch(51.4% 0.19 278 / 0.08) 0%, transparent 50%);
   }
 }
 
-/* Light mode (default) */
+/* Base Configuration */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #FFF8F0;
-  color: var(--color-dark);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Dark mode */
-.dark body {
-  background: var(--color-dark-bg);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background-color: var(--color-dark-bg);
   color: var(--color-dark-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: all 0.3s;
+h1, h2, h3, .font-nexus {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: -0.02em;
 }
 
-.btn-primary:hover {
-  background-color: var(--color-secondary);
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
 }
-
-.btn-secondary {
-  background-color: var(--color-accent);
-  color: var(--color-dark);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: all 0.3s;
+::-webkit-scrollbar-track {
+  background: var(--color-dark-bg);
 }
-
-.btn-secondary:hover {
-  background-color: var(--color-secondary);
-  color: white;
+::-webkit-scrollbar-thumb {
+  background: var(--color-dark-border);
+  border-radius: 10px;
+  border: 3px solid var(--color-dark-bg);
 }
-
-.card {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s;
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
-.dark .card {
-  background-color: var(--color-dark-surface);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
 }
 
 /* Animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@keyframes scanning {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.animate-scan {
+  animation: scanning 4s linear infinite;
 }
 
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.shimmer {
+  background: linear-gradient(90deg, transparent, oklch(100% 0 0 / 0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
 }
 
-@keyframes progress {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0;
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.3s ease-out;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.3s ease-out;
-}
-
-.animate-progress {
-  animation: progress 5s linear;
-}
-
-/* Hero carousel styles */
-.hero-carousel .swiper-pagination-bullet {
-  background-color: var(--color-primary);
-  opacity: 0.5;
-  width: 12px;
-  height: 12px;
-  margin: 0 6px !important;
-}
-
-.hero-carousel .swiper-pagination-bullet-active {
-  opacity: 1;
-  background-color: var(--color-primary);
-  transform: scale(1.3);
-}
-
-.hero-carousel .swiper-pagination {
-  bottom: 20px !important;
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }

@@ -1,313 +1,217 @@
 'use client';
 
 import Link from 'next/link';
-import LogoPixelMarket from './LogoPixelMarket';
-import type { Product } from '@/types';
-import { products } from '@/data/products';
-import { useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useState, useEffect } from 'react';
-import { FaShoppingCart, FaHeart, FaSearch } from 'react-icons/fa';
+import { 
+  Terminal, 
+  Search, 
+  ShoppingCart, 
+  Cpu, 
+  Activity,
+  User,
+  Menu,
+  X
+} from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
-import { useWishlistStore } from '@/store/wishlistStore';
-import { useUserStore } from '@/store/userStore';
 import { useCartSidebar } from '@/contexts/CartSidebarContext';
 import { getCurrentUser } from '@/lib/auth-storage';
 import { useTranslation } from '@/hooks/useTranslation';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NewHeader() {
-  const [showSearchModal, setShowSearchModal] = useState(false);
-  const [modalSearchTerm, setModalSearchTerm] = useState("");
-  const [modalResults, setModalResults] = useState<Product[]>([]);
-  const modalRef = useRef(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [sysTime, setSysTime] = useState('');
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const { t } = useTranslation();
+  useTranslation();
 
   const { getItemCount } = useCartStore();
-  const { items: wishlistItems } = useWishlistStore();
-  const { isAuthenticated, logout } = useUserStore();
   const { openCart } = useCartSidebar();
 
   const cartItemsCount = getItemCount();
-  const wishlistCount = wishlistItems.length;
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    // Check if user is authenticated
-    const user = getCurrentUser();
-    setCurrentUser(user);
-  }, []);
-
-  // Update user state when navigating
-  useEffect(() => {
-    const handleRouteChange = () => {
-      const user = getCurrentUser();
-      setCurrentUser(user);
-    };
-
-    // Listen for storage changes (when user logs in/out in another tab)
-    window.addEventListener('storage', handleRouteChange);
     
-    // Check user on mount and when component updates
-    const interval = setInterval(() => {
-      const user = getCurrentUser();
-      if (user !== currentUser) {
-        setCurrentUser(user);
-      }
+    const timer = setInterval(() => {
+      const now = new Date();
+      setSysTime(now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     }, 1000);
 
+    const user = getCurrentUser();
+    setCurrentUser(user);
+
     return () => {
-      window.removeEventListener('storage', handleRouteChange);
-      clearInterval(interval);
+      window.removeEventListener('scroll', handleScroll);
+      clearInterval(timer);
     };
-  }, [currentUser]);
+  }, []);
 
   return (
-    <header className={`fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md transition-all duration-300 ${isScrolled ? 'shadow-2xl shadow-primary/5' : 'border-b border-slate-100'}`}>
-      {/* Header: tech top bar (tagline) and white bar with title */}
-      <div className="w-full flex flex-col" style={{ position: 'relative', zIndex: 100 }}>
-        <div
-          className="bg-slate-950 text-white h-10 text-[11px] font-black uppercase tracking-[0.2em] flex items-center relative overflow-hidden"
-          style={{ paddingLeft: '16px', paddingRight: '16px' }}
-        >
-          {/* Animated background line */}
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-          
-          <span className="ml-18 opacity-80">{t.home.heroTagline}</span>
-
-          {/* Logo on the left */}
-          <div
-            className="absolute z-50"
-            style={{
-              top: "10px",
-              left: "16px"
-            }}
-          >
-            <LogoPixelMarket size={70} />
+    <header 
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 px-4 py-4 lg:px-8 
+      ${isScrolled ? 'pt-4' : 'pt-6'}`}
+    >
+      {/* Top Status Ticker (Mini) */}
+      <div className="container mx-auto max-w-7xl mb-2">
+        <div className="flex justify-between items-center text-[9px] font-black tracking-[0.3em] text-slate-500 uppercase px-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_oklch(62.6%_0.19_253)]" />
+              <span>NEXUS-LIVE: 1,204 NODES</span>
+            </div>
+            <div className="hidden md:flex items-center gap-2">
+              <Activity size={10} className="text-cyan-500/50" />
+              <span>THROUGHPUT: 98.4%</span>
+            </div>
           </div>
-
-          {/* Actions on the right */}
-          <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }}>
-            <div className="flex items-center gap-6 whitespace-nowrap font-black">
-              <Link href="/wishlist" className="flex items-center text-white/70 hover:text-white transition-colors relative">
-                <FaHeart size={12} className="mr-2 text-accent" />
-                <span>{t.common.wishlist}</span>
-                  {wishlistCount > 0 && (
-                    <span className="absolute -top-2 -right-4 bg-accent text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-                      {wishlistCount}
-                    </span>
-                  )}
-              </Link>
-              {currentUser ? (
-                <Link href="/dashboard" className="text-white/70 hover:text-primary transition-colors">
-                  <span>{t.common.dashboard}</span>
-                </Link>
-              ) : (
-                <Link href="/login" className="text-white/70 hover:text-primary transition-colors">
-                  <span>{t.common.login}</span>
-                </Link>
-              )}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 font-mono">
+              <Terminal size={10} />
+              <span>TIME: {sysTime}</span>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="flex items-center bg-transparent h-20 relative px-4">
-          {/* Left: brand/logo/title */}
-          <div className="flex items-center z-10">
-            <Link href="/" className="flex items-center group">
-              <h1 className="text-2xl ml-18 md:text-3xl font-black text-slate-900 tracking-tighter transition-all group-hover:tracking-normal">
-                Pixel<span className="text-primary">Market</span>
-              </h1>
-            </Link>
-          </div>
-          {/* Center: Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-10 absolute left-1/2 transform -translate-x-1/2">
+      {/* Main Glass Bridge */}
+      <div 
+        className={`container mx-auto max-w-7xl transition-all duration-500 rounded-2xl 
+        ${isScrolled 
+          ? 'glass-nexus py-3 px-6 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)] scale-[0.98]' 
+          : 'bg-transparent py-4 px-4'}`}
+      >
+        <div className="flex items-center justify-between">
+          {/* Logo Section */}
+          <Link href="/" className="flex items-center gap-3 group relative z-50">
+            <div className={`p-2 rounded-xl transition-all duration-500 
+              ${isScrolled ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/20' : 'bg-slate-900 text-cyan-400 border border-white/5'}`}>
+              <Cpu size={24} className="group-hover:rotate-90 transition-transform duration-500" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`font-nexus text-xl font-black tracking-tighter uppercase italic transition-colors 
+                ${isScrolled ? 'text-white' : 'text-white'}`}>
+                Pixel<span className="text-cyan-500">Nexus</span>
+              </span>
+              <span className="text-[8px] font-black tracking-[0.4em] text-slate-500 uppercase -mt-1 group-hover:text-cyan-400/50 transition-colors">
+                Market Infrastructure
+              </span>
+            </div>
+          </Link>
+
+          {/* Navigation - Cyber Desktop */}
+          <nav className="hidden lg:flex items-center gap-2">
             {[
-              { name: t.nav.home, href: '/' },
-              { name: t.nav.shop, href: '/shop' },
-              { name: t.nav.collections, href: '/collections' },
-              { name: t.nav.essence, href: '/essence' },
-              { name: t.nav.contact, href: '/contact' }
+              { name: 'Console', href: '/' },
+              { name: 'Data Shop', href: '/shop' },
+              { name: 'Ecosystems', href: '/collections' },
+              { name: 'Essence', href: '/essence' },
             ].map((link) => (
               <Link 
                 key={link.href}
                 href={link.href} 
-                className="text-slate-500 hover:text-primary transition-all font-bold text-sm uppercase tracking-widest relative group"
+                className="px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-all relative group"
               >
                 {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+                <motion.span 
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-cyan-500 rounded-full group-hover:w-4 transition-all duration-300"
+                />
               </Link>
             ))}
           </nav>
-          {/* Right Actions */}
-          <div className="flex items-center gap-6 ml-auto pr-4 z-10">
-            {/* Search Icon */}
-            <button
-              className="hidden md:flex text-slate-400 hover:text-primary transition-colors p-2 rounded-xl hover:bg-slate-50"
-              onClick={() => setShowSearchModal(true)}
-              aria-label="Open search modal"
-            >
-              <FaSearch size={18} />
+
+          {/* Action Hub */}
+          <div className="flex items-center gap-2">
+            {/* Search Trigger */}
+            <button className="p-3 text-slate-400 hover:text-cyan-400 hover:bg-white/5 rounded-xl transition-all group">
+              <Search size={18} className="group-hover:scale-110 transition-transform" />
             </button>
-            {/* Cart */}
-            <button onClick={openCart} className="relative text-slate-900 hover:text-primary transition-all p-2 rounded-xl hover:bg-slate-50">
-              <FaShoppingCart size={20} />
-              {cartItemsCount > 0 && (
-                <span className="absolute top-0 right-0 bg-primary text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black animate-pulse shadow-lg shadow-primary/20">
-                  {cartItemsCount}
-                </span>
-              )}
-            </button>
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-slate-900 p-2"
-              aria-label="Toggle menu"
+
+            {/* Cart Trigger */}
+            <button 
+              onClick={openCart}
+              className="relative p-3 text-slate-400 hover:text-cyan-400 hover:bg-white/5 rounded-xl transition-all group"
             >
-              <div className="w-6 h-4 flex flex-col justify-between">
-                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? 'rotate-45 translate-y-[7px]' : ''} rounded-full`} />
-                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? 'opacity-0' : ''} rounded-full`} />
-                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''} rounded-full`} />
+              <ShoppingCart size={18} className="group-hover:scale-110 transition-transform" />
+              <AnimatePresence>
+                {cartItemsCount > 0 && (
+                  <motion.span 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute top-2 right-2 w-4 h-4 rounded-full bg-cyan-500 text-black text-[9px] font-black flex items-center justify-center shadow-lg shadow-cyan-500/40"
+                  >
+                    {cartItemsCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* Identity Node */}
+            <div className="h-6 w-[1px] bg-slate-800 mx-2 hidden md:block" />
+            
+            <Link 
+              href={currentUser ? "/dashboard" : "/login"}
+              className={`hidden md:flex items-center gap-3 pl-2 pr-4 py-2 rounded-full border transition-all 
+              ${isScrolled 
+                ? 'border-white/10 hover:border-cyan-500/30 bg-white/5' 
+                : 'border-white/5 hover:border-cyan-500/50 hover:bg-cyan-500/5'}`}
+            >
+              <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-cyan-500">
+                <User size={14} />
               </div>
+              <div className="flex flex-col items-start leading-none gap-1">
+                <span className="text-[9px] font-black text-white uppercase tracking-wider">
+                  {currentUser ? 'Node Active' : 'Initialize'}
+                </span>
+                <span className="text-[8px] font-bold text-slate-500 truncate max-w-[80px]">
+                  {currentUser ? currentUser.firstName : 'Entity 0x0'}
+                </span>
+              </div>
+            </Link>
+
+            {/* Mobile Toggle */}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden p-3 text-slate-400 hover:text-white transition-colors"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Search Modal */}
-      {showSearchModal && createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-2xl" onClick={() => setShowSearchModal(false)} />
-          <div ref={modalRef} className="bg-white rounded-[32px] shadow-2xl p-10 w-full max-w-2xl relative z-10 border border-white/20 transform animate-in fade-in zoom-in duration-300">
-            <button
-              className="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-colors w-10 h-10 flex items-center justify-center bg-slate-50 rounded-full"
-              onClick={() => { setShowSearchModal(false); setModalSearchTerm(""); setModalResults([]); }}
-              aria-label="Close"
-            >
-              <span className="text-2xl leading-none">&times;</span>
-            </button>
-            
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">{t.common.search}</h2>
-              <p className="text-slate-500 font-medium lowercase">Search through our digital inventory</p>
+      {/* Mobile Terminal Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="lg:hidden absolute top-[100%] left-4 right-4 mt-2 p-6 glass-nexus rounded-3xl border border-white/10 shadow-2xl z-50"
+          >
+            <div className="flex flex-col gap-6">
+              {['Console', 'Data Shop', 'Ecosystems', 'Essence'].map((link, i) => (
+                <Link 
+                  key={link} 
+                  href="/" 
+                  className="text-2xl font-black text-white italic uppercase font-nexus tracking-tighter"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="text-cyan-500 mr-4 font-mono text-sm not-italic opacity-40">0{i+1}</span>
+                  {link}
+                </Link>
+              ))}
+              <div className="h-[1px] bg-white/5 my-2" />
+              <Link href="/dashboard" className="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-400">Operations Control</span>
+                <Terminal size={16} className="text-cyan-500" />
+              </Link>
             </div>
-
-            <div className="relative mb-8">
-              <input
-                type="text"
-                autoFocus
-                value={modalSearchTerm}
-                onChange={e => {
-                  setModalSearchTerm(e.target.value);
-                  const term = e.target.value.trim().toLowerCase();
-                  if (!term) { setModalResults([]); return; }
-                  const results = products.filter((p: Product) =>
-                    p.name.toLowerCase().includes(term) ||
-                    p.description.toLowerCase().includes(term) ||
-                    p.category_id.toLowerCase().includes(term)
-                  );
-                  setModalResults(results);
-                }}
-                placeholder="Core module, UI kit, hardware..."
-                className="w-full px-8 py-5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold text-slate-900 placeholder-slate-400"
-              />
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 text-primary">
-                 <FaSearch size={22} className="opacity-40" />
-              </div>
-            </div>
-
-            <div className="max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
-              {modalResults.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                  {modalResults.map(product => (
-                    <Link 
-                      key={product.id} 
-                      href={`/products/${product.id}`} 
-                      className="group flex items-center p-4 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-all"
-                      onClick={() => setShowSearchModal(false)}
-                    >
-                      <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-sm">
-                        <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
-                      </div>
-                      <div className="flex-1 ml-4">
-                        <div className="font-bold text-slate-900 group-hover:text-primary transition-colors">{product.name}</div>
-                        <div className="text-xs font-black text-slate-400 uppercase tracking-widest mt-1">{product.category_id}</div>
-                      </div>
-                      <div className="text-slate-300">
-                        <svg className="w-6 h-6 transform -rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : modalSearchTerm ? (
-                <div className="text-center py-10">
-                   <div className="text-slate-300 mb-2 font-black text-5xl">404</div>
-                   <div className="text-slate-500 font-bold tracking-tight">System could not locate requested module.</div>
-                </div>
-              ) : (
-                <div className="text-center py-10 opacity-30 italic font-medium text-slate-400 italic">
-                  Start typing to initialize search protocol...
-                </div>
-              )}
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
-
-      {/* Mobile Menu */}
-      <div className={`lg:hidden fixed inset-0 z-40 bg-white transition-all duration-500 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <nav className="container mx-auto px-8 py-32 flex flex-col space-y-8">
-          {[
-            { name: t.nav.home, href: '/' },
-            { name: t.nav.shop, href: '/shop' },
-            { name: t.nav.collections, href: '/collections' },
-            { name: t.nav.essence, href: '/essence' },
-            { name: t.nav.contact, href: '/contact' }
-          ].map((link, idx) => (
-            <Link 
-              key={link.href}
-              href={link.href} 
-              className={`text-4xl font-black text-slate-900 tracking-tighter hover:text-primary transition-all flex items-center gap-4 ${isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
-              style={{ transitionDelay: `${idx * 50}ms` }}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <span className="text-slate-200 text-lg">0{idx + 1}</span>
-              {link.name}
-            </Link>
-          ))}
-          
-          <div className="pt-12 border-t border-slate-100 space-y-6">
-            <Link 
-              href="/wishlist" 
-              className="text-xl font-bold text-slate-600 hover:text-primary transition-colors flex items-center justify-between"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {t.common.wishlist}
-              <span className="bg-accent text-white text-xs px-2 py-1 rounded-lg">{wishlistCount}</span>
-            </Link>
-            {isAuthenticated ? (
-              <>
-                <Link href="/profile" className="block text-xl font-bold text-slate-600" onClick={() => setIsMenuOpen(false)}>{t.common.profile}</Link>
-                <button onClick={() => { logout(); setIsMenuOpen(false); }} className="block w-full text-left text-xl font-bold text-red-500">{t.common.logout}</button>
-              </>
-            ) : (
-              <Link href="/login" className="block text-xl font-bold text-primary" onClick={() => setIsMenuOpen(false)}>{t.common.login}</Link>
-            )}
-          </div>
-        </nav>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

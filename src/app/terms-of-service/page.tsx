@@ -1,5 +1,4 @@
-import type { Metadata } from 'next';
-import { Gavel, Globe, Cpu, CreditCard, Ship, RefreshCcw, ShieldAlert, MessageSquare, Scale, Terminal, Info, CheckCircle2 } from 'lucide-react';
+import { Gavel, Globe, Cpu, CreditCard, Ship, RefreshCcw, ShieldAlert, MessageSquare, Scale, Terminal, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Nexus Operating Guidelines | PixelMarket',

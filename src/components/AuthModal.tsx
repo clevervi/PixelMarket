@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Mail, Lock, User, Phone, Terminal, Cpu, ArrowRight, ShieldCheck } from 'lucide-react';
+import { X, Mail, Lock, Terminal, Cpu, ArrowRight } from 'lucide-react';
 import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
 

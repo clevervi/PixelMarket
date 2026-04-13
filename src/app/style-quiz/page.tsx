@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaCheckCircle, FaArrowRight, FaArrowLeft, FaMicrochip, FaShieldAlt, FaLayerGroup, FaCode } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
