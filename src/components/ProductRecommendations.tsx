@@ -27,19 +27,19 @@ export default function ProductRecommendations({
   const { getAverageRating } = useReviewStore();
 
   // Recommendation algorithm
-  const recommendations = useMemo(() => {
+    const recommendations = useMemo(() => {
     const currentProduct = products.find(p => p.id === currentProductId);
     if (!currentProduct) return [];
 
     // Filter products from the same category
     const sameCategory = products.filter(
-      p => p.id !== currentProductId && p.category === currentCategory
+      p => p.id !== currentProductId && p.category_id === currentCategory
     );
 
     // Products with a similar color (if applicable)
     const similarColor = products.filter(
       p => p.id !== currentProductId && 
-           p.category !== currentCategory &&
+           p.category_id !== currentCategory &&
            p.color === currentProduct.color
     );
 
@@ -120,12 +120,12 @@ function ProductCard({
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-dark-brown">
           <Image
-            src={product.image}
+            src={product.image_url}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-300"
           />
-          {product.featured && (
+          {product.is_featured_admin && (
             <span className="absolute top-3 left-3 bg-amber-600 text-white px-3 py-1 text-xs font-bold rounded-full shadow-md">
               ⭐ Featured
             </span>

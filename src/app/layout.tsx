@@ -13,12 +13,12 @@ import CartSidebar from "@/components/cart/CartSidebar";
 import CartSessionManager from "@/components/CartSessionManager";
 
 export const metadata: Metadata = {
-  title: "Ancestral heartbeat - Artesanías Colombianas",
-  description: "Tienda virtual especializada en la venta de artesanías colombianas hechas a mano. Sombreros vueltiaos, mochilas wayuu, hamacas y más.",
-  keywords: ["artesanías", "colombia", "sombrero vueltiao", "mochila wayuu", "hamaca", "artesanías colombianas"],
+  title: "PixelMarket - Digital Assets & Tech Marketplace",
+  description: "Senior-grade professional marketplace for high-quality digital assets, software artifacts, and technology products. Built for the modern pixel era.",
+  keywords: ["digital assets", "software", "tech marketplace", "pixels", "developer tools", "e-commerce"],
   openGraph: {
-    title: "Ancestral heartbeat - Artesanías Colombianas",
-    description: "Descubre artesanías colombianas auténticas hechas a mano",
+    title: "PixelMarket - Digital Assets & Tech Marketplace",
+    description: "Discover high-quality digital assets and professional tech products.",
     type: "website",
   },
   // Set metadataBase to avoid the Next.js warning and prepare the project for deployment.

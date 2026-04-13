@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
-import { FiX, FiMail, FiLock, FiUser, FiPhone } from 'react-icons/fi';
+import { X, Mail, Lock, User, Phone, Terminal, Cpu, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
 
@@ -35,9 +35,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (isLoading) return;
-
     setIsLoading(true);
 
     try {
@@ -46,24 +44,24 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
       if (result.success) {
         addNotification({
           type: 'success',
-          title: '¡ Welcome !',
-          message: result.message || 'You have successfully logged in'
+          title: 'ACCESS GRANTED',
+          message: result.message || 'Identity synchronized with Nexus core.'
         });
         onClose();
         setLoginData({ email: '', password: '' });
       } else {
         addNotification({
           type: 'error',
-          title: 'Error',
-          message: result.message || 'Error logging in'
+          title: 'ACCESS DENIED',
+          message: result.message || 'Invalid credentials provided.'
         });
       }
     } catch (error) {
       console.error('Login error:', error);
       addNotification({
         type: 'error',
-        title: 'Error',
-        message: 'Unexpected error logging in'
+        title: 'TERMINAL ERROR',
+        message: 'A critical synchronization failure occurred.'
       });
     } finally {
       setIsLoading(false);
@@ -72,15 +70,13 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (isLoading) return;
 
-    // Validaciones
     if (registerData.password !== registerData.confirmPassword) {
       addNotification({
         type: 'error',
-        title: 'Error',
-        message: 'Passwords do not match'
+        title: 'VALIDATION ERROR',
+        message: 'Access keys do not match.'
       });
       return;
     }
@@ -88,8 +84,8 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
     if (registerData.password.length < 6) {
       addNotification({
         type: 'error',
-        title: 'Error',
-        message: 'The password must be at least 6 characters long.'
+        title: 'SECURITY ALERT',
+        message: 'Access key complexity too low. Min 6 characters.'
       });
       return;
     }
@@ -108,10 +104,10 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
       if (result.success) {
         addNotification({
           type: 'success',
-          title: '¡Account created!',
-          message: result.message || 'Your account has been successfully created'
+          title: 'ENTITY INITIALIZED',
+          message: result.message || 'Nexus profile successfully created.'
         });
-        onClose();
+        setMode('login');
         setRegisterData({
           email: '',
           password: '',
@@ -123,16 +119,16 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
       } else {
         addNotification({
           type: 'error',
-          title: 'Error',
-          message: result.message || 'Error creating the account'
+          title: 'INITIALIZATION FAILED',
+          message: result.message || 'Error creating entity profile.'
         });
       }
     } catch (error) {
       console.error('Register error:', error);
       addNotification({
         type: 'error',
-        title: 'Error',
-        message: 'Unexpected error creating the account'
+        title: 'SYSTEM ERROR',
+        message: 'Unexpected failure during entity creation.'
       });
     } finally {
       setIsLoading(false);
@@ -142,208 +138,202 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Overlay */}
       <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-scale-in">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-10"
-        >
-          <FiX className="w-5 h-5 text-gray-600" />
-        </button>
-
-        {/* Header */}
-        <div className="bg-gradient-to-r from-primary to-secondary text-white p-6">
-          <h2 className="text-2xl font-bold">
-            {mode === 'login' ? 'Log in' : 'Create Account'}
-          </h2>
-          <p className="text-white/90 text-sm mt-1">
-            {mode === 'login' 
-              ? 'Log in to your Ancestral heartbeat account' 
-              : 'Join our community'
-            }
-          </p>
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          {mode === 'login' ? (
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Correo Electrónico
-                </label>
-                <div className="relative">
-                  <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="email"
-                    required
-                    value={loginData.email}
-                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="You@email.com"
-                  />
-                </div>
+      {/* Modal Container */}
+      <div className="relative w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div className="relative bg-slate-900 border border-white/10 rounded-3xl shadow-[0_0_50px_-12px_rgba(79,70,229,0.5)] overflow-hidden">
+          
+          {/* Header */}
+          <div className="relative bg-gradient-to-br from-indigo-600 to-violet-700 p-8 text-white">
+            <button
+              onClick={onClose}
+              className="absolute top-6 right-6 p-2 bg-black/20 hover:bg-black/40 rounded-full transition-colors backdrop-blur-sm"
+            >
+              <X size={18} />
+            </button>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                <Terminal size={24} />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="password"
-                    required
-                    value={loginData.password}
-                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <h2 className="text-2xl font-black tracking-tighter uppercase italic">
+                  Nexus <span className="text-white/70">Console</span>
+                </h2>
+                <div className="h-1 w-12 bg-white/30 rounded-full" />
               </div>
+            </div>
+            <p className="text-indigo-100 text-sm font-medium">
+              {mode === 'login' 
+                ? 'Authorized Access Required' 
+                : 'Initialize New Operations Entity'
+              }
+            </p>
+          </div>
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-semibold disabled:opacity-50"
-              >
-                {isLoading ? 'Logging in...' : 'Log in'}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleRegister} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+          {/* Form Content */}
+          <div className="p-8 bg-slate-900/50 backdrop-blur-xl">
+            {mode === 'login' ? (
+              <form onSubmit={handleLogin} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    First Name
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                    Entity Identifier (Email)
                   </label>
-                  <div className="relative">
-                    <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 group-focus-within:text-indigo-500 transition-colors">
+                      <Mail size={16} />
+                    </div>
                     <input
-                      type="text"
+                      type="email"
                       required
-                      value={registerData.firstName}
-                      onChange={(e) => setRegisterData({ ...registerData, firstName: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Juan"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none text-white transition-all text-sm placeholder:text-slate-700"
+                      placeholder="architect@pixelmarket.tech"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Last Name
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                    Nexus access key
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={registerData.lastName}
-                    onChange={(e) => setRegisterData({ ...registerData, lastName: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Pérez"
-                  />
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 group-focus-within:text-indigo-500 transition-colors">
+                      <Lock size={16} />
+                    </div>
+                    <input
+                      type="password"
+                      required
+                      value={loginData.password}
+                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none text-white transition-all text-sm"
+                      placeholder="••••••••"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <div className="relative">
-                  <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3"
+                >
+                  {isLoading ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div>
+                  ) : (
+                    <>
+                      Synchronize <ArrowRight size={14} />
+                    </>
+                  )}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleRegister} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                      Given Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={registerData.firstName}
+                      onChange={(e) => setRegisterData({ ...registerData, firstName: e.target.value })}
+                      className="w-full px-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none text-white transition-all text-sm placeholder:text-slate-700"
+                      placeholder="Lead"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                      Family Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={registerData.lastName}
+                      onChange={(e) => setRegisterData({ ...registerData, lastName: e.target.value })}
+                      className="w-full px-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none text-white transition-all text-sm placeholder:text-slate-700"
+                      placeholder="Architect"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                    Global Identifier
+                  </label>
                   <input
                     type="email"
                     required
                     value={registerData.email}
                     onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="You@email.com"
+                    className="w-full px-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none text-white transition-all text-sm placeholder:text-slate-700"
+                    placeholder="email@nexus.tech"
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone (Optional)
-                </label>
-                <div className="relative">
-                  <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="tel"
-                    value={registerData.phone}
-                    onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="+57 300 123 4567"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <div>
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                    Key Complexity
+                  </label>
                   <input
                     type="password"
                     required
                     value={registerData.password}
                     onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none text-white transition-all text-sm"
                     placeholder="••••••••"
                   />
+                  <p className="text-[10px] text-slate-600 mt-2 ml-1">Min 6 characters required.</p>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <div>
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 ml-1">
+                    Verify Key
+                  </label>
                   <input
                     type="password"
                     required
                     value={registerData.confirmPassword}
                     onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 border border-white/5 bg-slate-800/40 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none text-white transition-all text-sm"
                     placeholder="••••••••"
                   />
                 </div>
-              </div>
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-semibold disabled:opacity-50"
-              >
-                {isLoading ? 'Creating account...' : 'Create Account'}
-              </button>
-            </form>
-          )}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full py-4 mt-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3"
+                >
+                  {isLoading ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div>
+                  ) : (
+                    <>
+                      Initialize <Cpu size={14} />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
 
-          {/* Toggle mode */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}
-              {' '}
+            {/* Footer switcher */}
+            <div className="mt-8 text-center">
               <button
                 onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-                disabled={isLoading}
-                className="text-primary font-semibold hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-indigo-400 transition-colors"
               >
-                {mode === 'login' ? 'Sign up' : 'Log in'}
+                {mode === 'login' 
+                  ? 'Request Initialization Protocol' 
+                  : 'Return to Terminal Access'
+                }
               </button>
-            </p>
+            </div>
           </div>
         </div>
       </div>

@@ -62,7 +62,7 @@ export default function CarritoPage() {
                 >
                   <div className="relative w-24 h-24 flex-shrink-0">
                     <Image
-                      src={item.product.image}
+                      src={item.product.image_url}
                       alt={item.product.name}
                       fill
                       className="object-cover rounded-lg"

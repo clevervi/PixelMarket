@@ -12,9 +12,9 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  category: string;
+  category_id: string;
   stock: number;
-  image: string;
+  image_url: string;
   createdAt: string;
 }
 
@@ -34,7 +34,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const filtered = products.filter(product =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      product.category_id.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
   }, [searchTerm, products]);
@@ -48,9 +48,9 @@ export default function ProductsPage() {
         name: p.name,
         description: p.description,
         price: p.price,
-        category: p.category,
+        category_id: p.category_id,
         stock: 30 + Math.floor(Math.random() * 50),
-        image: p.image,
+        image_url: p.image_url,
         createdAt: new Date().toISOString(),
       }));
       setProducts(mockProducts);
@@ -143,7 +143,7 @@ export default function ProductsPage() {
             <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
               <div className="relative h-64 bg-gray-200">
                 <Image
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   fill
                   className="object-cover"
@@ -162,7 +162,7 @@ export default function ProductsPage() {
               
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-1 text-gray-900">{product.name}</h3>
-                <p className="text-sm text-gray-600 mb-2">{product.category}</p>
+                <p className="text-sm text-gray-600 mb-2">{product.category_id}</p>
                 <p className="text-xl font-bold text-[#8B4513] mb-4">${product.price.toFixed(2)}</p>
                 
                 <div className="flex gap-2">

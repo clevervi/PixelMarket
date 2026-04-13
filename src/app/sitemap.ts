@@ -3,7 +3,7 @@ import { products } from '@/data/products';
 import { categories } from '@/data/products';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://latidoancestral.com';
+  const baseUrl = 'https://pixelmarket.tech';
 
   // Static pages
   const staticPages = [

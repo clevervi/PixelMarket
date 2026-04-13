@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const authUser = signInData.user;
     const userId = authUser.id as string;
 
-    // Look up the profile in our usuarios table using the same UUID
+    // Look up the profile in our users table using the same UUID
     const user = await findUserByIdForAuth(userId);
 
     if (!user) {

@@ -51,7 +51,7 @@ export default function ProductListView({ product }: ProductListViewProps) {
         {/* Image Section */}
         <Link href={`/products/${product.id}`} className="relative w-full md:w-64 h-64 md:h-auto flex-shrink-0 bg-gray-200">
           <Image
-            src={product.image}
+            src={product.image_url}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -79,7 +79,7 @@ export default function ProductListView({ product }: ProductListViewProps) {
           <div>
             {/* Category Badge */}
             <span className="inline-block px-3 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-3 capitalize">
-              {product.category}
+              {product.category_id}
             </span>
 
             {/* Product Name */}

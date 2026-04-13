@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  /* Original colors - earth tones */
-  --color-primary: #8B4513;      /* Saddle brown */
-  --color-secondary: #D2691E;    /* Chocolate */
-  --color-accent: #F4A460;       /* Sandy brown */
-  --color-dark: #2C1810;         /* Dark brown */
+  /* PixelMarket Tech Palette - Futuristic & Professional */
+  --color-primary: #6366f1;      /* Indigo 500 */
+  --color-secondary: #4f46e5;    /* Indigo 600 */
+  --color-accent: #10b981;       /* Emerald 500 (Neon highlights) */
+  --color-dark: #0f172a;         /* Slate 900 (Deepest Navy) */
   
-  /* Additional colors - earth palette */
-  --color-wheat: #F5DEB3;        /* Wheat */
-  --color-cornsilk: #FFF8DC;     /* Cornsilk */
-  --color-antiquewhite: #FAEBD7; /* Antique white */
-  --color-moccasin: #FFE4B5;     /* Moccasin */
+  /* UI Surface Colors */
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8fafc;
+  --color-surface-muted: #f1f5f9;
   
-  /* Dark mode colors */
-  --color-dark-bg: #1a1a1a;      /* Main background */
-  --color-dark-surface: #2d2d2d; /* Surfaces */
-  --color-dark-text: #e5e5e5;    /* Main text */
-  --color-dark-brown: #3D2817;   /* Dark brown 1 */
-  --color-dark-brown-2: #4A3426; /* Dark brown 2 */
-  --color-dark-brown-3: #5C3D2E; /* Dark brown 3 */
-  --color-dark-brown-4: #362415; /* Dark brown 4 */
+  /* Product Accent Palette */
+  --color-tech-blue: #3b82f6;
+  --color-tech-purple: #a855f7;
+  --color-tech-cyan: #06b6d4;
+  
+  /* Dark mode colors - True Dark */
+  --color-dark-bg: #020617;      /* Extremely Deep Navy */
+  --color-dark-surface: #0f172a; /* Slate 900 */
+  --color-dark-text: #f1f5f9;   
+  --color-dark-border: #1e293b;
 }
 
 /* Tailwind custom utilities for dashboard */

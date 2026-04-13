@@ -14,30 +14,30 @@ import 'swiper/css/navigation';
 const slides = [
   {
     id: 1,
-    title: 'Authentic Colombian Handicrafts',
-    description: 'Discover the beauty of handmade vueltiao hats, woven with tradition and passion',
-    image: '/assets/assets11/sombrero-vueltiao.webp',
-    discount: '20',
-    link: '/collections/hats',
-    buttonText: 'Shop Hats'
+    title: 'Enterprise UI Solutions',
+    description: 'Deploy pixel-perfect interface systems and high-end design assets for your mission-critical applications.',
+    image: '/assets/assets11/sombrero-vueltiao.webp', // Keeping original paths for now, following user instruction to replace when ready
+    discount: '15',
+    link: '/shop?category=UI-Kits',
+    buttonText: 'Explore Assets'
   },
   {
     id: 2,
-    title: 'Traditional Wayuu Backpacks',
-    description: 'Each backpack tells an ancestral story, handcrafted with love and dedication',
+    title: 'System Infrastructure',
+    description: 'High-performance clusters and architectural benchmarks designed for maximum scalability.',
     image: '/assets/assets11/mochila.webp',
-    discount: '15',
-    link: '/collections/backpacks',
-    buttonText: 'Shop Backpacks'
+    discount: '20',
+    link: '/shop?category=Infrastructure',
+    buttonText: 'Inspect Nodes'
   },
   {
     id: 3,
-    title: 'Handwoven Hammocks',
-    description: 'Relax in comfort with our traditional Colombian hammocks',
+    title: 'Advanced Operations',
+    description: 'Secure, encrypted protocols and verified assets to fortify your operational integrity.',
     image: '/assets/assets11/hamaca.webp',
-    discount: '25',
-    link: '/collections/hammocks',
-    buttonText: 'Shop Hammocks'
+    discount: '10',
+    link: '/shop?category=Security',
+    buttonText: 'Execute Access'
   },
 ];
 
@@ -50,16 +50,16 @@ export default function HeroSlider() {
 
   if (!mounted) {
     return (
-      <section className="relative bg-gradient-to-b from-gray-50 to-white dark:from-dark-bg dark:to-dark-surface overflow-hidden">
+      <section className="relative bg-slate-900 overflow-hidden">
         <div className="container mx-auto px-4 py-8 lg:py-12">
-          <div className="rounded-2xl shadow-2xl overflow-hidden bg-gradient-to-r from-primary to-secondary min-h-[500px] lg:min-h-[600px] animate-pulse" />
+          <div className="rounded-2xl shadow-2xl overflow-hidden bg-slate-800 min-h-[500px] lg:min-h-[600px] animate-pulse" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="relative bg-gradient-to-b from-gray-50 to-white dark:from-dark-bg dark:to-dark-surface overflow-hidden">
+    <section className="relative bg-slate-950 overflow-hidden">
       <div className="container mx-auto px-4 py-8 lg:py-12">
         <Swiper
           spaceBetween={30}
@@ -70,49 +70,49 @@ export default function HeroSlider() {
           }}
           pagination={{
             clickable: true,
-            bulletClass: 'swiper-pagination-bullet !bg-primary',
-            bulletActiveClass: 'swiper-pagination-bullet-active !bg-primary',
+            bulletClass: 'swiper-pagination-bullet !bg-emerald-500',
+            bulletActiveClass: 'swiper-pagination-bullet-active !bg-emerald-400',
           }}
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
-          className="hero-slider rounded-2xl shadow-2xl overflow-hidden"
+          className="hero-slider rounded-2xl shadow-2xl overflow-hidden glass-morphism border border-white/10"
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <div className="relative bg-gradient-to-r from-primary to-secondary text-white">
+              <div className="relative bg-slate-900/40 text-white">
                 <div className="flex flex-col lg:flex-row items-center min-h-[500px] lg:min-h-[600px]">
                   {/* Content */}
-                  <div className="w-full lg:w-1/2 p-8 lg:p-16 z-10">
+                  <div className="w-full lg:w-1/2 p-8 lg:p-16 z-20 relative">
                     {/* Discount Badge */}
-                    <div className="inline-flex items-center gap-3 mb-6 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
-                      <span className="text-5xl font-bold text-white">
+                    <div className="inline-flex items-center gap-3 mb-6 bg-indigo-500/20 backdrop-blur-md border border-indigo-500/30 rounded-full px-6 py-3">
+                      <span className="text-5xl font-bold text-indigo-400">
                         {slide.discount}%
                       </span>
-                      <span className="text-lg font-medium">
-                        OFF
+                      <span className="text-sm font-semibold text-slate-300 leading-tight uppercase tracking-wider">
+                        Nexus
                         <br />
-                        Sale
+                        Credit
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
+                    <h1 className="text-4xl lg:text-5xl xl:text-7xl font-black mb-6 leading-tight tracking-tight text-white drop-shadow-lg">
                       {slide.title}
                     </h1>
 
                     {/* Description */}
-                    <p className="text-lg lg:text-xl mb-8 text-white/90 max-w-xl">
+                    <p className="text-lg lg:text-xl mb-10 text-slate-300 max-w-xl font-medium leading-relaxed">
                       {slide.description}
                     </p>
 
                     {/* CTA Button */}
                     <Link
                       href={slide.link}
-                      className="inline-flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-xl"
+                      className="inline-flex items-center gap-3 bg-indigo-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-indigo-500 transform hover:-translate-y-1 transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.4)] group"
                     >
                       {slide.buttonText}
                       <svg
-                        className="w-6 h-6"
+                        className="w-6 h-6 group-hover:translate-x-1 transition-transform"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -128,13 +128,13 @@ export default function HeroSlider() {
                   </div>
 
                   {/* Image */}
-                  <div className="w-full lg:w-1/2 relative h-[300px] lg:h-full">
-                    <div className="absolute inset-0 bg-gradient-to-l from-transparent to-primary/50 lg:to-transparent z-10" />
+                  <div className="w-full lg:w-1/2 relative h-[400px] lg:h-[600px]">
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent z-10" />
                     <Image
                       src={slide.image}
                       alt={slide.title}
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-center grayscale-[20%] brightness-75"
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority={slide.id === 1}
                     />
@@ -147,40 +147,40 @@ export default function HeroSlider() {
       </div>
 
       {/* Features */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             {
-              icon: '🚚',
-              title: 'Free Shipping',
-              description: 'For orders over $200,000 COP',
+              icon: '🚀',
+              title: 'Instant Deployment',
+              description: 'Access assets via secure Nexus protocols.',
             },
             {
-              icon: '↩️',
-              title: 'Easy Returns',
-              description: '30-day return policy',
+              icon: '🛡️',
+              title: 'Verified Integrity',
+              description: 'All components audited for performance.',
             },
             {
-              icon: '🔒',
-              title: 'Secure Payment',
-              description: '100% secure transactions',
+              icon: '🔐',
+              title: 'Secure Nexus',
+              description: 'End-to-end encrypted asset transfers.',
             },
             {
-              icon: '📞',
-              title: '24/7 Support',
-              description: 'Dedicated customer service',
+              icon: '💬',
+              title: 'Ops Support',
+              description: '24/7 technical assistance for entities.',
             },
           ].map((feature, index) => (
             <div
               key={index}
-              className="flex items-center gap-4 p-6 bg-white dark:bg-dark-surface rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+              className="flex items-center gap-5 p-8 bg-slate-900/50 backdrop-blur-sm border border-white/5 rounded-2xl shadow-xl hover:bg-slate-800/80 transition-all duration-300 group"
             >
-              <div className="text-4xl">{feature.icon}</div>
+              <div className="text-5xl group-hover:scale-110 transition-transform">{feature.icon}</div>
               <div>
-                <h3 className="font-bold text-lg text-dark dark:text-dark-text mb-1">
+                <h3 className="font-bold text-xl text-white mb-2 tracking-tight">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-slate-400 font-medium">
                   {feature.description}
                 </p>
               </div>
@@ -193,37 +193,42 @@ export default function HeroSlider() {
         .hero-slider .swiper-button-next,
         .hero-slider .swiper-button-prev {
           color: white;
-          background: rgba(139, 69, 19, 0.8);
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
+          background: rgba(30, 41, 59, 0.6);
+          backdrop-filter: blur(8px);
+          width: 60px;
+          height: 60px;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .hero-slider .swiper-button-next:hover,
         .hero-slider .swiper-button-prev:hover {
-          background: rgba(139, 69, 19, 1);
+          background: rgba(79, 70, 229, 0.8);
+          border-color: rgba(255, 255, 255, 0.3);
         }
 
         .hero-slider .swiper-button-next:after,
         .hero-slider .swiper-button-prev:after {
-          font-size: 20px;
+          font-size: 24px;
+          font-weight: bold;
         }
 
         .hero-slider .swiper-pagination {
-          bottom: 20px;
+          bottom: 30px;
         }
 
         .hero-slider .swiper-pagination-bullet {
-          width: 12px;
-          height: 12px;
-          background: white;
-          opacity: 0.5;
+          width: 30px;
+          height: 4px;
+          border-radius: 2px;
+          background: rgba(255, 255, 255, 0.3);
+          opacity: 1;
+          transition: all 0.3s;
         }
 
         .hero-slider .swiper-pagination-bullet-active {
-          opacity: 1;
-          background: white;
-        }
+          width: 50px;
+          background: #34d399; /* emerald-400 */
       `}</style>
     </section>
   );

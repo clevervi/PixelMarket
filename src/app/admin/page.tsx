@@ -23,13 +23,13 @@ export default function AdminDashboard() {
   });
   const { adminSearchTerm } = useSearchStore();
 
-  const allFeaturedProducts = products.filter((p) => p.featured);
+  const allFeaturedProducts = products.filter((p) => p.is_featured_admin);
   
   // Filter products based on the search term
   const featuredProducts = allFeaturedProducts.filter(product =>
     product.name.toLowerCase().includes(adminSearchTerm.toLowerCase()) ||
     product.description.toLowerCase().includes(adminSearchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(adminSearchTerm.toLowerCase())
+    product.category_id.toLowerCase().includes(adminSearchTerm.toLowerCase())
   );
 
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
             >
               <div className="relative h-48 w-full">
                 <Image
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
                 <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">{product.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xl font-bold text-[#8B4513]">${product.price}</span>
-                  {product.featured && (
+                  {product.is_featured_admin && (
                     <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-semibold">Featured</span>
                   )}
                 </div>

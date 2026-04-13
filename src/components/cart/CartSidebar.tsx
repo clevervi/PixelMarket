@@ -105,7 +105,7 @@ export default function CartSidebar() {
                     className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200"
                   >
                     <Image
-                      src={item.product.image}
+                      src={item.product.image_url}
                       alt={item.product.name}
                       fill
                       className="object-cover"
@@ -123,7 +123,7 @@ export default function CartSidebar() {
                       {item.product.name}
                     </Link>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 capitalize">
-                      {item.product.category}
+                      {item.product.category_id}
                     </p>
                     
                     {/* Quantity Controls */}

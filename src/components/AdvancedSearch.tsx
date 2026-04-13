@@ -35,7 +35,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
       const filtered = products.filter(p =>
         p.name.toLowerCase().includes(query.toLowerCase()) ||
         p.description.toLowerCase().includes(query.toLowerCase()) ||
-        p.category.toLowerCase().includes(query.toLowerCase()) ||
+        p.category_id.toLowerCase().includes(query.toLowerCase()) ||
         p.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
       ).slice(0, 5);
       
@@ -115,7 +115,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
                 >
                   <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                     <Image
-                      src={product.image}
+                      src={product.image_url}
                       alt={product.name}
                       fill
                       className="object-cover"
@@ -124,7 +124,7 @@ export default function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 truncate">{product.name}</p>
-                    <p className="text-sm text-gray-500">{product.category}</p>
+                    <p className="text-sm text-gray-500">{product.category_id}</p>
                   </div>
                   <div className="text-primary font-bold">
                     ${product.price.toLocaleString('es-CO')}

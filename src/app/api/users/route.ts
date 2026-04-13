@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const supabase = createSupabaseServiceClient();
 
     const { data, error } = await supabase
-      .from('usuarios')
+      .from('users')
       .select('id, email, first_name, last_name, phone, role, is_active, vendor_id, created_at')
       .order('created_at', { ascending: false });
 
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 }
 
 // POST /api/users - create a user (admin-only)
-// Creates a Supabase Auth user and a matching profile row in `public.usuarios` with the same UUID.
+// Creates a Supabase Auth user and a matching profile row in `public.users` with the same UUID.
 export async function POST(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
@@ -97,11 +97,11 @@ export async function POST(req: NextRequest) {
 
     const userId = createdAuth.user.id;
 
-    // 2) Insert into usuarios table
+    // 2) Insert into users table
     const passwordHash = await hashPassword(password);
 
     const { data: inserted, error: insertError } = await supabase
-      .from('usuarios')
+      .from('users')
       .insert({
         id: userId,
         email,

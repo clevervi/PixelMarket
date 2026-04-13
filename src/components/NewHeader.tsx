@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import LogoAncestral from './LogoAncestral';
+import LogoPixelMarket from './LogoPixelMarket';
 import type { Product } from '@/types';
 import { products } from '@/data/products';
 import { useRef } from 'react';
@@ -72,14 +72,17 @@ export default function NewHeader() {
   }, [currentUser]);
 
   return (
-    <header className={`fixed w-full top-0 z-50 bg-white transition-all duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-md'}`}>
-      {/* Header: brown top bar (tagline) and white bar with title */}
+    <header className={`fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md transition-all duration-300 ${isScrolled ? 'shadow-2xl shadow-primary/5' : 'border-b border-slate-100'}`}>
+      {/* Header: tech top bar (tagline) and white bar with title */}
       <div className="w-full flex flex-col" style={{ position: 'relative', zIndex: 100 }}>
         <div
-          className="bg-[#8B4513] text-white h-10 text-sm flex items-center relative"
+          className="bg-slate-950 text-white h-10 text-[11px] font-black uppercase tracking-[0.2em] flex items-center relative overflow-hidden"
           style={{ paddingLeft: '16px', paddingRight: '16px' }}
         >
-          <span className="ml-18">{t.home.heroTagline}</span>
+          {/* Animated background line */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+          
+          <span className="ml-18 opacity-80">{t.home.heroTagline}</span>
 
           {/* Logo on the left */}
           <div
@@ -89,27 +92,27 @@ export default function NewHeader() {
               left: "16px"
             }}
           >
-            <LogoAncestral size={70} />
+            <LogoPixelMarket size={70} />
           </div>
 
           {/* Actions on the right */}
           <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }}>
-            <div className="flex items-center gap-4 whitespace-nowrap">
-              <Link href="/wishlist" className="flex items-center text-white hover:text-gray-200 text-sm font-medium relative">
-                <FaHeart size={14} className="mr-2" />
+            <div className="flex items-center gap-6 whitespace-nowrap font-black">
+              <Link href="/wishlist" className="flex items-center text-white/70 hover:text-white transition-colors relative">
+                <FaHeart size={12} className="mr-2 text-accent" />
                 <span>{t.common.wishlist}</span>
                   {wishlistCount > 0 && (
-                    <span className="absolute -top-2 -right-6 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                    <span className="absolute -top-2 -right-4 bg-accent text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
                       {wishlistCount}
                     </span>
                   )}
               </Link>
               {currentUser ? (
-                <Link href="/dashboard" className="text-white hover:text-gray-200 text-sm font-medium">
+                <Link href="/dashboard" className="text-white/70 hover:text-primary transition-colors">
                   <span>{t.common.dashboard}</span>
                 </Link>
               ) : (
-                <Link href="/login" className="text-white hover:text-gray-200 text-sm font-medium">
+                <Link href="/login" className="text-white/70 hover:text-primary transition-colors">
                   <span>{t.common.login}</span>
                 </Link>
               )}
@@ -117,36 +120,49 @@ export default function NewHeader() {
           </div>
         </div>
 
-        <div className="flex items-center bg-white h-20 relative px-4">
+        <div className="flex items-center bg-transparent h-20 relative px-4">
           {/* Left: brand/logo/title */}
           <div className="flex items-center z-10">
-            <Link href="/" className="flex items-center">
-              <h1 className="text-2xl ml-18 md:text-3xl font-bold text-[#8B4513]">Ancestral Heartbeat</h1>
+            <Link href="/" className="flex items-center group">
+              <h1 className="text-2xl ml-18 md:text-3xl font-black text-slate-900 tracking-tighter transition-all group-hover:tracking-normal">
+                Pixel<span className="text-primary">Market</span>
+              </h1>
             </Link>
           </div>
           {/* Center: Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">{t.nav.home}</Link>
-            <Link href="/shop" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">{t.nav.shop}</Link>
-            <Link href="/collections" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">{t.nav.collections}</Link>
-            <Link href="/essence" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">{t.nav.essence}</Link>
-            <Link href="/contact" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">{t.nav.contact}</Link>
+          <nav className="hidden lg:flex items-center space-x-10 absolute left-1/2 transform -translate-x-1/2">
+            {[
+              { name: t.nav.home, href: '/' },
+              { name: t.nav.shop, href: '/shop' },
+              { name: t.nav.collections, href: '/collections' },
+              { name: t.nav.essence, href: '/essence' },
+              { name: t.nav.contact, href: '/contact' }
+            ].map((link) => (
+              <Link 
+                key={link.href}
+                href={link.href} 
+                className="text-slate-500 hover:text-primary transition-all font-bold text-sm uppercase tracking-widest relative group"
+              >
+                {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+              </Link>
+            ))}
           </nav>
           {/* Right Actions */}
-          <div className="flex items-center gap-4 ml-auto pr-4 z-10">
+          <div className="flex items-center gap-6 ml-auto pr-4 z-10">
             {/* Search Icon */}
             <button
-              className="hidden md:flex text-gray-700 hover:text-[#8B4513] transition-colors"
+              className="hidden md:flex text-slate-400 hover:text-primary transition-colors p-2 rounded-xl hover:bg-slate-50"
               onClick={() => setShowSearchModal(true)}
               aria-label="Open search modal"
             >
-              <FaSearch size={20} />
+              <FaSearch size={18} />
             </button>
             {/* Cart */}
-            <button onClick={openCart} className="relative text-gray-700 hover:text-[#8B4513] transition-colors">
-              <FaShoppingCart size={22} />
+            <button onClick={openCart} className="relative text-slate-900 hover:text-primary transition-all p-2 rounded-xl hover:bg-slate-50">
+              <FaShoppingCart size={20} />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#D2691E] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                <span className="absolute top-0 right-0 bg-primary text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black animate-pulse shadow-lg shadow-primary/20">
                   {cartItemsCount}
                 </span>
               )}
@@ -154,93 +170,140 @@ export default function NewHeader() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-gray-700"
+              className="lg:hidden text-slate-900 p-2"
               aria-label="Toggle menu"
             >
-              <div className="w-6 h-5 flex flex-col justify-between">
-                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? 'opacity-0' : ''}`} />
-                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <div className="w-6 h-4 flex flex-col justify-between">
+                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? 'rotate-45 translate-y-[7px]' : ''} rounded-full`} />
+                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? 'opacity-0' : ''} rounded-full`} />
+                <span className={`h-0.5 w-full bg-current transition-all ${isMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''} rounded-full`} />
               </div>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {/* Search Modal */}
       {showSearchModal && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#FFE4B5] bg-opacity-80">
-          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md relative">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-2xl" onClick={() => setShowSearchModal(false)} />
+          <div ref={modalRef} className="bg-white rounded-[32px] shadow-2xl p-10 w-full max-w-2xl relative z-10 border border-white/20 transform animate-in fade-in zoom-in duration-300">
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              className="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-colors w-10 h-10 flex items-center justify-center bg-slate-50 rounded-full"
               onClick={() => { setShowSearchModal(false); setModalSearchTerm(""); setModalResults([]); }}
               aria-label="Close"
             >
-              &times;
+              <span className="text-2xl leading-none">&times;</span>
             </button>
-            <h2 className="text-xl font-bold mb-4 text-center">{t.common.search}</h2>
-            <input
-              type="text"
-              value={modalSearchTerm}
-              onChange={e => setModalSearchTerm(e.target.value)}
-              placeholder="Search products..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <button
-              className="w-full py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors mb-4"
-              onClick={() => {
-                const term = modalSearchTerm.trim().toLowerCase();
-                if (!term) { setModalResults([]); return; }
-                const results = products.filter((p: Product) =>
-                  p.name.toLowerCase().includes(term) ||
-                  p.description.toLowerCase().includes(term) ||
-                  p.category.toLowerCase().includes(term) ||
-                  (p.tags && p.tags.some((tag: string) => tag.toLowerCase().includes(term)))
-                );
-                setModalResults(results);
-              }}
-            >{t.common.search}</button>
-            <div>
+            
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">{t.common.search}</h2>
+              <p className="text-slate-500 font-medium lowercase">Search through our digital inventory</p>
+            </div>
+
+            <div className="relative mb-8">
+              <input
+                type="text"
+                autoFocus
+                value={modalSearchTerm}
+                onChange={e => {
+                  setModalSearchTerm(e.target.value);
+                  const term = e.target.value.trim().toLowerCase();
+                  if (!term) { setModalResults([]); return; }
+                  const results = products.filter((p: Product) =>
+                    p.name.toLowerCase().includes(term) ||
+                    p.description.toLowerCase().includes(term) ||
+                    p.category_id.toLowerCase().includes(term)
+                  );
+                  setModalResults(results);
+                }}
+                placeholder="Core module, UI kit, hardware..."
+                className="w-full px-8 py-5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold text-slate-900 placeholder-slate-400"
+              />
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 text-primary">
+                 <FaSearch size={22} className="opacity-40" />
+              </div>
+            </div>
+
+            <div className="max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
               {modalResults.length > 0 ? (
-                <ul className="divide-y divide-gray-200">
+                <div className="grid grid-cols-1 gap-4">
                   {modalResults.map(product => (
-                    <li key={product.id} className="py-3 flex items-center gap-3">
-                      <img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded-lg" />
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900">{product.name}</div>
-                        <div className="text-sm text-gray-500">{product.category}</div>
+                    <Link 
+                      key={product.id} 
+                      href={`/products/${product.id}`} 
+                      className="group flex items-center p-4 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-all"
+                      onClick={() => setShowSearchModal(false)}
+                    >
+                      <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-sm">
+                        <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                       </div>
-                      <Link href={`/products/${product.id}`} className="text-primary font-bold hover:underline" onClick={() => setShowSearchModal(false)}>
-                        {t.common.viewDetails}
-                      </Link>
-                    </li>
+                      <div className="flex-1 ml-4">
+                        <div className="font-bold text-slate-900 group-hover:text-primary transition-colors">{product.name}</div>
+                        <div className="text-xs font-black text-slate-400 uppercase tracking-widest mt-1">{product.category_id}</div>
+                      </div>
+                      <div className="text-slate-300">
+                        <svg className="w-6 h-6 transform -rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </div>
+                    </Link>
                   ))}
-                </ul>
+                </div>
               ) : modalSearchTerm ? (
-                <div className="text-center text-gray-500">No results found.</div>
-              ) : null}
+                <div className="text-center py-10">
+                   <div className="text-slate-300 mb-2 font-black text-5xl">404</div>
+                   <div className="text-slate-500 font-bold tracking-tight">System could not locate requested module.</div>
+                </div>
+              ) : (
+                <div className="text-center py-10 opacity-30 italic font-medium text-slate-400 italic">
+                  Start typing to initialize search protocol...
+                </div>
+              )}
             </div>
           </div>
         </div>,
         document.body
       )}
-      <div className={`lg:hidden bg-white border-t border-gray-200 transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-screen' : 'max-h-0'}`}>
-        <nav className="container mx-auto px-4 py-4 space-y-3">
-          <Link href="/" className="block py-2 text-gray-700 hover:text-[#8B4513] font-medium" onClick={() => setIsMenuOpen(false)}>{t.nav.home}</Link>
-          <Link href="/shop" className="block py-2 text-gray-700 hover:text-[#8B4513] font-medium" onClick={() => setIsMenuOpen(false)}>{t.nav.shop}</Link>
-          <Link href="/collections" className="block py-2 text-gray-700 hover:text-[#8B4513] font-medium" onClick={() => setIsMenuOpen(false)}>{t.nav.collections}</Link>
-          <Link href="/essence" className="block py-2 text-gray-700 hover:text-[#8B4513] font-medium" onClick={() => setIsMenuOpen(false)}>{t.nav.essence}</Link>
-          <Link href="/contact" className="block py-2 text-gray-700 hover:text-[#8B4513] font-medium" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</Link>
-          <div className="border-t pt-3 mt-3">
-            <Link href="/wishlist" className="block py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setIsMenuOpen(false)}>{t.common.wishlist} ({wishlistCount})</Link>
+
+      {/* Mobile Menu */}
+      <div className={`lg:hidden fixed inset-0 z-40 bg-white transition-all duration-500 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+        <nav className="container mx-auto px-8 py-32 flex flex-col space-y-8">
+          {[
+            { name: t.nav.home, href: '/' },
+            { name: t.nav.shop, href: '/shop' },
+            { name: t.nav.collections, href: '/collections' },
+            { name: t.nav.essence, href: '/essence' },
+            { name: t.nav.contact, href: '/contact' }
+          ].map((link, idx) => (
+            <Link 
+              key={link.href}
+              href={link.href} 
+              className={`text-4xl font-black text-slate-900 tracking-tighter hover:text-primary transition-all flex items-center gap-4 ${isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+              style={{ transitionDelay: `${idx * 50}ms` }}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="text-slate-200 text-lg">0{idx + 1}</span>
+              {link.name}
+            </Link>
+          ))}
+          
+          <div className="pt-12 border-t border-slate-100 space-y-6">
+            <Link 
+              href="/wishlist" 
+              className="text-xl font-bold text-slate-600 hover:text-primary transition-colors flex items-center justify-between"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {t.common.wishlist}
+              <span className="bg-accent text-white text-xs px-2 py-1 rounded-lg">{wishlistCount}</span>
+            </Link>
             {isAuthenticated ? (
               <>
-                <Link href="/profile" className="block py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setIsMenuOpen(false)}>{t.common.profile}</Link>
-                <button onClick={() => { logout(); setIsMenuOpen(false); }} className="block w-full text-left py-2 text-red-600">{t.common.logout}</button>
+                <Link href="/profile" className="block text-xl font-bold text-slate-600" onClick={() => setIsMenuOpen(false)}>{t.common.profile}</Link>
+                <button onClick={() => { logout(); setIsMenuOpen(false); }} className="block w-full text-left text-xl font-bold text-red-500">{t.common.logout}</button>
               </>
             ) : (
-              <Link href="/profile" className="block py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setIsMenuOpen(false)}>{t.common.login}</Link>
+              <Link href="/login" className="block text-xl font-bold text-primary" onClick={() => setIsMenuOpen(false)}>{t.common.login}</Link>
             )}
           </div>
         </nav>

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name, slug, description, shortDescription, price, stock, featured, vendorId, categoryId } = body;
+    const { name, slug, description, shortDescription, price, stock, is_featured_admin, vendorId, categoryId } = body;
 
     if (!name || !slug || !description || typeof price !== 'number') {
       return NextResponse.json(
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       shortDescription,
       price,
       stock,
-      featured,
+      is_featured_admin,
       vendorId: effectiveVendorId,
       categoryId,
     });

@@ -10,9 +10,9 @@ interface ProductForm {
   name: string;
   description: string;
   price: number;
-  category: string;
+  category_id: string;
   stock: number;
-  image: string;
+  image_url: string;
   tags?: string[];
 }
 
@@ -26,9 +26,9 @@ export default function ProductEditPage() {
     name: '',
     description: '',
     price: 0,
-    category: '',
+    category_id: '',
     stock: 0,
-    image: '',
+    image_url: '',
   });
 
   const [isLoading, setIsLoading] = useState(!isNew);
@@ -67,7 +67,7 @@ export default function ProductEditPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.name || !form.description || !form.category || form.price <= 0) {
+    if (!form.name || !form.description || !form.category_id || form.price <= 0) {
       addNotification({
         type: 'error',
         title: 'Validation Error',
@@ -180,8 +180,8 @@ export default function ProductEditPage() {
                 Category <span className="text-red-500">*</span>
               </label>
               <select
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                value={form.category_id}
+                onChange={(e) => setForm({ ...form, category_id: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent outline-none"
               >
                 <option value="">Select a category</option>
@@ -229,21 +229,21 @@ export default function ProductEditPage() {
               </label>
               <input
                 type="url"
-                value={form.image}
-                onChange={(e) => setForm({ ...form, image: e.target.value })}
+                value={form.image_url}
+                onChange={(e) => setForm({ ...form, image_url: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent outline-none"
               />
             </div>
           </div>
 
           {/* Image Preview */}
-          {form.image && (
+          {form.image_url && (
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Image Preview
               </label>
               <img
-                src={form.image}
+                src={form.image_url}
                 alt="Preview"
                 className="h-48 object-cover rounded-lg"
                 onError={(e) => {

@@ -10,11 +10,11 @@ import { toast } from 'react-hot-toast';
 interface Product {
   id: string;
   name: string;
-  category: string;
+  category_id: string;
   price: number;
   stock: number;
   status: 'active' | 'inactive';
-  image: string;
+  image_url: string;
   vendorId?: string | null;
 }
 
@@ -94,12 +94,12 @@ export default function ProductsPage() {
     if (searchTerm) {
       filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchTerm.toLowerCase()),
+        p.category_id.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
+      filtered = filtered.filter(p => p.category_id === selectedCategory);
     }
 
     setFilteredProducts(filtered);
@@ -158,7 +158,7 @@ export default function ProductsPage() {
     }
   };
 
-  const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))];
+  const categories = ['all', ...Array.from(new Set(products.map(p => p.category_id)))];
 
   if (!user) {
     return (
@@ -245,7 +245,7 @@ export default function ProductsPage() {
                   </span>
                 </div>
                 
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{product.category}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{product.category_id}</p>
                 
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-lg font-bold text-primary">${product.price}</span>
@@ -370,11 +370,11 @@ export default function ProductsPage() {
                     const mapped: Product = {
                       id: p.id,
                       name: p.name,
-                      category: categoryLabel,
+                      category_id: categoryLabel,
                       price: parseFloat(p.price),
                       stock: p.stock ?? stock,
                       status: p.is_active ? 'active' : 'inactive',
-                      image: '/assets/assets1/hat1.jpg',
+                      image_url: '/assets/assets1/hat1.jpg',
                       vendorId: p.vendor_id ?? null,
                     };
 
@@ -411,7 +411,7 @@ export default function ProductsPage() {
                     <input
                       type="text"
                       name="category"
-                      defaultValue={editingProduct?.category}
+                      defaultValue={editingProduct?.category_id}
                       placeholder="Category label (for dashboard only)"
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary focus:border-primary dark:bg-dark-surface dark:text-dark-text"
                     />

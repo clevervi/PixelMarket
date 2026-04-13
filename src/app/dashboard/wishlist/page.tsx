@@ -63,7 +63,7 @@ export default function WishlistPage() {
               <div key={product.id} className="bg-white dark:bg-dark-surface rounded-lg shadow-md overflow-hidden">
                 <div className="aspect-square bg-gray-200 dark:bg-gray-700 relative">
                   <Image
-                    src={product.image}
+                    src={product.image_url}
                     alt={product.name}
                     fill
                     className="object-cover"
@@ -79,7 +79,7 @@ export default function WishlistPage() {
                 
                 <div className="p-4">
                   <h3 className="font-semibold text-dark dark:text-dark-text mb-1">{product.name}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{product.category}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{product.category_id}</p>
                   
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-lg font-bold text-primary">${product.price}</span>

@@ -1,169 +1,213 @@
 import type { Metadata } from 'next';
+import { Gavel, Globe, Cpu, CreditCard, Ship, RefreshCcw, ShieldAlert, MessageSquare, Scale, Terminal, Info, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions | Ancestral heartbeat',
-  description: 'Terms and conditions of use of Ancestral Heartbeat - Colombian handicrafts store',
+  title: 'Nexus Operating Guidelines | PixelMarket',
+  description: 'Framework for operational engagement and system utilization within the PixelMarket Nexus ecosystem.',
 };
 
 export default function TerminosServicioPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-8 text-center">Terms and Conditions of Service</h1>
+    <div className="min-h-screen bg-slate-950 py-20 px-4 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-600/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/5 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 mb-6 text-emerald-400">
+            <Gavel size={32} />
+          </div>
+          <h1 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase italic">
+            Nexus <span className="text-emerald-500 tracking-normal">Operating Guidelines</span>
+          </h1>
+          <p className="text-slate-400 font-medium tracking-wide max-w-2xl mx-auto">
+            Governing framework for resource utilization, asset acquisition, and system engagement within the PixelMarket ecosystem.
+          </p>
+        </div>
         
-        <div className="bg-white rounded-lg shadow-md p-8 space-y-6">
+        <div className="bg-slate-900/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl p-8 md:p-12 border border-white/5 space-y-12">
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">1. Acceptance of Terms</h2>
-            <p className="text-gray-700 leading-relaxed">
-              By accessing and using the <strong>Ancestral heartbeat</strong> website, you agree to be bound by these terms and conditions of service. If you do not agree with any part of these terms, you should not use our services.
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <CheckCircle2 size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">01. Operational Acceptance</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium">
+              By initializing a session and engaging with the <strong>PixelMarket Nexus</strong> infrastructure, you acknowledge full compliance with these operational guidelines. Failure to adhere to these protocols will result in immediate session termination and identity blacklisting.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">2. Service Description</h2>
-            <p className="text-gray-700 leading-relaxed">
-              Ancestral Heartbeat is an e-commerce platform specializing in the sale of handmade Colombian handicrafts, including:
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <Globe size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">02. Infrastructure Ecosystem</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium mb-4">
+              PixelMarket Nexus is a high-availability digital asset marketplace specializing in premium engineering resources, including:
             </p>
-            <ul className="list-disc list-inside mt-3 text-gray-700 space-y-2 ml-4">
-              <li>Vueltiao hats</li>
-              <li>Mochilas wayuu</li>
-              <li>Hamacas artesanales</li>
-              <li>Hamacas artesanales</li>
-              <li>Hammock chairs</li>
-              <li>Traditional clothing</li>
-              <li>Handmade accessories and jewelry</li>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-4">
+              {[
+                'Enterprise-grade code repositories',
+                'Modular architectural templates',
+                'Optimized UI/UX asset clusters',
+                'Production-ready backend microservices',
+                'Cloud-native deployment configurations'
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="text-slate-300 text-sm font-semibold">{item}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <Cpu size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">03. Entity Identification</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium mb-6">
+              Access to core operational nodes requires valid entity initialization. You are solely responsible for:
+            </p>
+            <ul className="space-y-3 ml-4">
+              <li className="flex gap-4">
+                <span className="text-emerald-500 font-bold font-mono">/01</span>
+                <span className="text-slate-300 text-sm font-semibold">Maintenance of access key confidentiality</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-emerald-500 font-bold font-mono">/02</span>
+                <span className="text-slate-300 text-sm font-semibold">All unauthorized sub-routine execution under your identifier</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-emerald-500 font-bold font-mono">/03</span>
+                <span className="text-slate-300 text-sm font-semibold">Prompt reporting of identity compromise to Nexus security</span>
+              </li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">3. Registration and User Account</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              To make purchases, you must create an account and provide accurate and complete information. You are responsible for:
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <CreditCard size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">04. Asset Acquisition & Valuation</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium mb-6">
+              Valuation metrics for all Nexus assets are dynamic and subject to engineering overhead:
             </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>Maintaining the confidentiality of your password</li>
-              <li>All activities that occur under your account</li>
-              <li>Notifying us immediately of any unauthorized use</li>
+            <div className="bg-black/30 p-6 rounded-3xl border border-white/5 space-y-4">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-black">Acquisition Protocols:</p>
+              <ul className="list-disc list-inside text-slate-300 text-sm space-y-2 font-semibold ml-2">
+                <li>All valuations are expressed in USD (System Default)</li>
+                <li>Nexus reserves the right to modify asset valuation without notification</li>
+                <li>Digital assets may exhibit slight variances based on implementation context</li>
+                <li>Availability is prioritized based on pull-request sequence</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <Ship size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">05. Deployment & Logistics</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium mb-4">
+              Asset distribution protocols follow global logistics standards:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { title: 'Coverage', desc: 'Secure global asset distribution' },
+                { title: 'Latency', desc: 'Estimated based on carrier throughput' },
+                { title: 'Subsidies', desc: 'Enterprise tier includes free distribution' }
+              ].map((item, i) => (
+                <div key={i} className="p-4 bg-slate-800/40 rounded-2xl border border-white/5">
+                  <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest block mb-1">{item.title}</span>
+                  <span className="text-slate-300 text-xs font-bold leading-tight block">{item.desc}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <RefreshCcw size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">06. Integrity Rollback (Returns)</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium mb-4">
+              Should an asset fail to meet architectural specifications:
+            </p>
+            <ul className="list-disc list-inside text-slate-300 text-sm space-y-2 font-semibold ml-4">
+              <li>Initiate rollback request within 15 solar days from acquisition</li>
+              <li>Assets must remain in "original/unused" state (no fork/modification)</li>
+              <li>Customized architectural solutions are ineligible for rollback</li>
+              <li>Logistics overhead for rollbacks is the responsibility of the entity</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">4. Products and Prices</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              We strive to display products as accurately as possible:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>Images are for reference only and may vary slightly from the actual product</li>
-              <li>Prices are expressed in Colombian pesos (COP)</li>
-              <li>We reserve the right to modify prices without prior notice</li>
-              <li>Handmade products may have unique variations</li>
-              <li>We verify availability before confirming your order</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">5. Purchase and Payment Process</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              When making a purchase:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>You agree to pay the price of the product plus taxes and shipping costs.</li>
-              <li>We accept credit/debit cards, PayPal, bank transfer, and cash on delivery</li>
-              <li>Your order is subject to availability and confirmation</li>
-              <li>You will receive a confirmation email with the order details</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">6. Shipping and Delivery</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              Shipping information:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>We ship throughout Colombia</li>
-              <li>Delivery times are estimated and may vary</li>
-              <li>Shipping costs are calculated at checkout</li>
-              <li>Free shipping on orders over $200,000 COP</li>
-              <li>We are not responsible for delays caused by the courier company</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">7. Returns and Refunds</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              Return policy:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>You have 15 days from receipt to request a return</li>
-              <li>The product must be in its original and unused condition</li>
-              <li>Customized products are not eligible for return</li>
-              <li>Refunds will be processed once the product is received and verified</li>
-              <li>Return shipping costs are the responsibility of the customer (except for defective products)</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">8. Intellectual Property</h2>
-            <p className="text-gray-700 leading-relaxed">
-              All website content (images, texts, logos, designs) is the property of Ancestral heartbeat or its content providers and is protected by intellectual property laws. You may not reproduce, distribute, or modify any content without express authorization.
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <ShieldAlert size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">07. Intellectual Sovereignty</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium">
+              All infrastructure components, codebase, identifiers, and architectural designs are the exclusive property of <strong>PixelMarket Nexus</strong> Core Operations or its upstream contributors. Unauthorized mirroring, distribution, or reverse-engineering is strictly prohibited.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">9. Limitation of Liability</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              Ancestral heartbeat will not be liable for:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>Indirect, incidental, or consequential damages</li>
-              <li>Loss of data or service interruption</li>
-              <li>Misuse of products</li>
-              <li>Events beyond our reasonable control (force majeure)</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">10. Reviews and Comments</h2>
-            <p className="text-gray-700 leading-relaxed mb-3">
-              When posting reviews or comments:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
-              <li>You grant Ancestral heartbeat the right to use that content</li>
-              <li>You guarantee that the content is original and does not infringe third-party rights</li>
-              <li>You may not post offensive, defamatory, or illegal content</li>
-              <li>We reserve the right to remove inappropriate content</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">11. Modifications</h2>
-            <p className="text-gray-700 leading-relaxed">
-              We reserve the right to modify these terms at any time. Changes will take effect immediately after being posted on the website. It is your responsibility to review these terms periodically.
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <Scale size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">08. Legal Jurisdiction</h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium">
+              These guidelines are governed by international tech commerce statutes. Any conflict resolution will be conducted via specialized arbitration terminals under global digital governance.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">12. Applicable Law and Jurisdiction</h2>
-            <p className="text-gray-700 leading-relaxed">
-              These terms are governed by the laws of the Republic of Colombia. Any dispute will be resolved in the competent courts of Bogotá, Colombia.
-            </p>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                <Terminal size={20} />
+              </div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">09. Support & Oversight</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="p-6 bg-slate-800/40 rounded-3xl border border-white/5">
+                <div className="flex items-center gap-3 mb-4 text-emerald-400">
+                  <MessageSquare size={18} />
+                  <span className="text-xs font-black uppercase tracking-widest">Support Node</span>
+                </div>
+                <p className="text-slate-400 text-sm font-semibold mb-1">ops@pixelmarket.tech</p>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Active Monitoring: 09:00 - 18:00 UTC</p>
+              </div>
+              <div className="flex items-center justify-center p-6 border-2 border-dashed border-white/5 rounded-3xl group hover:border-emerald-500/30 transition-colors">
+                <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest text-center">
+                  By persisting in this environment, <br/>
+                  you <span className="text-emerald-500">Agree</span> to the above.
+                </p>
+              </div>
+            </div>
           </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-amber-600">13. Contact</h2>
-            <p className="text-gray-700 leading-relaxed">
-              For questions about these terms and conditions:
-            </p>
-            <ul className="mt-3 text-gray-700 space-y-2">
-              <li><strong>Email:</strong> soporte@latidoancestral.com</li>
-              <li><strong>Phone:</strong> +57 300 123 4567</li>
-              <li><strong>Address:</strong> Carrera 7 #123-45, Bogotá, Colombia</li>
-              <li><strong>Hours:</strong> Monday to Friday, 9:00 AM - 6:00 PM</li>
-            </ul>
-          </section>
-
-          <div className="mt-8 pt-6 border-t text-center text-gray-600">
-            <p>Last updated: {new Date().toLocaleDateString('en-US')}</p>
+          <div className="mt-12 pt-8 border-t border-white/5 flex justify-between items-center text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
+            <span>PixelMarket Core Architecture</span>
+            <span>Last Synced: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase()}</span>
           </div>
         </div>
       </div>

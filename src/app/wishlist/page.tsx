@@ -58,7 +58,7 @@ export default function WishlistPage() {
             >
               <Link href={`/products/${product.id}`} className="block relative h-64">
                 <Image
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   fill
                   className="object-cover"

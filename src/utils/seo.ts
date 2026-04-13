@@ -7,20 +7,20 @@ export function generateProductSchema(product: Product, averageRating?: number, 
     '@type': 'Product',
     name: product.name,
     description: product.description,
-    image: product.images || [product.image],
+    image: product.images || [product.image_url],
     brand: {
       '@type': 'Brand',
-  name: product.brand || 'Ancestral heartbeat',
+      name: product.brand || 'PixelMarket',
     },
     offers: {
       '@type': 'Offer',
-      url: `https://latidoancestral.com/products/${product.id}`,
-      priceCurrency: 'COP',
+      url: `https://pixelmarket.tech/products/${product.id}`,
+      priceCurrency: 'USD',
       price: product.price,
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
-        name: 'Ancestral heartbeat',
+        name: 'PixelMarket',
       },
     },
     ...(averageRating && reviewCount ? {
@@ -40,20 +40,20 @@ export function generateOrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-  name: 'Ancestral heartbeat',
-  description: 'Tienda virtual de artesanías colombianas hechas a mano',
-  url: 'https://latidoancestral.com',
-  logo: 'https://latidoancestral.com/logo.png',
+  name: 'PixelMarket',
+  description: 'Premier destination for high-performance digital assets, enterprise-grade UI kits, and precision developer hardware.',
+  url: 'https://pixelmarket.tech',
+  logo: 'https://pixelmarket.tech/logo.png',
     sameAs: [
-  'https://facebook.com/latidoancestral',
-  'https://instagram.com/latidoancestral',
-  'https://twitter.com/latidoancestral',
+      'https://facebook.com/pixelmarket',
+      'https://instagram.com/pixelmarket',
+      'https://twitter.com/pixelmarket',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+57-300-123-4567',
       contactType: 'Customer Service',
-  email: 'soporte@latidoancestral.com',
+  email: 'ops@pixelmarket.tech',
       availableLanguage: ['Spanish', 'English'],
     },
     address: {
@@ -76,7 +76,7 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `https://latidoancestral.com${item.url}`,
+      item: `https://pixelmarket.tech${item.url}`,
     })),
   };
 
@@ -106,7 +106,7 @@ export function generateMetaTags(tags: MetaTags) {
       images: tags.ogImage ? [{ url: tags.ogImage }] : [],
       url: tags.ogUrl,
       type: 'website',
-      siteName: 'Ancestral heartbeat',
+      siteName: 'PixelMarket',
     },
     twitter: {
       card: 'summary_large_image',

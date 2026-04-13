@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/perfil/', '/checkout/', '/carrito/'],
       },
     ],
-    sitemap: 'https://latidoancestral.com/sitemap.xml',
+    sitemap: 'https://pixelmarket.tech/sitemap.xml',
   };
 }

@@ -30,10 +30,10 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   return generateMetaTags({
     title: `${product.name} | Ancestral Heartbeat`,
     description: product.description,
-    keywords: `${product.name}, ${product.category}, Colombian handicrafts, handmade`,
+    keywords: `${product.name}, ${product.category_id}, Colombian handicrafts, handmade`,
     ogTitle: product.name,
     ogDescription: product.description,
-    ogImage: product.image,
+    ogImage: product.image_url,
     ogUrl: `/products/${product.id}`,
     canonical: `/products/${product.id}`,
   });
@@ -101,13 +101,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Product Details */}
       <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
         <ProductGallery 
-          images={[product.image]} 
+          images={[product.image_url]} 
           productName={product.name}
         />
 
         <div className="flex flex-col justify-center">
           {/* Featured badge */}
-          {product.featured && (
+          {product.is_featured_admin && (
             <span className="inline-block w-fit px-3 py-1 bg-primary text-white text-sm font-semibold rounded-full mb-3">
               Featured
             </span>
@@ -200,7 +200,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="bg-white dark:bg-dark-surface rounded-lg shadow-lg p-8 md:p-12 border-2 border-amber-200 dark:border-amber-800 mb-12">
         <ProductRecommendations 
           currentProductId={product.id}
-          currentCategory={product.category}
+          currentCategory={product.category_id}
           maxRecommendations={4}
         />
       </div>

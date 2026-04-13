@@ -24,7 +24,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const categoryProducts = products.filter((p) => p.category === id);
+  const categoryProducts = products.filter((p) => p.category_id === id);
 
   // Get unique colors from the products in this category
   const availableColors = useMemo(() => {

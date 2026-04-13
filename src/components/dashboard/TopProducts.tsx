@@ -24,7 +24,7 @@ export default function TopProducts({ products }: TopProductsProps) {
           >
             <div className="flex-shrink-0 w-12 h-12 relative rounded-lg overflow-hidden bg-gray-100">
               <Image
-                src={product.image}
+                src={product.image_url}
                 alt={product.name}
                 fill
                 className="object-cover"

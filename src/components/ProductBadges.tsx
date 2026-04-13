@@ -29,7 +29,7 @@ export default function ProductBadges({
         )}
 
         {/* Featured badge */}
-        {product.featured && (
+        {product.is_featured_admin && (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
             <FiStar className="w-3 h-3" />
             Featured

@@ -64,9 +64,9 @@ export default function ProductCard({
   
   const inWishlist = isInWishlist(product.id);
 
-  const formattedPrice = new Intl.NumberFormat("es-CO", {
+  const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "COP",
+    currency: "USD",
     minimumFractionDigits: 0,
   }).format(product.price);
 
@@ -93,7 +93,7 @@ export default function ProductCard({
 
   return (
     <div 
-      className="card group relative overflow-hidden flex flex-col h-full"
+      className="card group relative overflow-hidden flex flex-col h-full bg-white dark:bg-dark-surface border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all duration-300 rounded-2xl"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(true)}
@@ -112,13 +112,13 @@ export default function ProductCard({
         }}
         onMouseEnter={() => setIsImageHovered(true)}
         onMouseLeave={() => setIsImageHovered(false)}
-        className="relative h-48 sm:h-56 md:h-64 bg-gray-200 cursor-pointer flex-shrink-0 w-full overflow-hidden"
+        className="relative h-48 sm:h-56 md:h-64 bg-slate-100 dark:bg-slate-900 cursor-pointer flex-shrink-0 w-full overflow-hidden"
       >
         <Image
-          src={product.image}
+          src={product.image_url}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={false}
         />
@@ -135,9 +135,9 @@ export default function ProductCard({
 
         {/* Overlay with quick actions - covers image only */}
         <div className={`
-          absolute inset-0 top-0 left-0 w-full h-full bg-black/40 backdrop-blur-sm 
+          absolute inset-0 top-0 left-0 w-full h-full bg-dark/40 backdrop-blur-sm 
           flex items-center justify-center gap-2 sm:gap-3
-          transition-opacity duration-300 z-10
+          transition-all duration-300 z-10
           ${isHovered ? 'opacity-100' : 'opacity-0'}
         `}>
           <Tooltip text={t.common.addToCart} isActive={activeTooltip === 'cart'}>
@@ -145,7 +145,7 @@ export default function ProductCard({
               onClick={(e) => { e.stopPropagation(); handleQuickAdd(e); }}
               onMouseEnter={() => setActiveTooltip('cart')}
               onMouseLeave={() => setActiveTooltip(null)}
-              className="p-2 sm:p-3 bg-white text-black rounded-full hover:bg-[#8B4513] hover:text-white transition-colors shadow-lg"
+              className="p-2 sm:p-3 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-all shadow-xl hover:scale-110"
               aria-label={t.common.addToCart}
             >
               <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -161,7 +161,7 @@ export default function ProductCard({
               }}
               onMouseEnter={() => setActiveTooltip('quickview')}
               onMouseLeave={() => setActiveTooltip(null)}
-              className="p-2 sm:p-3 bg-white text-black rounded-full hover:bg-[#8B4513] hover:text-white transition-colors shadow-lg"
+              className="p-2 sm:p-3 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-all shadow-xl hover:scale-110"
               aria-label="Quick view"
             >
               <FiEye className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -173,7 +173,7 @@ export default function ProductCard({
               href={`/products/${product.id}`}
               onMouseEnter={() => setActiveTooltip('details')}
               onMouseLeave={() => setActiveTooltip(null)}
-              className="p-2 sm:p-3 bg-white text-black rounded-full hover:bg-[#8B4513] hover:text-white transition-colors shadow-lg"
+              className="p-2 sm:p-3 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-all shadow-xl hover:scale-110"
               aria-label={t.common.viewDetails}
             >
               <span className="text-lg font-bold">ⓘ</span>
@@ -192,8 +192,8 @@ export default function ProductCard({
           ${inWishlist 
             ? 'bg-red-500 text-white scale-110' 
             : isImageHovered 
-              ? 'bg-[#8B4513] text-white' 
-              : 'bg-white/90 backdrop-blur-sm text-black hover:bg-[#8B4513] hover:text-white'
+              ? 'bg-primary text-white' 
+              : 'bg-white/90 backdrop-blur-sm text-dark hover:bg-primary hover:text-white'
           }
         `}
         title={inWishlist ? 'Remove from favorites' : 'Add to favorites'}
@@ -203,52 +203,42 @@ export default function ProductCard({
       </button>
 
       {/* Product information */}
-      <div className="p-3 sm:p-4 md:p-6 flex flex-col flex-grow bg-white">
+      <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-grow">
         <Link href={`/products/${product.id}`}>
-          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 text-black hover:underline transition-colors line-clamp-2">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 text-dark dark:text-white hover:text-primary transition-colors line-clamp-1">
             {product.name}
           </h3>
         </Link>
         
-        <p className="text-gray-600 mb-2 sm:mb-3 line-clamp-2 text-xs sm:text-sm">
+        <p className="text-slate-500 dark:text-slate-400 mb-2 sm:mb-4 line-clamp-2 text-xs sm:text-sm leading-relaxed">
           {product.description}
         </p>
 
-        {/* Rating */}
-        {product.rating && (
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <div className="flex text-yellow-500 text-xs sm:text-sm">
-              {'⭐'.repeat(Math.round(product.rating))}
-            </div>
-            <span className="text-xs sm:text-sm text-gray-500">
-              {product.rating.toFixed(1)} ({product.reviewsCount || 0})
-            </span>
-          </div>
-        )}
-
         {/* Price and category */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-auto gap-3">
           <div>
-            <span className="text-lg sm:text-xl md:text-2xl font-bold text-primary">{formattedPrice}</span>
+            <span className="text-lg sm:text-xl md:text-2xl font-black text-primary">{formattedPrice}</span>
             {discount && (
-              <div className="text-xs sm:text-sm text-gray-500 line-through">
-                ${Math.round(product.price / (1 - discount / 100)).toLocaleString('es-CO')}
+              <div className="text-xs sm:text-sm text-slate-400 line-through">
+                ${Math.round(product.price / (1 - discount / 100)).toLocaleString()}
               </div>
             )}
           </div>
-          <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full whitespace-nowrap">
-            {product.category}
+          <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-full whitespace-nowrap border border-slate-200 dark:border-slate-700">
+            {product.category_id}
           </span>
         </div>
 
-        {/* View details button */}
-        <Link
-          href={`/products/${product.id}`}
-          className="text-xs sm:text-sm w-full text-center block mt-auto py-2 px-3 sm:px-4 rounded font-semibold transition-colors bg-primary text-white hover:bg-primary-dark"
+        {/* Buy Now button */}
+        <button
+          onClick={(e) => { e.stopPropagation(); handleQuickAdd(e); }}
+          className="w-full mt-4 py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-bold transition-all bg-primary text-white hover:bg-secondary shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95"
         >
-          {t.common.viewDetails}
-        </Link>
+          <FiShoppingCart className="w-4 h-4" />
+          <span>{t.common.addToCart}</span>
+        </button>
       </div>
     </div>
   );
 }
+

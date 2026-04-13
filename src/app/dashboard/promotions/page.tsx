@@ -20,7 +20,7 @@ interface Promotion {
   image?: string;
 }
 
-const featuredProducts = products.filter(p => p.featured);
+const featuredProducts = products.filter(p => p.is_featured_admin);
 
 const initialPromotions: Promotion[] = [
   { 
@@ -31,7 +31,7 @@ const initialPromotions: Promotion[] = [
     startDate: '2024-06-01', 
     endDate: '2024-08-31', 
     status: 'active',
-    image: featuredProducts[0]?.image || '/assets/assets11/hamaca.webp'
+    image: featuredProducts[0]?.image_url || '/assets/assets11/hamaca.webp'
   },
   { 
     id: 2, 
@@ -41,7 +41,7 @@ const initialPromotions: Promotion[] = [
     startDate: '2024-01-01', 
     endDate: '2024-12-31', 
     status: 'active',
-    image: featuredProducts[1]?.image || '/assets/assets11/mochila.webp'
+    image: featuredProducts[1]?.image_url || '/assets/assets11/mochila.webp'
   },
   { 
     id: 3, 
@@ -51,7 +51,7 @@ const initialPromotions: Promotion[] = [
     startDate: '2024-11-29', 
     endDate: '2024-11-29', 
     status: 'scheduled',
-    image: featuredProducts[2]?.image || '/assets/assets11/sombrero-vueltiao.webp'
+    image: featuredProducts[2]?.image_url || '/assets/assets11/sombrero-vueltiao.webp'
   },
 ];
 

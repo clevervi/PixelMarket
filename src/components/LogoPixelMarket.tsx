@@ -4,12 +4,12 @@ import Image from 'next/image';
 // Local logo from public/assets/logo.png
 const LOGO_SRC = '/assets/logo.png';
 
-type LogoAncestralProps = {
+type LogoPixelMarketProps = {
   size?: number;
   hoverBelow?: boolean;
 };
 
-function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
+function LogoPixelMarket({ size = 64, hoverBelow = false }: LogoPixelMarketProps) {
   const [showTitle, setShowTitle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [imageLoadError, setImageLoadError] = useState(false);
@@ -34,16 +34,16 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
         onMouseLeave={() => setShowTitle(false)}
         onFocus={() => setShowTitle(true)}
         onBlur={() => setShowTitle(false)}
-        aria-label="Ver logo completo"
+        aria-label="View full logo"
       >
         <div style={{
           width: size,
           height: size,
           borderRadius: '50%',
           overflow: 'hidden',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
           position: 'relative',
-          background: imageLoadError ? '#8B4513' : 'transparent',
+          background: imageLoadError ? '#1e293b' : 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -51,7 +51,7 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
           {!imageLoadError ? (
             <Image
               src={LOGO_SRC}
-              alt="Logo Ancestral Heartbeat"
+              alt="PixelMarket Logo"
               width={size}
               height={size}
               style={{ objectFit: 'cover', width: '100%', height: '100%' }}
@@ -70,7 +70,7 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
               color: '#fff',
               fontWeight: 'bold',
             }}>
-              ♥
+              PM
             </div>
           )}
           {!hoverBelow && (
@@ -89,16 +89,16 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
                 fontWeight: '700',
                 fontSize: '0.9rem',
                 pointerEvents: 'none',
-                background: 'rgba(0,0,0,0.32)',
-                WebkitBackdropFilter: 'blur(4px)',
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(15, 23, 42, 0.65)',
+                WebkitBackdropFilter: 'blur(6px)',
+                backdropFilter: 'blur(6px)',
                 opacity: showTitle ? 1 : 0,
                 transform: showTitle ? 'translateY(0)' : 'translateY(6px)',
-                transition: 'opacity 220ms ease, transform 220ms ease',
+                transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
                 borderRadius: '50%'
               }}
             >
-              Ancestral Heartbeat
+              PixelMarket
             </div>
           )}
         </div>
@@ -109,11 +109,11 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
             marginTop: '8px',
             textAlign: 'center',
             fontWeight: 700,
-            fontSize: '0.9rem',
-            color: '#8B4513',
+            fontSize: '1rem',
+            color: '#1e293b',
           }}
         >
-          Ancestral Heartbeat
+          PixelMarket
         </div>
       )}
       {showModal && (
@@ -124,7 +124,7 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
             left: 0,
             width: '100vw',
             height: '100vh',
-            background: 'rgba(0,0,0,0.7)',
+            background: 'rgba(15, 23, 42, 0.9)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -137,31 +137,34 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
               onClick={() => setShowModal(false)}
               style={{
                 position: 'absolute',
-                top: '-30px',
+                top: '-40px',
                 right: '0',
-                background: '#fff',
+                background: 'white',
                 border: 'none',
-                fontSize: '28px',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                fontSize: '24px',
                 cursor: 'pointer',
-                color: '#8B4513',
-                fontWeight: 'bold',
-                padding: '0 10px',
-                lineHeight: '1',
+                color: '#1e293b',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               }}
-              aria-label="Cerrar"
+              aria-label="Close"
             >
               ×
             </button>
             <img
               src={LOGO_SRC}
-              alt="Logo completo"
+              alt="PixelMarket Full Logo"
               style={{
                 maxWidth: '90vw',
-                maxHeight: '90vh',
-                borderRadius: '16px',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
+                maxHeight: '80vh',
+                borderRadius: '24px',
+                boxShadow: '0 10px 40px rgba(0,0,0,0.4)',
                 background: '#fff',
-                justifyContent:'flex-end'
               }}
               onError={handleImageError}
             />
@@ -170,6 +173,6 @@ function LogoAncestral({ size = 64, hoverBelow = false }: LogoAncestralProps) {
       )}
     </div>
   );
-};
+}
 
-export default LogoAncestral;
+export default LogoPixelMarket;

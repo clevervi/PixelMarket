@@ -11,10 +11,10 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  category: string;
+  category_id: string;
   price: number;
   stock: number;
-  image: string;
+  image_url: string;
   createdAt: string;
 }
 
@@ -38,10 +38,10 @@ export default function EditProductPage() {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     description: '',
-    category: 'Other',
+    category_id: 'Other',
     price: 0,
     stock: 0,
-    image: '',
+    image_url: '',
   });
   const [isLoading, setIsLoading] = useState(!isNewProduct);
   const [isSaving, setIsSaving] = useState(false);
@@ -218,9 +218,9 @@ export default function EditProductPage() {
                 Category
               </label>
               <select
-                id="category"
-                name="category"
-                value={formData.category || 'Other'}
+                id="category_id"
+                name="category_id"
+                value={formData.category_id || 'Other'}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent"
               >
@@ -267,23 +267,23 @@ export default function EditProductPage() {
 
           {/* Image URL */}
           <div>
-            <label htmlFor="image" className="block text-sm font-semibold text-[#8B4513] mb-2">
+            <label htmlFor="image_url" className="block text-sm font-semibold text-[#8B4513] mb-2">
               Image URL
             </label>
             <input
-              id="image"
-              name="image"
+              id="image_url"
+              name="image_url"
               type="url"
-              value={formData.image || ''}
+              value={formData.image_url || ''}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#8B4513] focus:border-transparent"
               placeholder="https://example.com/image.jpg"
             />
-            {formData.image && (
+            {formData.image_url && (
               <div className="mt-4">
                 <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
                 <img
-                  src={formData.image}
+                  src={formData.image_url}
                   alt="Product preview"
                   className="h-40 w-40 object-cover rounded-lg border border-gray-300"
                   onError={(e) => {

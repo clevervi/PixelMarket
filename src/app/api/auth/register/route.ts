@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const supabase = createSupabaseServiceClient();
 
     // We also create a local password hash to satisfy the NOT NULL constraint
-    // of the password_hash column in the usuarios table. Real verification is done by
+    // of the password_hash column in the users table. Real verification is done by
     // Supabase Auth, but we keep this field for compatibility.
     const passwordHash = await hashPassword(password);
 
@@ -66,9 +66,9 @@ export async function POST(request: NextRequest) {
     const authUser = signUpData.user;
     const userId = authUser.id as string;
 
-    // Insert the corresponding row in our usuarios table using the same UUID
+    // Insert the corresponding row in our users table using the same UUID
     const insertResult = await supabase
-      .from('usuarios')
+      .from('users')
       .insert({
         id: userId,
         email,

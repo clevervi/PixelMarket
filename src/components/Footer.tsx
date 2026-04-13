@@ -7,136 +7,114 @@ import { useTranslation } from '@/hooks/useTranslation';
 export default function Footer() {
   const { t } = useTranslation();
   return (
-    <footer className="bg-[#2C1810] text-white mt-16">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-2xl font-bold mb-4 text-accent">Ancestral heartbeat</h3>
-            <p className="text-white">
-              Promoting Colombian culture and ancestral traditions through handmade crafts.
+    <footer className="bg-slate-950 text-white border-t border-white/5 relative overflow-hidden">
+      {/* Footer background detail */}
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-black mb-6 text-white tracking-tighter">
+              Pixel<span className="text-primary">Market</span>
+            </h3>
+            <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-medium">
+              The premier destination for high-performance digital assets, enterprise-grade UI kits, and precision developer hardware.
             </p>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl w-fit">
+              <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Terminal Status: Online</span>
+            </div>
           </div>
 
           <div>
-            <h4 className="text-xl font-semibold mb-4 text-accent">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/essence" className="text-white hover:text-accent transition-colors">
-                  Our Essence
-                </Link>
-              </li>
-              <li>
-                <Link href="/collections" className="text-white hover:text-accent transition-colors">
-                  Collections
-                </Link>
-              </li>
-              <li>
-                <Link href="/inspiration" className="text-white hover:text-accent transition-colors">
-                  Inspiration
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-white hover:text-accent transition-colors">
-                  Contact
-                </Link>
-              </li>
+            <h4 className="text-xs font-black uppercase tracking-[0.3em] mb-8 text-primary">Protocol Links</h4>
+            <ul className="space-y-4">
+              {[
+                { name: 'Core Essence', href: '/essence' },
+                { name: 'Asset Index', href: '/collections' },
+                { name: 'Tech Blog', href: '/inspiration' },
+                { name: 'System Support', href: '/contact' }
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-slate-400 hover:text-white transition-all text-sm font-semibold flex items-center group">
+                    <span className="w-0 group-hover:w-3 h-[1px] bg-primary transition-all mr-0 group-hover:mr-2" />
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xl font-semibold mb-4 text-accent">Legal</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/privacy-policy" className="text-white hover:text-accent transition-colors">
-                  {t.footer.privacyPolicy}
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-of-service" className="text-white hover:text-accent transition-colors">
-                  {t.footer.termsOfService}
-                </Link>
-              </li>
-              <li>
-                <Link href="/cart" className="text-white hover:text-accent transition-colors">
-                  Cart
-                </Link>
-              </li>
-              <li>
-                <Link href="/profile" className="text-white hover:text-accent transition-colors">
-                  My Account
-                </Link>
-              </li>
+            <h4 className="text-xs font-black uppercase tracking-[0.3em] mb-8 text-primary">Compliance</h4>
+            <ul className="space-y-4">
+              {[
+                { name: t.footer.privacyPolicy, href: '/privacy-policy' },
+                { name: t.footer.termsOfService, href: '/terms-of-service' },
+                { name: 'Order Logs', href: '/cart' },
+                { name: 'User Profile', href: '/profile' }
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-slate-400 hover:text-white transition-all text-sm font-semibold">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xl font-semibold mb-4 text-accent">Contact</h4>
-            <ul className="space-y-2 text-white">
-              <li>Email: katemartinez1507@gmail.com</li>
-              <li></li>
-              <li>Colombia</li>
+            <h4 className="text-xs font-black uppercase tracking-[0.3em] mb-8 text-primary">Node Contact</h4>
+            <ul className="space-y-4 text-sm font-semibold">
+              <li className="flex flex-col">
+                <span className="text-[10px] uppercase text-slate-500 mb-1">Inbound Queries</span>
+                <span className="text-slate-200">contact@pixelmarket.tech</span>
+              </li>
+              <li className="flex flex-col">
+                <span className="text-[10px] uppercase text-slate-500 mb-1">Developer Ops</span>
+                <span className="text-slate-200">ops@pixelmarket.tech</span>
+              </li>
             </ul>
             
             {/* Social Media */}
-            <div className="mt-6">
-              <h5 className="text-sm font-semibold mb-3 text-accent">{t.footer.followUs}</h5>
+            <div className="mt-10">
               <div className="flex gap-4">
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white hover:text-accent transition-colors"
-                  aria-label="Facebook"
-                >
-                  <FaFacebook size={24} />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white hover:text-accent transition-colors"
-                  aria-label="Instagram"
-                >
-                  <FaInstagram size={24} />
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white hover:text-accent transition-colors"
-                  aria-label="Twitter"
-                >
-                  <FaTwitter size={24} />
-                </a>
-                <a
-                  href="https://wa.me/573001234567"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white hover:text-accent transition-colors"
-                  aria-label="WhatsApp"
-                >
-                  <FaWhatsapp size={24} />
-                </a>
+                {[
+                  { icon: FaFacebook, href: 'https://facebook.com', label: 'FB' },
+                  { icon: FaInstagram, href: 'https://instagram.com', label: 'IG' },
+                  { icon: FaTwitter, href: 'https://twitter.com', label: 'TW' },
+                  { icon: FaWhatsapp, href: 'https://whatsapp.com', label: 'WA' }
+                ].map((social, idx) => (
+                  <a
+                    key={idx}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:bg-primary hover:border-primary transition-all duration-300"
+                    aria-label={social.label}
+                  >
+                    <social.icon size={18} />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-700 dark:border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400">&copy; {new Date().getFullYear()} Ancestral Heartbeat. {t.footer.allRightsReserved}</p>
-          <p className="mt-2 text-sm text-gray-400">Kateryn Martinez | Made with ❤️ in Colombia</p>
-          <div className="mt-3 flex justify-center gap-4 text-sm">
-            <Link href="/privacy-policy" className="text-gray-400 hover:text-accent transition-colors">
-              Privacy
-            </Link>
-            <span>|</span>
-            <Link href="/terms-of-service" className="text-gray-400 hover:text-accent transition-colors">
-              Terms
-            </Link>
-            <span>|</span>
-            <Link href="/sitemap.xml" className="text-gray-400 hover:text-accent transition-colors">
-              Sitemap
-            </Link>
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">
+            &copy; {new Date().getFullYear()} PIXELMARKET_CORE. {t.footer.allRightsReserved}
+          </p>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+               <span className="text-[10px] font-black text-slate-600 uppercase">Encryption</span>
+               <span className="text-[10px] font-black text-primary uppercase">AES-256</span>
+            </div>
+            <div className="h-4 w-px bg-white/10" />
+            <div className="flex items-center gap-2">
+               <span className="text-[10px] font-black text-slate-600 uppercase">Latency</span>
+               <span className="text-[10px] font-black text-accent uppercase">12ms</span>
+            </div>
           </div>
         </div>
       </div>

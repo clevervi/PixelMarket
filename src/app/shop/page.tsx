@@ -35,7 +35,7 @@ export default function ShopPage() {
   const filteredProducts = useMemo(() => {
     return allProducts.filter(product => {
       // Category filter
-      if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
+      if (filters.categories.length > 0 && !filters.categories.includes(product.category_id)) {
         return false;
       }
 

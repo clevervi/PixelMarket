@@ -65,7 +65,7 @@ export default function QuickViewModal() {
   }).format(product.price);
 
   // Mock multiple images (in real app, product would have gallery)
-  const images = [product.image, product.image, product.image];
+  const images = [product.image_url, product.image_url, product.image_url];
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 animate-fade-in">
@@ -107,7 +107,7 @@ export default function QuickViewModal() {
                 </Link>
 
                 {/* Badges */}
-                {product.featured && (
+                {product.is_featured_admin && (
                   <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                     FEATURED
                   </div>
@@ -143,7 +143,7 @@ export default function QuickViewModal() {
           <div className="lg:w-1/2 flex flex-col">
             {/* Category */}
             <span className="inline-block w-fit px-3 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-4 capitalize">
-              {product.category}
+              {product.category_id}
             </span>
 
             {/* Title */}
