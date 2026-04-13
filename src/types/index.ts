@@ -14,11 +14,11 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  image: string;
+  image_url: string;
   images?: string[];    // Multiple images
-  category: string;
+  category_id: string;
   color?: string;
-  featured?: boolean;
+  is_featured_admin?: boolean;
   brand?: string;       // Brand
   material?: string;    // Material
   variants?: ProductVariant[]; // Available variants
@@ -31,7 +31,7 @@ export interface Category {
   id: string;
   name: string;
   description: string;
-  image: string;
+  image_url: string;
 }
 
 // Shopping cart

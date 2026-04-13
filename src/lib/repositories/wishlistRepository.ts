@@ -2,8 +2,8 @@ import { createSupabaseServiceClient } from '../supabaseClient';
 
 export interface WishlistRow {
   id: string;
-  usuario_id: string;
-  producto_id: string;
+  user_id: string;
+  product_id: string;
   added_at: string;
 }
 
@@ -12,8 +12,8 @@ export async function listWishlistByUser(userId: string): Promise<WishlistRow[]>
 
   const { data, error } = await supabase
     .from('wishlist')
-    .select('id, usuario_id, producto_id, added_at')
-    .eq('usuario_id', userId)
+    .select('id, user_id, product_id, added_at')
+    .eq('user_id', userId)
     .order('added_at', { ascending: false });
 
   if (error) {
@@ -23,8 +23,8 @@ export async function listWishlistByUser(userId: string): Promise<WishlistRow[]>
 
   return (data || []).map((row) => ({
     id: row.id as string,
-    usuario_id: row.usuario_id as string,
-    producto_id: row.producto_id as string,
+    user_id: row.user_id as string,
+    product_id: row.product_id as string,
     added_at: String(row.added_at),
   }));
 }
@@ -35,9 +35,9 @@ export async function addToWishlist(userId: string, productId: string): Promise<
   // Comprobar si ya existe
   const { data: existing, error: existingError } = await supabase
     .from('wishlist')
-    .select('id, usuario_id, producto_id, added_at')
-    .eq('usuario_id', userId)
-    .eq('producto_id', productId)
+    .select('id, user_id, product_id, added_at')
+    .eq('user_id', userId)
+    .eq('product_id', productId)
     .maybeSingle();
 
   if (existingError) {
@@ -48,8 +48,8 @@ export async function addToWishlist(userId: string, productId: string): Promise<
   if (existing) {
     return {
       id: existing.id as string,
-      usuario_id: existing.usuario_id as string,
-      producto_id: existing.producto_id as string,
+      user_id: existing.user_id as string,
+      product_id: existing.product_id as string,
       added_at: String(existing.added_at),
     };
   }
@@ -57,10 +57,10 @@ export async function addToWishlist(userId: string, productId: string): Promise<
   const { data, error } = await supabase
     .from('wishlist')
     .insert({
-      usuario_id: userId,
-      producto_id: productId,
+      user_id: userId,
+      product_id: productId,
     })
-    .select('id, usuario_id, producto_id, added_at')
+    .select('id, user_id, product_id, added_at')
     .single();
 
   if (error || !data) {
@@ -70,8 +70,8 @@ export async function addToWishlist(userId: string, productId: string): Promise<
 
   return {
     id: data.id as string,
-    usuario_id: data.usuario_id as string,
-    producto_id: data.producto_id as string,
+    user_id: data.user_id as string,
+    product_id: data.product_id as string,
     added_at: String(data.added_at),
   };
 }
@@ -82,8 +82,8 @@ export async function removeFromWishlist(userId: string, productId: string): Pro
   const { error } = await supabase
     .from('wishlist')
     .delete()
-    .eq('usuario_id', userId)
-    .eq('producto_id', productId);
+    .eq('user_id', userId)
+    .eq('product_id', productId);
 
   if (error) {
     console.error('removeFromWishlist error (supabase):', error);
@@ -97,7 +97,7 @@ export async function clearWishlist(userId: string): Promise<void> {
   const { error } = await supabase
     .from('wishlist')
     .delete()
-    .eq('usuario_id', userId);
+    .eq('user_id', userId);
 
   if (error) {
     console.error('clearWishlist error (supabase):', error);
@@ -111,8 +111,8 @@ export async function isInWishlist(userId: string, productId: string): Promise<b
   const { count, error } = await supabase
     .from('wishlist')
     .select('id', { count: 'exact', head: true })
-    .eq('usuario_id', userId)
-    .eq('producto_id', productId);
+    .eq('user_id', userId)
+    .eq('product_id', productId);
 
   if (error) {
     console.error('isInWishlist error (supabase):', error);

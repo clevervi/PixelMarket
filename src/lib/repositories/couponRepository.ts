@@ -30,7 +30,7 @@ export async function findCouponByCode(code: string): Promise<CouponRow | null> 
        usage_limit_per_user,
        starts_at::text as starts_at,
        expires_at::text as expires_at
-     FROM cupones
+     FROM coupons
      WHERE UPPER(code) = UPPER($1)
     `,
     [code],
@@ -40,8 +40,8 @@ export async function findCouponByCode(code: string): Promise<CouponRow | null> 
 export async function hasUserUsedCoupon(userId: string, couponId: string): Promise<boolean> {
   const row = await sqlOne<{ exists: boolean }>(
     `SELECT EXISTS (
-       SELECT 1 FROM cupones_usuarios
-       WHERE usuario_id = $1 AND cupon_id = $2
+       SELECT 1 FROM coupon_users
+       WHERE user_id = $1 AND coupon_id = $2
      ) as exists`,
     [userId, couponId],
   );
@@ -50,14 +50,14 @@ export async function hasUserUsedCoupon(userId: string, couponId: string): Promi
 
 export async function markCouponUsed(userId: string, couponId: string, orderId?: string | null): Promise<void> {
   await sql(
-    `INSERT INTO cupones_usuarios (cupon_id, usuario_id, pedido_id)
+    `INSERT INTO coupon_users (coupon_id, user_id, order_id)
      VALUES ($1, $2, $3)`,
     [couponId, userId, orderId ?? null],
   );
 
   // Increment the coupon's global usage counter
   await sql(
-    `UPDATE cupones
+    `UPDATE coupons
      SET usage_count = COALESCE(usage_count, 0) + 1
      WHERE id = $1`,
     [couponId],

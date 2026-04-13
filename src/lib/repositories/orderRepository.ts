@@ -59,8 +59,8 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
     await client.query('BEGIN');
 
     const addressRes = await client.query<{ id: string }>(
-      `INSERT INTO direcciones (
-         usuario_id,
+      `INSERT INTO addresses (
+         user_id,
          full_name,
          street,
          city,
@@ -69,11 +69,11 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
          country,
          phone,
          is_default,
-         tipo
+         address_type
        ) VALUES (
          $1, $2, $3, $4, $5, $6, $7, $8,
          false,
-         'envio'
+         'shipping'
        )
        RETURNING id`,
       [
@@ -95,16 +95,16 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
       order_number: string;
       created_at: string;
     }>(
-      `INSERT INTO pedidos (
-         usuario_id,
+      `INSERT INTO orders (
+         user_id,
          status,
          subtotal,
          tax,
          shipping_cost,
          discount_amount,
          total,
-         cupon_id,
-         direccion_id,
+         coupon_id,
+         address_id,
          notes
        ) VALUES (
          $1, 'pending', $2, $3, $4, $5, $6, $7, $8, $9
@@ -129,10 +129,10 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
       const lineSubtotal = item.unitPrice * item.quantity;
 
       await client.query(
-        `INSERT INTO detalle_pedido (
-           pedido_id,
-           producto_id,
-           variante_id,
+        `INSERT INTO order_items (
+           order_id,
+           product_id,
+           variant_id,
            product_name,
            product_sku,
            quantity,
@@ -189,9 +189,9 @@ export async function listOrdersForAdmin(status?: string | null): Promise<AdminO
        (u.first_name || ' ' || u.last_name) as customer_name,
        u.email,
        COUNT(d.id)::int as items_count
-     FROM pedidos p
-     LEFT JOIN usuarios u ON u.id = p.usuario_id
-     LEFT JOIN detalle_pedido d ON d.pedido_id = p.id
+     FROM orders p
+     LEFT JOIN users u ON u.id = p.user_id
+     LEFT JOIN order_items d ON d.order_id = p.id
      ${whereClause}
      GROUP BY p.id, u.first_name, u.last_name, u.email
      ORDER BY p.created_at DESC
@@ -213,10 +213,10 @@ export async function listOrdersForVendor(vendorId: string): Promise<VendorOrder
        (u.first_name || ' ' || u.last_name) as customer_name,
        u.email,
        COUNT(DISTINCT d.id)::int as items_count
-     FROM pedidos p
-     JOIN detalle_pedido d ON d.pedido_id = p.id
-     JOIN productos pr ON pr.id = d.producto_id
-     LEFT JOIN usuarios u ON u.id = p.usuario_id
+     FROM orders p
+     JOIN order_items d ON d.order_id = p.id
+     JOIN products pr ON pr.id = d.product_id
+     LEFT JOIN users u ON u.id = p.user_id
      WHERE pr.vendor_id = $1
      GROUP BY p.id, u.first_name, u.last_name, u.email
      ORDER BY p.created_at DESC

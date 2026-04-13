@@ -8,7 +8,7 @@ export interface ProductRow {
   short_description: string | null;
   price: string; // numeric -> string
   stock: number;
-  featured: boolean;
+  is_featured_admin: boolean;
   is_active: boolean;
   vendor_id: string | null;
   category_id: string | null;
@@ -21,7 +21,7 @@ export interface CreateProductInput {
   shortDescription?: string;
   price: number;
   stock?: number;
-  featured?: boolean;
+  is_featured_admin?: boolean;
   vendorId: string | null;
   categoryId?: string | null;
 }
@@ -36,11 +36,11 @@ export async function listActiveProducts(): Promise<ProductRow[]> {
        short_description,
        price::text as price,
        stock,
-       featured,
+       is_featured_admin,
        is_active,
        vendor_id,
        category_id
-     FROM productos
+     FROM products
      WHERE is_active = true
      ORDER BY created_at DESC
     `,
@@ -57,11 +57,11 @@ export async function listProductsByVendor(vendorId: string): Promise<ProductRow
        short_description,
        price::text as price,
        stock,
-       featured,
+       is_featured_admin,
        is_active,
        vendor_id,
        category_id
-     FROM productos
+     FROM products
      WHERE vendor_id = $1
      ORDER BY created_at DESC
     `,
@@ -79,11 +79,11 @@ export async function findProductById(id: string): Promise<ProductRow | null> {
        short_description,
        price::text as price,
        stock,
-       featured,
+       is_featured_admin,
        is_active,
        vendor_id,
        category_id
-     FROM productos
+     FROM products
      WHERE id = $1
     `,
     [id],
@@ -92,14 +92,14 @@ export async function findProductById(id: string): Promise<ProductRow | null> {
 
 export async function createProduct(input: CreateProductInput): Promise<ProductRow> {
   const row = await sqlOne<ProductRow>(
-    `INSERT INTO productos (
+    `INSERT INTO products (
        name,
        slug,
        description,
        short_description,
        price,
        stock,
-       featured,
+       is_featured_admin,
        is_active,
        vendor_id,
        category_id
@@ -123,7 +123,7 @@ export async function createProduct(input: CreateProductInput): Promise<ProductR
        short_description,
        price::text as price,
        stock,
-       featured,
+       is_featured_admin,
        is_active,
        vendor_id,
        category_id
@@ -135,7 +135,7 @@ export async function createProduct(input: CreateProductInput): Promise<ProductR
       input.shortDescription || null,
       input.price,
       input.stock ?? null,
-      input.featured ?? null,
+      input.is_featured_admin ?? null,
       input.vendorId,
       input.categoryId ?? null,
     ],
@@ -147,7 +147,7 @@ export async function createProduct(input: CreateProductInput): Promise<ProductR
 
 export async function softDeleteProduct(id: string): Promise<void> {
   await sql(
-    `UPDATE productos
+    `UPDATE products
      SET is_active = false
      WHERE id = $1
     `,

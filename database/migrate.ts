@@ -26,10 +26,10 @@ export async function migrateProducts() {
           product.name,
           product.description,
           product.price,
-          product.image,
-          product.category,
-          product.color || null,
-          product.featured || false,
+          product.image_url,
+          product.category_id,
+          null,
+          product.is_featured_admin || false,
           product.brand || null,
           product.material || null,
           product.rating || null,
@@ -77,7 +77,11 @@ export async function initDatabase() {
 }
 
 // Run if executed directly
-if (require.main === module) {
+const isMain = import.meta.url.startsWith('file:') && 
+               (process.argv[1] === new URL(import.meta.url).pathname || 
+                process.argv[1].endsWith('migrate.ts'));
+
+if (isMain) {
   initDatabase()
     .then(() => process.exit(0))
     .catch((error) => {

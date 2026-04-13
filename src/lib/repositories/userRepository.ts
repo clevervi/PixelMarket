@@ -48,7 +48,7 @@ export async function findUserByIdForAuth(id: string): Promise<AuthUserRow | nul
   const supabase = createSupabaseServiceClient();
 
   const { data, error } = await supabase
-    .from('usuarios')
+    .from('users')
     .select(
       'id, email, password_hash, first_name, last_name, role, is_active, vendor_id',
     )
@@ -79,7 +79,7 @@ export async function findUserByEmailForAuth(email: string): Promise<AuthUserRow
   const supabase = createSupabaseServiceClient();
 
   const { data, error } = await supabase
-    .from('usuarios')
+    .from('users')
     .select(
       'id, email, password_hash, first_name, last_name, role, is_active, vendor_id',
     )
@@ -107,7 +107,7 @@ export async function findUserByEmailForAuth(email: string): Promise<AuthUserRow
 
 export async function createUserForAuth(input: CreateUserInput): Promise<AuthUserRow> {
   const row = await sqlOne<AuthUserRow>(
-    `INSERT INTO usuarios (
+    `INSERT INTO users (
        email,
        password_hash,
        first_name,
@@ -158,7 +158,7 @@ export async function findUserProfileById(id: string): Promise<UserProfileRow | 
   const supabase = createSupabaseServiceClient();
 
   const { data, error } = await supabase
-    .from('usuarios')
+    .from('users')
     .select('id, email, first_name, last_name, phone, role, created_at')
     .eq('id', id)
     .maybeSingle();
@@ -185,9 +185,9 @@ export async function listOrdersForUser(userId: string): Promise<UserOrderSummar
   const supabase = createSupabaseServiceClient();
 
   const { data, error } = await supabase
-    .from('pedidos')
+    .from('orders')
     .select('id, order_number, status, total, created_at')
-    .eq('usuario_id', userId)
+    .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -242,7 +242,7 @@ export async function updateUserProfile(
   if (typeof updates.phone === 'string') updatePayload.phone = updates.phone;
 
   const { data, error } = await supabase
-    .from('usuarios')
+    .from('users')
     .update(updatePayload)
     .eq('id', id)
     .select('id, email, first_name, last_name, phone, role, created_at')
