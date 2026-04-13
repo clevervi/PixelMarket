@@ -59,14 +59,21 @@ CREATE TABLE permisos (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE roles_permisos (
+CREATE TABLE permissions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE roles_permissions (
     role_id UUID REFERENCES roles(id) ON DELETE CASCADE,
-    permiso_id UUID REFERENCES permisos(id) ON DELETE CASCADE,
-    PRIMARY KEY (role_id, permiso_id)
+    permission_id UUID REFERENCES permissions(id) ON DELETE CASCADE,
+    PRIMARY KEY (role_id, permission_id)
 );
 
 -- Users (base + preliminary vendor fields)
-CREATE TABLE usuarios (
+CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -94,9 +101,9 @@ CREATE TABLE usuarios_roles (
     PRIMARY KEY (usuario_id, role_id)
 );
 
-CREATE TABLE direcciones (
+CREATE TABLE addresses (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     full_name VARCHAR(200) NOT NULL,
     street VARCHAR(255) NOT NULL,
     city VARCHAR(100) NOT NULL,
@@ -105,14 +112,14 @@ CREATE TABLE direcciones (
     country VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     is_default BOOLEAN DEFAULT false,
-    tipo VARCHAR(20), -- 'shipping' or 'billing'
+    address_type VARCHAR(20), -- 'shipping' or 'billing'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE metodos_pago (
+CREATE TABLE payment_methods (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     type payment_method_type NOT NULL,
     card_last_four VARCHAR(4),
     card_brand VARCHAR(50),
@@ -126,7 +133,7 @@ CREATE TABLE metodos_pago (
 );
 
 -- Catalog
-CREATE TABLE categorias (
+CREATE TABLE categories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) UNIQUE NOT NULL,
     slug VARCHAR(100) UNIQUE NOT NULL,
@@ -157,7 +164,7 @@ CREATE TABLE vendors (
     description TEXT,
     logo VARCHAR(500),
     banner VARCHAR(500),
-    owner_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+    owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
     status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'suspended', 'rejected')),
     commission_rate DECIMAL(5,2) DEFAULT 10.00 CHECK (commission_rate >= 0 AND commission_rate <= 100),
     contact_email VARCHAR(255) NOT NULL,
@@ -167,7 +174,7 @@ CREATE TABLE vendors (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     approved_at TIMESTAMP,
-    approved_by UUID REFERENCES usuarios(id)
+    approved_by UUID REFERENCES users(id)
 );
 
 -- Now we can link users with vendors
@@ -227,7 +234,7 @@ CREATE TABLE vendor_analytics (
 -- 5. PRODUCTS AND E-COMMERCE (continued)
 -- ============================================
 
-CREATE TABLE productos (
+CREATE TABLE products (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
@@ -327,9 +334,9 @@ CREATE TABLE cupones (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE pedidos (
+CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
     order_number VARCHAR(50) UNIQUE NOT NULL,
     status order_status DEFAULT 'pending',
     subtotal DECIMAL(10, 2) NOT NULL CHECK (subtotal >= 0),
@@ -337,13 +344,13 @@ CREATE TABLE pedidos (
     shipping_cost DECIMAL(10, 2) DEFAULT 0 CHECK (shipping_cost >= 0),
     discount_amount DECIMAL(10, 2) DEFAULT 0 CHECK (discount_amount >= 0),
     total DECIMAL(10, 2) NOT NULL CHECK (total >= 0),
-    cupon_id UUID REFERENCES cupones(id) ON DELETE SET NULL,
-    direccion_id UUID REFERENCES direcciones(id) ON DELETE SET NULL,
-    metodo_pago_id UUID REFERENCES metodos_pago(id) ON DELETE SET NULL,
+    coupon_id UUID REFERENCES cupones(id) ON DELETE SET NULL,
+    address_id UUID REFERENCES addresses(id) ON DELETE SET NULL,
+    payment_method_id UUID REFERENCES payment_methods(id) ON DELETE SET NULL,
     notes TEXT,
     invoice_url VARCHAR(500),
     
-    -- Datos Multi-Vendor
+    -- Multi-Vendor Data
     vendor_id UUID REFERENCES vendors(id),
     commission_amount DECIMAL(10,2) DEFAULT 0,
     admin_fee DECIMAL(10,2) DEFAULT 0,
@@ -354,11 +361,11 @@ CREATE TABLE pedidos (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE detalle_pedido (
+CREATE TABLE order_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    pedido_id UUID REFERENCES pedidos(id) ON DELETE CASCADE,
-    producto_id UUID REFERENCES productos(id) ON DELETE SET NULL,
-    variante_id UUID REFERENCES variantes(id) ON DELETE SET NULL,
+    order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES products(id) ON DELETE SET NULL,
+    variant_id UUID REFERENCES variantes(id) ON DELETE SET NULL,
     product_name VARCHAR(255) NOT NULL,
     product_sku VARCHAR(100),
     quantity INTEGER NOT NULL CHECK (quantity > 0),
@@ -367,16 +374,16 @@ CREATE TABLE detalle_pedido (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE pagos (
+CREATE TABLE payments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    pedido_id UUID REFERENCES pedidos(id) ON DELETE CASCADE,
+    order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
     amount DECIMAL(10, 2) NOT NULL CHECK (amount >= 0),
     status payment_status DEFAULT 'pending',
     payment_method payment_method_type NOT NULL,
     transaction_id VARCHAR(255),
     external_reference VARCHAR(255),
     payment_gateway VARCHAR(100),
-    currency VARCHAR(3) DEFAULT 'COP',
+    currency VARCHAR(3) DEFAULT 'USD',
     paid_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -597,33 +604,33 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Apply updated_at trigger to key tables
-CREATE TRIGGER update_usuarios_updated_at BEFORE UPDATE ON usuarios FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_productos_updated_at BEFORE UPDATE ON productos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_products_updated_at BEFORE UPDATE ON products FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_vendors_updated_at BEFORE UPDATE ON vendors FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_pedidos_updated_at BEFORE UPDATE ON pedidos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_orders_updated_at BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_vendor_payouts_updated_at BEFORE UPDATE ON vendor_payouts FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Function to update the average rating
 CREATE OR REPLACE FUNCTION update_product_rating()
 RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE productos
+    UPDATE products
     SET rating_average = (
         SELECT COALESCE(AVG(rating), 0)
-        FROM reseñas
-        WHERE producto_id = NEW.producto_id AND is_approved = true
+        FROM reviews
+        WHERE product_id = NEW.product_id AND is_approved = true
     ),
     reviews_count = (
         SELECT COUNT(*)
-        FROM reseñas
-        WHERE producto_id = NEW.producto_id AND is_approved = true
+        FROM reviews
+        WHERE product_id = NEW.product_id AND is_approved = true
     )
-    WHERE id = NEW.producto_id;
+    WHERE id = NEW.product_id;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_product_rating_on_review AFTER INSERT OR UPDATE ON reseñas
+CREATE TRIGGER update_product_rating_on_review AFTER INSERT OR UPDATE ON reviews
     FOR EACH ROW EXECUTE FUNCTION update_product_rating();
 
 -- Function to generate the order number
@@ -638,36 +645,36 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE SEQUENCE order_number_seq;
-CREATE TRIGGER generate_order_number_trigger BEFORE INSERT ON pedidos
+CREATE TRIGGER generate_order_number_trigger BEFORE INSERT ON orders
     FOR EACH ROW EXECUTE FUNCTION generate_order_number();
 
 -- Function to record inventory movements
 CREATE OR REPLACE FUNCTION register_inventory_movement()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO inventario (producto_id, variante_id, movement_type, quantity, stock_before, stock_after, reference_id)
+    INSERT INTO inventory (product_id, variant_id, movement_type, quantity, stock_before, stock_after, reference_id)
     SELECT 
-        NEW.producto_id,
-        NEW.variante_id,
+        NEW.product_id,
+        NEW.variant_id,
         'sale',
         -NEW.quantity,
-        COALESCE((SELECT stock FROM variantes WHERE id = NEW.variante_id), (SELECT stock FROM productos WHERE id = NEW.producto_id)),
-        COALESCE((SELECT stock FROM variantes WHERE id = NEW.variante_id), (SELECT stock FROM productos WHERE id = NEW.producto_id)) - NEW.quantity,
-        NEW.pedido_id
-    FROM detalle_pedido
+        COALESCE((SELECT stock FROM variantes WHERE id = NEW.variant_id), (SELECT stock FROM products WHERE id = NEW.product_id)),
+        COALESCE((SELECT stock FROM variantes WHERE id = NEW.variant_id), (SELECT stock FROM products WHERE id = NEW.product_id)) - NEW.quantity,
+        NEW.order_id
+    FROM order_items
     WHERE id = NEW.id;
     
-    IF NEW.variante_id IS NOT NULL THEN
-        UPDATE variantes SET stock = stock - NEW.quantity WHERE id = NEW.variante_id;
+    IF NEW.variant_id IS NOT NULL THEN
+        UPDATE variantes SET stock = stock - NEW.quantity WHERE id = NEW.variant_id;
     ELSE
-        UPDATE productos SET stock = stock - NEW.quantity WHERE id = NEW.producto_id;
+        UPDATE products SET stock = stock - NEW.quantity WHERE id = NEW.product_id;
     END IF;
     
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER register_inventory_on_order AFTER INSERT ON detalle_pedido
+CREATE TRIGGER register_inventory_on_order AFTER INSERT ON order_items
     FOR EACH ROW EXECUTE FUNCTION register_inventory_movement();
 
 -- ============================================
@@ -689,12 +696,11 @@ INSERT INTO configuracion (key, value, description) VALUES
 ('free_shipping_threshold', '100000', 'Monto mínimo para envío gratis');
 
 -- Categories
-INSERT INTO categorias (name, slug, description, image, display_order) VALUES
-('Sombreros', 'sombreros', 'Sombreros artesanales tradicionales', '/images/categories/sombreros.jpg', 1),
-('Mochilas', 'mochilas', 'Mochilas tejidas a mano', '/images/categories/mochilas.jpg', 2),
-('Joyería', 'joyeria', 'Accesorios artesanales', '/images/categories/joyeria.jpg', 3),
-('Textiles', 'textiles', 'Ropa y telas', '/images/categories/textiles.jpg', 4),
-('Decoración', 'decoracion', 'Hogar', '/images/categories/decoracion.jpg', 5);
+INSERT INTO categories (name, slug, description, image, display_order) VALUES
+('Scripts & Modules', 'scripts-modules', 'High-performance automation and backend logic.', '/images/categories/scripts.jpg', 1),
+('UI/UX Kits', 'ui-ux-kits', 'Premium design foundations and interface components.', '/images/categories/uiux.jpg', 2),
+('3D Digital Assets', '3d-assets', 'Professional 3D models and environment kits.', '/images/categories/3d.jpg', 3),
+('Hardware Dev', 'hardware-dev', 'Specialized engineering hardware and test boards.', '/images/categories/hardware.jpg', 4);
 
 -- Subcategories
 INSERT INTO categorias (name, slug, description, parent_id) 
@@ -799,26 +805,26 @@ VALUES ('BIENVENIDA10', 'percentage', 10, 50000, NOW(), NOW() + INTERVAL '90 day
 -- or remove this section before running the script.
 
 -- Enable RLS on key tables
-ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.wishlist ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.pedidos ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.cupones_usuarios ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.direcciones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.coupon_users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.addresses ENABLE ROW LEVEL SECURITY;
 
 -- Users: each user can only view/update their own profile
-CREATE POLICY "usuarios_all_service_role"
-ON public.usuarios
+CREATE POLICY "users_all_service_role"
+ON public.users
 FOR ALL
 USING (auth.role() = 'service_role')
 WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "usuarios_select_self"
-ON public.usuarios
+CREATE POLICY "users_select_self"
+ON public.users
 FOR SELECT
 USING (id = auth.uid());
 
-CREATE POLICY "usuarios_update_self"
-ON public.usuarios
+CREATE POLICY "users_update_self"
+ON public.users
 FOR UPDATE
 USING (id = auth.uid())
 WITH CHECK (id = auth.uid());
@@ -833,69 +839,69 @@ WITH CHECK (auth.role() = 'service_role');
 CREATE POLICY "wishlist_select_own"
 ON public.wishlist
 FOR SELECT
-USING (usuario_id = auth.uid());
+USING (user_id = auth.uid());
 
 CREATE POLICY "wishlist_insert_own"
 ON public.wishlist
 FOR INSERT
-WITH CHECK (usuario_id = auth.uid());
+WITH CHECK (user_id = auth.uid());
 
 CREATE POLICY "wishlist_delete_own"
 ON public.wishlist
 FOR DELETE
-USING (usuario_id = auth.uid());
+USING (user_id = auth.uid());
 
 -- Addresses: only the owner can view/modify
-CREATE POLICY "direcciones_all_service_role"
-ON public.direcciones
+CREATE POLICY "addresses_all_service_role"
+ON public.addresses
 FOR ALL
 USING (auth.role() = 'service_role')
 WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "direcciones_select_own"
-ON public.direcciones
+CREATE POLICY "addresses_select_own"
+ON public.addresses
 FOR SELECT
-USING (usuario_id = auth.uid());
+USING (user_id = auth.uid());
 
-CREATE POLICY "direcciones_insert_own"
-ON public.direcciones
+CREATE POLICY "addresses_insert_own"
+ON public.addresses
 FOR INSERT
-WITH CHECK (usuario_id = auth.uid());
+WITH CHECK (user_id = auth.uid());
 
-CREATE POLICY "direcciones_update_own"
-ON public.direcciones
+CREATE POLICY "addresses_update_own"
+ON public.addresses
 FOR UPDATE
-USING (usuario_id = auth.uid())
-WITH CHECK (usuario_id = auth.uid());
+USING (user_id = auth.uid())
+WITH CHECK (user_id = auth.uid());
 
-CREATE POLICY "direcciones_delete_own"
-ON public.direcciones
+CREATE POLICY "addresses_delete_own"
+ON public.addresses
 FOR DELETE
-USING (usuario_id = auth.uid());
+USING (user_id = auth.uid());
 
 -- Orders: customers only see their own orders (admin/service_role is handled by the backend)
-CREATE POLICY "pedidos_all_service_role"
-ON public.pedidos
+CREATE POLICY "orders_all_service_role"
+ON public.orders
 FOR ALL
 USING (auth.role() = 'service_role')
 WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "pedidos_select_own"
-ON public.pedidos
+CREATE POLICY "orders_select_own"
+ON public.orders
 FOR SELECT
-USING (usuario_id = auth.uid());
+USING (user_id = auth.uid());
 
--- cupones_usuarios: only allow viewing own usage records
-CREATE POLICY "cupones_usuarios_all_service_role"
-ON public.cupones_usuarios
+-- coupon_users: only allow viewing own usage records
+CREATE POLICY "coupon_users_all_service_role"
+ON public.coupon_users
 FOR ALL
 USING (auth.role() = 'service_role')
 WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "cupones_usuarios_select_own"
-ON public.cupones_usuarios
+CREATE POLICY "coupon_users_select_own"
+ON public.coupon_users
 FOR SELECT
-USING (usuario_id = auth.uid());
+USING (user_id = auth.uid());
 
 -- ============================================
 -- END OF SCRIPT

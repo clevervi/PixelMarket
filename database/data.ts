@@ -15,7 +15,7 @@ export const db: Database = {
     {
       id: '1',
       name: 'Demo User',
-      email: 'demo@latidoancestral.com',
+      email: 'demo@pixelmarket.tech',
       password: 'demo123', // In production, use bcrypt
       addresses: [
         {

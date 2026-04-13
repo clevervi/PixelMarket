@@ -20,7 +20,7 @@ export interface SalesData {
 export interface TopProduct {
   id: string;
   name: string;
-  image: string;
+  image_url: string;
   sales: number;
   revenue: number;
   stock: number;
@@ -73,7 +73,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     {
       id: '1',
       name: 'Vueltiao Hat',
-      image: '/assets/assets11/sombrero-vueltiao.webp',
+      image_url: '/assets/assets11/sombrero-vueltiao.webp',
       sales: 156,
       revenue: 7800,
       stock: 45,
@@ -81,7 +81,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     {
       id: '2',
       name: 'Wayuu Bag',
-      image: '/assets/assets11/mochila.webp',
+      image_url: '/assets/assets11/mochila.webp',
       sales: 134,
       revenue: 6700,
       stock: 32,
@@ -89,7 +89,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     {
       id: '3',
       name: 'Hammock Chair',
-      image: '/assets/assets11/hamaca.webp',
+      image_url: '/assets/assets11/hamaca.webp',
       sales: 98,
       revenue: 9800,
       stock: 18,
@@ -97,7 +97,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     {
       id: '4',
       name: 'Handwoven Bracelet',
-      image: '/assets/assets11/pulseras.webp',
+      image_url: '/assets/assets11/pulseras.webp',
       sales: 234,
       revenue: 4680,
       stock: 125,
@@ -105,7 +105,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     {
       id: '5',
       name: 'Traditional Poncho',
-      image: '/assets/assets11/ropa.webp',
+      image_url: '/assets/assets11/ropa.webp',
       sales: 67,
       revenue: 5360,
       stock: 28,

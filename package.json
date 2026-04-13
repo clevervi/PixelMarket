@@ -1,7 +1,8 @@
 {
-  "name": "tienda_virtual",
-  "version": "1.0.0",
-  "description": "*Latido Ancestral* is an online store specializing in the sale of handmade Colombian handicrafts. Our goal is to promote ancestral culture and tradition through products such as vueltiao hats, hammock chairs, bags, bracelets, clothing and more, made with traditional techniques and natural materials.",
+  "name": "pixelmarket",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Professional Senior-level E-commerce Marketplace for Digital Assets and Tech Products.",
   "main": "index.js",
   "scripts": {
     "dev": "next dev -p 3000",
